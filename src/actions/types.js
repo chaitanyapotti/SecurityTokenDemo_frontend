@@ -1,0 +1,7 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const TODO_TEXT = "TODO_TEXT";
+export const SET_PRIORITY = "SET_PRIORITY";
+export const TODO_SUCCESS = "TODO_SUCCESS";
+export const SET_USERNAME_OR_EMAIL = "SET_USERNAME_OR_EMAIL";
+export const SET_PASSWORD = "SET_PASSWORD";
