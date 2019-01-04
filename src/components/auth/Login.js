@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { Button, Input, Container } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 
 class Login extends Component {
@@ -48,16 +44,13 @@ class Login extends Component {
 
   render() {
     const { errors, usernameOrEmail, password } = this.props || {};
-
     return (
       <div>
-        <AppBar color="primary" position="static">
-          <Toolbar>
-            <Typography variant="h6" color="inherit">
-              Login
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Login
+          </Typography>
+        </Toolbar>
         {errors.usernameOrEmail ? (
           <TextField error label="Username or Email" margin="normal" value={usernameOrEmail} onChange={this.onUsernameOrEmailChange} />
         ) : (
