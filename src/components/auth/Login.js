@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Header, Button } from "semantic-ui-react";
+import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
@@ -29,9 +29,8 @@ class Login extends Component {
 
   componentDidMount() {
     const { isAuthenticated, history } = this.props || {};
-    console.log("test");
+
     if (isAuthenticated) {
-      console.log("yes");
       history.push("/dashboard");
     }
   }
@@ -39,9 +38,7 @@ class Login extends Component {
   componentDidUpdate(prevProps) {
     const { isAuthenticated, history } = this.props || {};
     const { isAuthenticated: oldAuthentication } = prevProps || {};
-    console.log("yess");
     if (oldAuthentication !== isAuthenticated && isAuthenticated) {
-      console.log("no");
       history.push("/dashboard");
     }
   }
@@ -49,9 +46,50 @@ class Login extends Component {
   render() {
     const { errors, usernameOrEmail, password } = this.props || {};
     return (
-      <div>
-        <Header size="huge">es</Header>
-        <Button size="massive">check</Button>
+      <div className="login-form">
+        <style>
+          {`
+      body > div,
+      body > div > div,
+      body > div > div > div.login-form {
+        height: 100%;
+      }
+    `}
+        </style>
+        <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as="h2" color="teal" textAlign="center">
+              Log-in to your account
+            </Header>
+            <Form size="large">
+              <Segment stacked>
+                <Form.Input
+                  error={errors.usernameOrEmail}
+                  warning={errors.usernameOrEmail}
+                  value={usernameOrEmail}
+                  onChange={this.onUsernameOrEmailChange}
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="Username or E-mail address"
+                />
+                <Form.Input
+                  error={errors.password}
+                  value={password}
+                  onChange={this.onPasswordChange}
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Password"
+                  type="password"
+                />
+                <Button onClick={this.onSubmitClick} color="teal" fluid size="large">
+                  Login
+                </Button>
+              </Segment>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
