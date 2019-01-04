@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import "./App.css";
+import "semantic-ui-css/semantic.min.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
