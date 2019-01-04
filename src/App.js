@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
+import store from "./store";
 import { setCurrentUser, logoutUserAction } from "./actions/authActions";
 
 if (localStorage.jwtToken) {
