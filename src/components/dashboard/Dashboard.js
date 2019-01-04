@@ -7,7 +7,8 @@ import { logoutUserAction } from "../../actions/authActions";
 class Dashboard extends Component {
   onLogoutClick = e => {
     e.preventDefault();
-    const { logoutUserAction: logoutUser, history } = this.props || {};
+    const { logoutUserAction: logoutUser } = this.props;
+    const { history } = this.props || {};
     logoutUser(history);
   };
 
@@ -22,7 +23,7 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.proptypes = {
+Dashboard.propTypes = {
   logoutUserAction: Proptypes.func.isRequired
 };
 

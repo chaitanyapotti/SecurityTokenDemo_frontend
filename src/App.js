@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { withRouter } from "react-router-dom";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import jwt_decode from "jwt-decode";
@@ -25,4 +26,4 @@ class App extends PureComponent {
   }
 }
 
-export default App;
+export default withRouter(App);

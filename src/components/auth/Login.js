@@ -17,27 +17,19 @@ class Login extends Component {
 
   onSubmitClick = e => {
     const { loginUserAction: loginUser } = this.props;
-    const { usernameOrEmail, password } = this.props || {};
+    const { usernameOrEmail, password, history } = this.props || {};
     const userData = {
       usernameOrEmail,
       password
     };
 
-    loginUser(userData);
+    loginUser(userData, history);
   };
 
   componentDidMount() {
     const { isAuthenticated, history } = this.props || {};
 
     if (isAuthenticated) {
-      history.push("/dashboard");
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { isAuthenticated, history } = this.props || {};
-    const { isAuthenticated: oldAuthentication } = prevProps || {};
-    if (oldAuthentication !== isAuthenticated && isAuthenticated) {
       history.push("/dashboard");
     }
   }
