@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
-import Login from "./components/auth/Login";
-import { Provider } from "react-redux";
-import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUserAction } from "./actions/authActions";
@@ -19,18 +15,11 @@ if (localStorage.jwtToken) {
   }
 }
 
+//put header and footer here
 class App extends Component {
   render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-            <Route exact path="/" component={Login} />
-            <Route exact path="/login" component={Login} />
-          </div>
-        </Router>
-      </Provider>
-    );
+    const { children } = this.props || {};
+    return <div className="App">{children}</div>;
   }
 }
 
