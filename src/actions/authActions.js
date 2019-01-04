@@ -1,7 +1,7 @@
-import { GET_ERRORS, SET_CURRENT_USER, SET_USERNAME_OR_EMAIL, SET_PASSWORD } from "./types";
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import { GET_ERRORS, SET_CURRENT_USER, SET_USERNAME_OR_EMAIL, SET_PASSWORD } from "./types";
+import setAuthToken from "../utils/setAuthToken";
 
 export const loginUserAction = userData => dispatch => {
   axios
@@ -21,12 +21,10 @@ export const loginUserAction = userData => dispatch => {
     );
 };
 
-export const setCurrentUser = decoded => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: decoded
-  };
-};
+export const setCurrentUser = decoded => ({
+  type: SET_CURRENT_USER,
+  payload: decoded
+});
 
 export const logoutUserAction = history => dispatch => {
   localStorage.removeItem("jwtToken");

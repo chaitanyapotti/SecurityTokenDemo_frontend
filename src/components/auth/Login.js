@@ -10,41 +10,44 @@ import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "..
 
 class Login extends Component {
   onUsernameOrEmailChange = e => {
-    const { setUsernameOrEmailAction } = this.props;
-    setUsernameOrEmailAction(e.target.value);
+    const { setUsernameOrEmailAction: setUsernameOrEmail } = this.props;
+    setUsernameOrEmail(e.target.value);
   };
 
   onPasswordChange = e => {
-    const { setPasswordAction } = this.props;
-    setPasswordAction(e.target.value);
+    const { setPasswordAction: setPassword } = this.props;
+    setPassword(e.target.value);
   };
 
   onSubmitClick = e => {
     e.preventDefault();
-    const { loginUserAction, usernameOrEmail, password } = this.props;
+    const { loginUserAction: loginUser } = this.props;
+    const { usernameOrEmail, password } = this.props || {};
     const userData = {
       usernameOrEmail,
       password
     };
 
-    loginUserAction(userData);
+    loginUser(userData);
   };
 
   componentDidMount() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, history } = this.props || {};
     if (isAuthenticated) {
-      this.props.history.push("/dashboard");
+      history.push("/dashboard");
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isAuthenticated) {
-      this.props.history.push("/dashboard");
+  componentDidUpdate(prevProps) {
+    const { isAuthenticated, history } = this.props || {};
+    const { isAuthenticated: oldAuthentication } = prevProps || {};
+    if (oldAuthentication !== isAuthenticated && isAuthenticated) {
+      history.push("/dashboard");
     }
   }
 
   render() {
-    const { errors, usernameOrEmail, password } = this.props;
+    const { errors, usernameOrEmail, password } = this.props || {};
 
     return (
       <div>
