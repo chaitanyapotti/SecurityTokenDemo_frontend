@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Input, Container } from "semantic-ui-react";
+import { Header, Button } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
@@ -29,7 +29,9 @@ class Login extends Component {
 
   componentDidMount() {
     const { isAuthenticated, history } = this.props || {};
+    console.log("test");
     if (isAuthenticated) {
+      console.log("yes");
       history.push("/dashboard");
     }
   }
@@ -37,7 +39,9 @@ class Login extends Component {
   componentDidUpdate(prevProps) {
     const { isAuthenticated, history } = this.props || {};
     const { isAuthenticated: oldAuthentication } = prevProps || {};
+    console.log("yess");
     if (oldAuthentication !== isAuthenticated && isAuthenticated) {
+      console.log("no");
       history.push("/dashboard");
     }
   }
@@ -46,31 +50,8 @@ class Login extends Component {
     const { errors, usernameOrEmail, password } = this.props || {};
     return (
       <div>
-        <Toolbar>
-          <Typography variant="h6" color="inherit">
-            Login
-          </Typography>
-        </Toolbar>
-        {errors.usernameOrEmail ? (
-          <TextField error label="Username or Email" margin="normal" value={usernameOrEmail} onChange={this.onUsernameOrEmailChange} />
-        ) : (
-          <TextField label="Username or Email" margin="normal" value={usernameOrEmail} onChange={this.onUsernameOrEmailChange} />
-        )}
-
-        <br />
-        {errors.usernameOrEmail && <div>{errors.usernameOrEmail}</div>}
-        {errors.password ? (
-          <TextField error label="Enter your Password" margin="normal" value={password} onChange={this.onPasswordChange} />
-        ) : (
-          <TextField label="Enter your Password" margin="normal" value={password} onChange={this.onPasswordChange} />
-        )}
-
-        <br />
-        {errors.password && <div>{errors.password}</div>}
-        <br />
-        <Button variant="contained" onClick={this.onSubmitClick}>
-          Submit
-        </Button>
+        <Header size="huge">es</Header>
+        <Button size="massive">check</Button>
       </div>
     );
   }

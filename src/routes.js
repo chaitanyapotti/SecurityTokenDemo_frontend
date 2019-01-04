@@ -4,6 +4,6 @@ import Login from "./components/auth/Login";
 
 export default (
   <Switch>
-    <Route path="/" component={Login} />
+    <Route exact path="/" component={Login} />
   </Switch>
 );
