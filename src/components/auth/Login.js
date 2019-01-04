@@ -16,7 +16,6 @@ class Login extends Component {
   };
 
   onSubmitClick = e => {
-    e.preventDefault();
     const { loginUserAction: loginUser } = this.props;
     const { usernameOrEmail, password } = this.props || {};
     const userData = {
@@ -64,8 +63,7 @@ class Login extends Component {
             <Form size="large">
               <Segment stacked>
                 <Form.Input
-                  error={errors.usernameOrEmail}
-                  warning={errors.usernameOrEmail}
+                  error={!!errors.usernameOrEmail}
                   value={usernameOrEmail}
                   onChange={this.onUsernameOrEmailChange}
                   fluid
@@ -73,8 +71,9 @@ class Login extends Component {
                   iconPosition="left"
                   placeholder="Username or E-mail address"
                 />
+                <Form.Field>{errors.usernameOrEmail}</Form.Field>
                 <Form.Input
-                  error={errors.password}
+                  error={!!errors.password}
                   value={password}
                   onChange={this.onPasswordChange}
                   fluid
@@ -83,6 +82,7 @@ class Login extends Component {
                   placeholder="Password"
                   type="password"
                 />
+                <Form.Field>{errors.password}</Form.Field>
                 <Button onClick={this.onSubmitClick} color="teal" fluid size="large">
                   Login
                 </Button>
