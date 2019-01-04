@@ -4,25 +4,27 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 
 class Login extends Component {
   onUsernameOrEmailChange = e => {
     const { setUsernameOrEmailAction } = this.props;
     setUsernameOrEmailAction(e.target.value);
   };
+
   onPasswordChange = e => {
     const { setPasswordAction } = this.props;
     setPasswordAction(e.target.value);
   };
+
   onSubmitClick = e => {
     e.preventDefault();
     const { loginUserAction, usernameOrEmail, password } = this.props;
     const userData = {
-      usernameOrEmail: usernameOrEmail,
-      password: password
+      usernameOrEmail,
+      password
     };
 
     loginUserAction(userData);
@@ -40,6 +42,7 @@ class Login extends Component {
       this.props.history.push("/dashboard");
     }
   }
+
   render() {
     const { errors, usernameOrEmail, password } = this.props;
 

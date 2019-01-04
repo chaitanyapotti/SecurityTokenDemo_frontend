@@ -18,11 +18,34 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src",
+    "lint:ci": "eslint src --max-warnings 0",
+    "fix": "eslint --fix src",
+    "q": "eslint --quiet --fix src/index.js $(git diff --cached --name-only --diff-filter=d HEAD | grep .js$)",
+    "size:why": "node tools/stats.js",
+    "size": "size-limit"
   },
   "proxy": "https://api-securitytoken.herokuapp.com",
-  "eslintConfig": {
-    "extends": "react-app"
+  "devDependencies": {
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-react-app": "^3.0.6",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.2",
+    "eslint-plugin-mocha": "^5.2.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "prettier": "^1.15.3",
+    "webpack-bundle-analyzer": "^3.0.3"
+  },
+  "engines": {
+    "node": "10.x"
   },
   "browserslist": [
     ">0.2%",

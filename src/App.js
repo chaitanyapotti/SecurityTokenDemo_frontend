@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
@@ -16,8 +16,8 @@ if (localStorage.jwtToken) {
   }
 }
 
-//put header and footer here
-class App extends Component {
+// put header and footer here
+class App extends PureComponent {
   render() {
     const { children } = this.props || {};
     return <div className="App">{children}</div>;
