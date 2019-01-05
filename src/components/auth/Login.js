@@ -63,7 +63,7 @@ class Login extends Component {
                   iconPosition="left"
                   placeholder="Username or E-mail address"
                 />
-                <Form.Field>{errors.usernameOrEmail}</Form.Field>
+                {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
                 <Form.Input
                   error={!!errors.password}
                   value={password}
@@ -74,7 +74,7 @@ class Login extends Component {
                   placeholder="Password"
                   type="password"
                 />
-                <Form.Field>{errors.password}</Form.Field>
+                {errors.password && <Form.Field>{errors.password}</Form.Field>}
                 <Button onClick={this.onSubmitClick} color="teal" fluid size="large">
                   Login
                 </Button>

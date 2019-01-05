@@ -7,12 +7,18 @@ export const loginUserAction = (userData, history) => dispatch => {
   axios
     .post("/api/users/login", userData)
     .then(res => {
-      const { token } = res.data;
+      const { token, role, first_name } = res.data;
       localStorage.setItem("jwtToken", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("firstName", first_name);
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
       history.push("/dashboard");
+      dispatch({
+        type: GET_ERRORS,
+        payload: {}
+      });
     })
     .catch(err =>
       dispatch({
@@ -32,6 +38,14 @@ export const logoutUserAction = history => dispatch => {
   setAuthToken(false);
   dispatch(setCurrentUser({}));
   history.push("/");
+  dispatch({
+    type: SET_USERNAME_OR_EMAIL,
+    payload: ""
+  });
+  dispatch({
+    type: SET_PASSWORD,
+    payload: ""
+  });
 };
 
 export const setUsernameOrEmailAction = input => dispatch => {
