@@ -45,10 +45,10 @@ class BrokerDealerDashboard extends Component {
                 Select Investor :{" "}
                 <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
               </div>
-              <div className="txt-m text--primary push-half-h--bottom">
+              <div className="txt-m text--primary push-half--bottom">
                 ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
               </div>
-              <div className="txt-m text--primary push-half-h--bottom">
+              <div className="txt-m text--primary push-half--bottom">
                 Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
               </div>
             </Col>
