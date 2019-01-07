@@ -7,7 +7,7 @@ import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance } from "../../actions/userActions";
 import web3 from "../../helpers/web3";
 import { Grid } from "../../helpers/react-flexbox-grid";
-import { CustomCard } from "../../components/CustomMUI/CustomCardComponent";
+import CustomCard from "../../components/CustomMUI/CUICard";
 
 class MarketMakerDashboard extends Component {
   onLogoutClick = e => {
