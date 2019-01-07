@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import Login from "./components/auth/Login";
+import Login from "./containers/Login";
 import Dashboard from "./pages/Dashboard";
 
 export default (

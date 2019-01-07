@@ -49,7 +49,7 @@ class Login extends Component {
         </style>
         <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h2" color="teal" textAlign="center">
+            <Header as="h2" className="txt-g-primary txt-xxxl" textAlign="center">
               Log-in to your account
             </Header>
             <Form size="large">
@@ -75,7 +75,7 @@ class Login extends Component {
                   type="password"
                 />
                 {errors.password && <Form.Field>{errors.password}</Form.Field>}
-                <Button onClick={this.onSubmitClick} color="teal" fluid size="large">
+                <Button onClick={this.onSubmitClick} className="btn bg--primary txt-p-vault txt-dddbld text--white" fluid size="large">
                   Login
                 </Button>
               </Segment>
