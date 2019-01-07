@@ -6,12 +6,29 @@ import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import web3 from "../../helpers/web3";
-import { Grid } from "../../helpers/react-flexbox-grid";
-import CustomCard from "../../components/CustomMUI/CUICard";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import HoldingsTable from "../../components/common/HoldingsTable";
+import config from "../../config";
+import CUICard from "../../components/CustomMUI/CUICard";
 
 class MarketMakerDashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.tokenOptions =
+      Object.keys(config.tokens).map(x => ({
+        key: config.tokens[x].name,
+        value: config.tokens[x].address,
+        text: config.tokens[x].name
+      })) || {};
+
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    console.log(reserveAddress);
+    fetchUserBalance(reserveAddress);
+    fetchTokenBalance(reserveAddress);
+  }
+
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
@@ -23,28 +40,27 @@ class MarketMakerDashboard extends Component {
     dropDownChange(d.value);
   };
 
-  componentDidMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    fetchUserBalance(publicAddress);
-    fetchTokenBalance(publicAddress);
-  }
-
   render() {
     const { userBalance, tokenBalance, portfolioValue, dropDownSelect } = this.props || {};
-    const tokenOptions = [{ key: "LMD", value: "LMD", text: "LMD" }, { key: "RIV", value: "RIV", text: "RIV" }];
     return (
       <Grid>
         <h2>Market Maker</h2>
 
         <div>
-          Select Token : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
+          Select Token : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Token" options={this.tokenOptions} />
         </div>
 
         <HoldingsTable tokenBalance={tokenBalance} />
         <Button color="red" onClick={this.onLogoutClick}>
           Logout
         </Button>
+        <CUICard>
+          <Row center="lg">
+            <Col>
+              <TokenChart tokenBalance={tokenBalance} />
+            </Col>
+          </Row>
+        </CUICard>
       </Grid>
     );
   }
