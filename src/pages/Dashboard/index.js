@@ -23,13 +23,14 @@ class Dashboard extends Component {
 
   render() {
     const { history } = this.props || {};
-    if (localStorage.role === "INVESTOR") {
+    const { role } = JSON.parse(localStorage.getItem("user_data")) || {};
+    if (role === "INVESTOR") {
       return <InvestorDashboard history={history} />;
     }
-    if (localStorage.role === "MARKET_MAKER") {
+    if (role === "MARKET_MAKER") {
       return <MarketMakerDashboard history={history} />;
     }
-    if (localStorage.role === "BROKER_DEALER") {
+    if (role === "BROKER_DEALER") {
       return <BrokerDealerDashboard history={history} />;
     }
     return <Button onClick={this.onLogoutClick}>Logout</Button>;

@@ -25,8 +25,9 @@ class MarketMakerDashboard extends Component {
 
   componentDidMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    fetchUserBalance(localStorage.publicAddress);
-    fetchTokenBalance(localStorage.publicAddress);
+    const { publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    fetchUserBalance(publicAddress);
+    fetchTokenBalance(publicAddress);
   }
 
   render() {

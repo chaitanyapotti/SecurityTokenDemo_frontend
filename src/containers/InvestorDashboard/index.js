@@ -19,22 +19,22 @@ class InvestorDashboard extends Component {
 
   componentDidMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    console.log(localStorage.publicAddress);
-    fetchUserBalance(localStorage.publicAddress);
-    fetchTokenBalance(localStorage.publicAddress);
+    const { publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    fetchUserBalance(publicAddress);
+    fetchTokenBalance(publicAddress);
   }
 
   render() {
     const { userBalance, tokenBalance, portfolioValue } = this.props || {};
     return (
       <Grid container="true">
-        <CUICard>
+        <CUICard style={{ marginTop: "20px" }}>
           <Row>
             <Col lg={8}>
-              <div className="txt-m text--primary push-half-h--bottom">
-                Role : <span className="txt-m text--secondary">Investor</span>
+              <div className="txt-xxxl text--primary">
+                Role : <span className="txt-xxxl txt-m text--secondary">Investor</span>
               </div>
-              <div className="txt-m text--primary push-half-h--bottom">
+              <div className="txt-m text--primary push-half-h--bottom push-top--35">
                 ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
               </div>
               <div className="txt-m text--primary push-half-h--bottom">
