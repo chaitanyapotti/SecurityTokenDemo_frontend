@@ -5,6 +5,7 @@ import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid } from "../../helpers/react-flexbox-grid";
+import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 
 class InvestorDashboard extends Component {
   onLogoutClick = e => {
@@ -20,13 +21,12 @@ class InvestorDashboard extends Component {
   }
 
   render() {
-    const { userData } = this.props || {};
-    const { userBalance, tokenBalance } = userData;
+    const { userBalance, tokenBalance, portfolioValue } = this.props || {};
     return (
       <Grid container>
         <h2>Investor</h2>
-        <h3>ETH Balance : {Math.round(userBalance / Math.pow(10, 18))} </h3>
-        <h3>Portfolio Value : {tokenBalance * 1 + tokenBalance * 10} ($USD)</h3>
+        <h3>ETH Balance : {userBalance} </h3>
+        <h3>Portfolio Value : ${portfolioValue}</h3>
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -36,16 +36,13 @@ class InvestorDashboard extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>LMD</Table.Cell>
-              <Table.Cell>{tokenBalance}</Table.Cell>
-              <Table.Cell>{tokenBalance * 1}</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>RIV</Table.Cell>
-              <Table.Cell>{tokenBalance}</Table.Cell>
-              <Table.Cell>{tokenBalance * 10}</Table.Cell>
-            </Table.Row>
+            {Object.keys(tokenBalance).map(key => (
+              <Table.Row>
+                <Table.Cell>{key}</Table.Cell>
+                <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
+                <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
         <Button onClick={this.onLogoutClick}>Logout</Button>
@@ -62,8 +59,11 @@ InvestorDashboard.propTypes = {
 
 const mapStateToProps = state => {
   const { userData } = state;
+  const { userBalance, tokenBalance, portfolioValue } = userData || {};
   return {
-    userData
+    userBalance,
+    tokenBalance,
+    portfolioValue
   };
 };
 

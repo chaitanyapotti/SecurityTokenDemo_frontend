@@ -1,21 +1,36 @@
 import actionTypes from "../actionTypes";
+import { formatFromWei } from "../helpers/numberHelpers";
+import config from "../config";
 
 const INITIAL_STATE = {
   userBalance: "",
-  tokenBalance: ""
+  tokenBalance: {},
+  portfolioValue: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
+  const currentTokenBalances = JSON.parse(JSON.stringify(state.tokenBalance));
   switch (action.type) {
     case actionTypes.GET_USER_BALANCE:
       return {
         ...state,
-        userBalance: action.payload
+        userBalance: formatFromWei(action.payload, 3)
       };
     case actionTypes.GET_TOKEN_BALANCE: {
+      const { token, data } = action.payload || {};
+      const balance = formatFromWei(data, 3);
+      const dollarValue = parseFloat(balance) * config.tokens[token].price;
+      currentTokenBalances[token] = { balance, dollarValue };
+      let portfolioValue = 0;
+      for (const key in currentTokenBalances) {
+        if (Object.prototype.hasOwnProperty.call(currentTokenBalances, key)) {
+          portfolioValue += currentTokenBalances[key].dollarValue;
+        }
+      }
       return {
         ...state,
-        tokenBalance: action.payload
+        tokenBalance: currentTokenBalances,
+        portfolioValue
       };
     }
     default:
