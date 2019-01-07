@@ -41,7 +41,7 @@ class InvestorDashboard extends Component {
               </div>
             </Col>
             <Col lg={2} xsOffset={2}>
-              <Button color="red" onClick={this.onLogoutClick}>
+              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
                 Logout
               </Button>
             </Col>
