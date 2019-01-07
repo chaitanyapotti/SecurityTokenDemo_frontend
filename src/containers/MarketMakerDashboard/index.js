@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange } from "../../actions/marketMakerActions";
-import { getTokenBalance } from "../../actions/userActions";
+import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import web3 from "../../helpers/web3";
 import { Grid } from "../../helpers/react-flexbox-grid";
 import CustomCard from "../../components/CustomMUI/CUICard";
+import TokenChart from "../../components/common/TokenChart";
+import HoldingsTable from "../../components/common/HoldingsTable";
 
 class MarketMakerDashboard extends Component {
   onLogoutClick = e => {
@@ -22,14 +24,13 @@ class MarketMakerDashboard extends Component {
   };
 
   componentDidMount() {
-    const { getTokenBalance: fetchTokenBalance } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    fetchUserBalance(localStorage.publicAddress);
     fetchTokenBalance(localStorage.publicAddress);
   }
 
   render() {
-    const { marketMaker, userData } = this.props || {};
-    const { dropDownSelect } = marketMaker;
-    const { tokenBalance } = userData;
+    const { userBalance, tokenBalance, portfolioValue, dropDownSelect } = this.props || {};
     const tokenOptions = [{ key: "LMD", value: "LMD", text: "LMD" }, { key: "RIV", value: "RIV", text: "RIV" }];
     return (
       <Grid>
@@ -39,7 +40,7 @@ class MarketMakerDashboard extends Component {
           Select Token : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
         </div>
 
-        <Button onClick={this.onLogoutClick}>Logout</Button>
+        <HoldingsTable tokenBalance={tokenBalance} />
       </Grid>
     );
   }
@@ -48,18 +49,23 @@ class MarketMakerDashboard extends Component {
 MarketMakerDashboard.propTypes = {
   logoutUserAction: Proptypes.func.isRequired,
   onDropdownChange: Proptypes.func.isRequired,
-  getTokenBalance: Proptypes.func.isRequired
+  getTokenBalance: Proptypes.func.isRequired,
+  getUserBalanceAction: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
-  const { marketMaker, userData } = state;
+  const { userData, marketMakerData } = state;
+  const { userBalance, tokenBalance, portfolioValue } = userData || {};
+  const { dropDownSelect } = marketMakerData || {};
   return {
-    marketMaker,
-    userData
+    userBalance,
+    tokenBalance,
+    portfolioValue,
+    dropDownSelect
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance }
+  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction }
 )(MarketMakerDashboard);

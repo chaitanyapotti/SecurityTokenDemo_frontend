@@ -9,6 +9,6 @@ export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
   userData: userReducer,
-  marketMaker: marketMakerReducer,
+  marketMakerData: marketMakerReducer,
   signinManagerData: signinManagerReducer
 });
