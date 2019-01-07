@@ -6,6 +6,7 @@ import { Colors } from "../../helpers/numberHelpers";
 const getOption = tokenBalance => {
   const tokenCountData = [];
   const tokenDollarData = [];
+  const legendData = ["balance", "dollar Value"];
   for (const key in tokenBalance) {
     if (Object.prototype.hasOwnProperty.call(tokenBalance, key)) {
       tokenCountData.push({ value: tokenBalance[key].balance, name: key });
@@ -26,12 +27,12 @@ const getOption = tokenBalance => {
       // },
       textStyle: { fontFamily: "Montserrat", fontSize: "14" }
     },
-    // legend: {
-    //   show: false,
-    //   orient: "vertical",
-    //   x: "left",
-    //   data: legendData
-    // },
+    legend: {
+      show: false,
+      orient: "vertical",
+      x: "right",
+      data: legendData
+    },
     series: [
       {
         name: "Token Value ($)",

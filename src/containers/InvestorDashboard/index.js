@@ -13,7 +13,6 @@ class InvestorDashboard extends Component {
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
-    console.log(history);
     logoutUser(history);
   };
 
@@ -29,7 +28,7 @@ class InvestorDashboard extends Component {
       <Grid container="true">
         <CUICard>
           <Row>
-            <Col lg={6} xs={12}>
+            <Col lg={8}>
               <div className="txt-m text--primary push-half-h--bottom">
                 Role : <span className="txt-m text--secondary">Investor</span>
               </div>
@@ -39,6 +38,11 @@ class InvestorDashboard extends Component {
               <div className="txt-m text--primary push-half-h--bottom">
                 Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
               </div>
+            </Col>
+            <Col lg={2} xsOffset={2}>
+              <Button color="red" onClick={this.onLogoutClick}>
+                Logout
+              </Button>
             </Col>
           </Row>
         </CUICard>
@@ -60,8 +64,13 @@ class InvestorDashboard extends Component {
             ))}
           </Table.Body>
         </Table>
-        <TokenChart tokenBalance={tokenBalance} />
-        <Button onClick={this.onLogoutClick}>Logout</Button>
+        <CUICard>
+          <Row center="lg">
+            <Col>
+              <TokenChart tokenBalance={tokenBalance} />
+            </Col>
+          </Row>
+        </CUICard>
       </Grid>
     );
   }
