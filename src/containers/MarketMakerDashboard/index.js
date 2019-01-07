@@ -38,51 +38,7 @@ class MarketMakerDashboard extends Component {
         <div>
           Select Token : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
         </div>
-        {dropDownSelect === "RIV" ? (
-          <CustomCard className="card-brdr" style={{ padding: "50px", width: "50%" }}>
-            <div>Token Balance: {tokenBalance}</div>
-            <div>Token Ether Scan Link</div>
-            <div>Reserve Mapper Order Scan Link</div>
-          </CustomCard>
-        ) : dropDownSelect === "LMD" ? (
-          <CustomCard className="card-brdr" style={{ padding: "50px", width: "50%" }}>
-            <div>Token Balance: {tokenBalance}</div>
-            <div>Token Ether Scan Link</div>
-            <div>Reserve Mapper Order Scan Link</div>
-          </CustomCard>
-        ) : (
-          <div />
-        )}
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Price</Table.HeaderCell>
-              <Table.HeaderCell>Options</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>LMD</Table.Cell>
-              <Table.Cell>{tokenBalance}</Table.Cell>
-              <Table.Cell>{tokenBalance * 1}</Table.Cell>
-              <Table.Cell>
-                <Button primary>Buy</Button>
-                <Button primary>Sell</Button>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>RIV</Table.Cell>
-              <Table.Cell>{tokenBalance}</Table.Cell>
-              <Table.Cell>{tokenBalance * 10}</Table.Cell>
-              <Table.Cell>
-                <Button primary>Buy</Button>
-                <Button primary>Sell</Button>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
+
         <Button onClick={this.onLogoutClick}>Logout</Button>
       </Grid>
     );

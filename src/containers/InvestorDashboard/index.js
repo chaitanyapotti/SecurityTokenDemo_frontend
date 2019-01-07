@@ -12,6 +12,7 @@ class InvestorDashboard extends Component {
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
+    console.log(history);
     logoutUser(history);
   };
 
