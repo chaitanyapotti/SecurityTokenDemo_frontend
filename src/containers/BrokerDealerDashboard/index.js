@@ -41,7 +41,7 @@ class BrokerDealerDashboard extends Component {
               <div className="txt-xxxl text--primary">
                 Role : <span className="txt-xxxl txt-m text--secondary">Broker Dealer</span>
               </div>
-              <div className="txt-m text--primary push-half-h--bottom push-top--35">
+              <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
                 <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
               </div>
