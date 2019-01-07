@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_USER_BALANCE, GET_TOKEN_BALANCE } from "./types";
+import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
 import config from "../config";
 
@@ -7,7 +7,7 @@ export function getUserBalanceAction(publicAddress) {
   return async dispatch => {
     const balance = await web3.eth.getBalance(publicAddress);
     dispatch({
-      type: GET_USER_BALANCE,
+      type: actionTypes.GET_USER_BALANCE,
       payload: balance
     });
   };
@@ -19,7 +19,7 @@ export const getTokenBalance = publicAddress => dispatch => {
     .then(res => {
       const { data } = res.data;
       dispatch({
-        type: GET_TOKEN_BALANCE,
+        type: actionTypes.GET_TOKEN_BALANCE,
         payload: data
       });
     })

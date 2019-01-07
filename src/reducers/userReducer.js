@@ -1,4 +1,4 @@
-import { GET_USER_BALANCE, GET_TOKEN_BALANCE } from "../actions/types";
+import actionTypes from "../actionTypes";
 
 const INITIAL_STATE = {
   userBalance: "",
@@ -7,12 +7,12 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case GET_USER_BALANCE:
+    case actionTypes.GET_USER_BALANCE:
       return {
         ...state,
         userBalance: action.payload
       };
-    case GET_TOKEN_BALANCE: {
+    case actionTypes.GET_TOKEN_BALANCE: {
       return {
         ...state,
         tokenBalance: action.payload

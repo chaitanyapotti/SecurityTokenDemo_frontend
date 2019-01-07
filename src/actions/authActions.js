@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, SET_USERNAME_OR_EMAIL, SET_PASSWORD } from "./types";
+import actionTypes from "../actionTypes";
 import setAuthToken from "../utils/setAuthToken";
 
 export const loginUserAction = (userData, history) => dispatch => {
@@ -17,20 +17,20 @@ export const loginUserAction = (userData, history) => dispatch => {
       dispatch(setCurrentUser(decoded));
       history.push("/dashboard");
       dispatch({
-        type: GET_ERRORS,
+        type: actionTypes.GET_ERRORS,
         payload: {}
       });
     })
     .catch(err =>
       dispatch({
-        type: GET_ERRORS,
+        type: actionTypes.GET_ERRORS,
         payload: err.response.data
       })
     );
 };
 
 export const setCurrentUser = decoded => ({
-  type: SET_CURRENT_USER,
+  type: actionTypes.SET_CURRENT_USER,
   payload: decoded
 });
 
@@ -40,25 +40,25 @@ export const logoutUserAction = history => dispatch => {
   dispatch(setCurrentUser({}));
   history.push("/");
   dispatch({
-    type: SET_USERNAME_OR_EMAIL,
+    type: actionTypes.SET_USERNAME_OR_EMAIL,
     payload: ""
   });
   dispatch({
-    type: SET_PASSWORD,
+    type: actionTypes.SET_PASSWORD,
     payload: ""
   });
 };
 
 export const setUsernameOrEmailAction = input => dispatch => {
   dispatch({
-    type: SET_USERNAME_OR_EMAIL,
+    type: actionTypes.SET_USERNAME_OR_EMAIL,
     payload: input
   });
 };
 
 export const setPasswordAction = input => dispatch => {
   dispatch({
-    type: SET_PASSWORD,
+    type: actionTypes.SET_PASSWORD,
     payload: input
   });
 };

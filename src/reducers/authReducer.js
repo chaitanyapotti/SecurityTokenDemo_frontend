@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, SET_USERNAME_OR_EMAIL, SET_PASSWORD } from "../actions/types";
+import actionTypes from "../actionTypes";
 import isEmpty from "../validation/is-Empty";
 
 const INITIAL_STATE = {
@@ -10,18 +10,18 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case SET_CURRENT_USER:
+    case actionTypes.SET_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
         user: action.payload
       };
-    case SET_USERNAME_OR_EMAIL:
+    case actionTypes.SET_USERNAME_OR_EMAIL:
       return {
         ...state,
         usernameOrEmail: action.payload
       };
-    case SET_PASSWORD:
+    case actionTypes.SET_PASSWORD:
       return {
         ...state,
         password: action.payload

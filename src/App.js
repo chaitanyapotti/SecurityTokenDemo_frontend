@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import { setCurrentUser, logoutUserAction } from "./actions/authActions";
+import SigninManager from "./containers/SigninManager";
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -22,7 +23,12 @@ if (localStorage.jwtToken) {
 class App extends PureComponent {
   render() {
     const { children } = this.props || {};
-    return <div className="App">{children}</div>;
+    return (
+      <div className="App">
+        {children}
+        <SigninManager />
+      </div>
+    );
   }
 }
 

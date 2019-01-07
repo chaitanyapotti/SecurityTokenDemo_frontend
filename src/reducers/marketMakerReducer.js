@@ -1,4 +1,4 @@
-import { ON_DROPDOWN_CHANGE } from "../actions/types";
+import actionTypes from "../actionTypes";
 
 const INITIAL_STATE = {
   dropDownSelect: ""
@@ -6,7 +6,7 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case ON_DROPDOWN_CHANGE:
+    case actionTypes.ON_DROPDOWN_CHANGE:
       return {
         ...state,
         dropDownSelect: action.payload
