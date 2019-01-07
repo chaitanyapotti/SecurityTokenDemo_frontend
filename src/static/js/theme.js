@@ -70,7 +70,7 @@ const customTheme = {
       colorSecondary: CS_COLORS.SECONDARY
     },
     MuiSelect: {
-      disabled: {
+      "&$disabled": {
         cursor: "not-allowed !important"
       }
     },
@@ -109,12 +109,12 @@ const customTheme = {
         fontSize: `16px !important`,
         fontWeight: 400
       },
-      selected: {
+      "&$selected": {
         color: `rgb(0,0,0) !important`
       }
     },
     MuiMenuItem: {
-      selected: {
+      "&$selected": {
         backgroundColor: "transparent !important",
         color: CS_COLORS.SELECT_TEXT
       }
@@ -126,7 +126,7 @@ const customTheme = {
       input: {
         background: "transparent !important"
       },
-      disabled: {
+      "&$disabled": {
         cursor: "not-allowed !important"
       },
       inputType: {

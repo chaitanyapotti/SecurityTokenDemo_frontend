@@ -37,7 +37,8 @@ class BuyHoldingsTable extends PureComponent {
               <Table.HeaderCell>Token Name</Table.HeaderCell>
               <Table.HeaderCell>Token Count</Table.HeaderCell>
               <Table.HeaderCell>Token Value(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
+              <Table.HeaderCell>Buy</Table.HeaderCell>
+              <Table.HeaderCell>Sell</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -52,6 +53,8 @@ class BuyHoldingsTable extends PureComponent {
                       Buy
                     </Button>
                   </span>
+                </Table.Cell>
+                <Table.Cell>
                   <span>
                     <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" onClick={this.onSellClick}>
                       Sell
