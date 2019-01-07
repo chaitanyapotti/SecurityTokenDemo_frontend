@@ -18,9 +18,9 @@ class BuyHoldingsTable extends PureComponent {
         <Table.Body>
           {Object.keys(tokenBalance).map(key => (
             <Table.Row key={key}>
-              <Table.Cell>{key}</Table.Cell>
-              <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-              <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
+              <Table.Cell verticalAlign="middle">{key}</Table.Cell>
+              <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
+              <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
               <Table.Cell>
                 <span>
                   <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" onClick={this.onLogoutClick}>
