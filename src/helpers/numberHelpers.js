@@ -13,9 +13,9 @@ const formatCent = tokenPrice => {
 
 const Colors = i => {
   const Palette = [
-    "#ffb6c7",
-    "#ff839b",
-    "#e85b7d",
+    // "#ffb6c7",
+    // "#ff839b",
+    // "#e85b7d",
     "#94d1ff",
     "#4ca9fc",
     "#0968af",
@@ -47,7 +47,7 @@ const Colors = i => {
       Palette.push(greyHex);
     }
   }
-  const colorArray = ["#3d3d3d", "#ffffff", "#3d3d3d", "#ffffff"].concat(Palette.splice(0, 6 + i));
+  const colorArray = Palette.splice(0, 6 + i);
   return colorArray;
 };
 
