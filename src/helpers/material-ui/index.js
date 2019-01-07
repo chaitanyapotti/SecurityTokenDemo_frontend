@@ -14,7 +14,7 @@ import { CUIModal, CUIModalActions, CUIModalContent, CUIModalTitle } from "./CUI
 import CUIPaper from "./CUIPaper";
 import { CUICircularProgress, CUILinearProgress } from "./CUIProgress";
 import CUISubHeader from "./CUISubHeader";
-import CUIRegWrapper from "./CUIRegWrapper";
+
 import CUITabs from "./CUITabs";
 import CUIWrapper from "./CUIWrapper";
 import CUIChip from "./CUIChip";
@@ -49,7 +49,6 @@ export {
   CUISubHeader,
   CUITabs,
   CUIWrapper,
-  CUIRegWrapper,
   CUIChip,
   CUISelectInput
 };
