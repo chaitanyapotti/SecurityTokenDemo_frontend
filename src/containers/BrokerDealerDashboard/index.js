@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Dropdown } from "semantic-ui-react";
+import { Button, Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
@@ -12,6 +12,16 @@ import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 
 class BrokerDealerDashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.tokenOptions =
+      JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
+        key: x.name,
+        value: x.address,
+        text: x.name
+      })) || {};
+  }
+
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
@@ -27,12 +37,6 @@ class BrokerDealerDashboard extends Component {
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, portfolioValue } = this.props || {};
-    const tokenOptions =
-      JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
-        key: x.name,
-        value: x.address,
-        text: x.name
-      })) || {};
     return (
       <Grid container="true">
         <CUICard style={{ marginTop: "20px" }}>
@@ -43,7 +47,7 @@ class BrokerDealerDashboard extends Component {
               </div>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
+                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={this.tokenOptions} />
               </div>
               <div className="txt-m text--primary push-half--bottom">
                 ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>

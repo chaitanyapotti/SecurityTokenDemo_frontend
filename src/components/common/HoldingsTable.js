@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { Table } from "semantic-ui-react";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
+import config from "../../config";
 
 class HoldingsTable extends PureComponent {
   render() {
@@ -17,7 +18,7 @@ class HoldingsTable extends PureComponent {
         <Table.Body>
           {Object.keys(tokenBalance).map(key => (
             <Table.Row key={key}>
-              <Table.Cell>{key}</Table.Cell>
+              <Table.Cell>{config.tokens[key].name}</Table.Cell>
               <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
             </Table.Row>
