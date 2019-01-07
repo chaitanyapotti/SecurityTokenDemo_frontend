@@ -3,7 +3,10 @@ import { Table, Button, Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
+import { onDropdownChange } from "../../actions/marketMakerActions";
+import { getTokenBalance } from "../../actions/userActions";
 import { Grid } from "../../helpers/react-flexbox-grid";
+import HoldingsTable from "../../components/common/HoldingsTable";
 
 class BrokerDealerDashboard extends Component {
   onLogoutClick = e => {
@@ -12,7 +15,15 @@ class BrokerDealerDashboard extends Component {
     logoutUser(history);
   };
 
+  onDropdownChange = (e, d) => {
+    const { onDropdownChange: dropDownChange } = this.props;
+    const { getTokenBalance: fetchTokenBalance } = this.props || {};
+    dropDownChange(d.value);
+  };
+
   render() {
+    const { dropDownSelect, tokenBalance } = this.props || {};
+    console.log(tokenBalance);
     const tokenOptions = [{ key: "Michelle", value: "Michelle", text: "Michelle" }, { key: "Christian", value: "Christian", text: "Christian" }];
     return (
       <Grid>
@@ -20,26 +31,38 @@ class BrokerDealerDashboard extends Component {
         <div>
           Select Investor : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
         </div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Price</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-        </Table>
-        <Button onClick={this.onLogoutClick}>Logout</Button>
+        {dropDownSelect === "Michelle" ? (
+          <HoldingsTable tokenBalance={tokenBalance} />
+        ) : dropDownSelect === "Christian" ? (
+          <HoldingsTable tokenBalance={tokenBalance} />
+        ) : (
+          <div />
+        )}
+        <Button color="red" onClick={this.onLogoutClick}>
+          Logout
+        </Button>
       </Grid>
     );
   }
 }
 
 BrokerDealerDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired
+  logoutUserAction: Proptypes.func.isRequired,
+  onDropdownChange: Proptypes.func.isRequired,
+  getTokenBalance: Proptypes.func.isRequired
+};
+
+const mapStateToProps = state => {
+  const { marketMakerData, userData } = state;
+  const { tokenBalance } = userData || {};
+  const { dropDownSelect } = marketMakerData || {};
+  return {
+    dropDownSelect,
+    tokenBalance
+  };
 };
 
 export default connect(
-  null,
-  { logoutUserAction }
+  mapStateToProps,
+  { logoutUserAction, onDropdownChange, getTokenBalance }
 )(BrokerDealerDashboard);

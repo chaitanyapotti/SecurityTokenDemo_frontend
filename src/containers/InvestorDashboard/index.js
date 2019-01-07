@@ -19,6 +19,7 @@ class InvestorDashboard extends Component {
 
   componentDidMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    console.log(localStorage.publicAddress);
     fetchUserBalance(localStorage.publicAddress);
     fetchTokenBalance(localStorage.publicAddress);
   }

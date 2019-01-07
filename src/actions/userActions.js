@@ -12,11 +12,13 @@ export const getUserBalanceAction = publicAddress => async dispatch => {
 };
 
 export const getTokenBalance = publicAddress => dispatch => {
+  console.log("yes");
   for (const token in config.tokens) {
     if (Object.prototype.hasOwnProperty.call(config.tokens, token)) {
       axios
         .get(`web3/erc20token/tokenbalance?address=${config.tokens[token].address}&network=${config.network}&useraddress=${publicAddress}`)
         .then(res => {
+          console.log(res);
           if (res.status === 200) {
             const { data } = res.data;
             dispatch({
