@@ -8,9 +8,10 @@ import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions
 import web3 from "../../helpers/web3";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
-import HoldingsTable from "../../components/common/HoldingsTable";
+import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
+import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 
 class MarketMakerDashboard extends Component {
   constructor(props) {
@@ -21,12 +22,11 @@ class MarketMakerDashboard extends Component {
         value: config.tokens[x].address,
         text: config.tokens[x].name
       })) || {};
-
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
     const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    console.log(reserveAddress);
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
+    this.etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
   }
 
   onLogoutClick = e => {
@@ -43,17 +43,49 @@ class MarketMakerDashboard extends Component {
   render() {
     const { userBalance, tokenBalance, portfolioValue, dropDownSelect } = this.props || {};
     return (
-      <Grid>
-        <h2>Market Maker</h2>
+      <Grid container="true">
+        <CUICard style={{ marginTop: "20px" }}>
+          <Row>
+            <Col lg={8}>
+              <div className="txt-xxxl text--primary">
+                Role : <span className="txt-xxxl txt-m text--secondary">Market Maker</span>
+              </div>
+              <div className="txt-m text--primary push-half--bottom  push-top--35">
+                Reserve ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
+              </div>
+              <div className="txt-m text--primary push-half--bottom">
+                Reserve Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
+              </div>
+            </Col>
+            <Col lg={2} xsOffset={2}>
+              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
+                Logout
+              </Button>
+              <a className="btn bg--primary txt-p-vault txt-dddbld text--white" href={this.etherScanLink} target="_blank" rel="noopener noreferrer">
+                View Reserve on Etherscan
+              </a>
+            </Col>
+          </Row>
+        </CUICard>
+        {/* <CUICard>
+          <Row>
+            <Col lg={8}>
+              <span className="txt-m text--primary push--bottom">
+                Select Token :{" "}
+                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Token" options={this.tokenOptions} />
+              </span>
+            </Col>
+            <Col lg={4} />
+          </Row>
+          {dropDownSelect ? (
+            <Row>
+              <Col />
+            </Row>
+          ) : null}
+        </CUICard> */}
 
-        <div>
-          Select Token : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Token" options={this.tokenOptions} />
-        </div>
+        <EtherScanHoldingsTable tokenBalance={tokenBalance} />
 
-        <HoldingsTable tokenBalance={tokenBalance} />
-        <Button color="red" onClick={this.onLogoutClick}>
-          Logout
-        </Button>
         <CUICard>
           <Row center="lg">
             <Col>
