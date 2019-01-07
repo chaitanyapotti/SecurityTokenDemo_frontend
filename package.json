@@ -36,7 +36,6 @@
     "size:why": "node tools/stats.js",
     "size": "size-limit"
   },
-  "proxy": "https://api-securitytoken.herokuapp.com",
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",

@@ -2,10 +2,11 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import actionTypes from "../actionTypes";
 import setAuthToken from "../utils/setAuthToken";
+import config from "../config";
 
 export const loginUserAction = (userData, history) => dispatch => {
   axios
-    .post("/api/users/login", userData)
+    .post(`${config.api}/api/users/login`, userData)
     .then(res => {
       const { token } = res.data;
       localStorage.setItem("user_data", JSON.stringify(res.data));
