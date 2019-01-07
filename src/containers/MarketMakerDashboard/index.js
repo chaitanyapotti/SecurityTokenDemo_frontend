@@ -41,6 +41,9 @@ class MarketMakerDashboard extends Component {
         </div>
 
         <HoldingsTable tokenBalance={tokenBalance} />
+        <Button color="red" onClick={this.onLogoutClick}>
+          Logout
+        </Button>
       </Grid>
     );
   }
