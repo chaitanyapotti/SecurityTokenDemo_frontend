@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Table, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
+import CUICard from "../../components/CustomMUI/CUICard";
 import { logoutUserAction } from "../../actions/authActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
-import { Grid } from "../../helpers/react-flexbox-grid";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 
@@ -25,10 +26,22 @@ class InvestorDashboard extends Component {
   render() {
     const { userBalance, tokenBalance, portfolioValue } = this.props || {};
     return (
-      <Grid container>
-        <h2>Investor</h2>
-        <h3>ETH Balance : {userBalance} </h3>
-        <h3>Portfolio Value : {formatMoney(portfolioValue, 0)}</h3>
+      <Grid container="true">
+        <CUICard>
+          <Row>
+            <Col lg={6} xs={12}>
+              <div className="txt-m text--primary push-half-h--bottom">
+                Role : <span className="txt-m text--secondary">Investor</span>
+              </div>
+              <div className="txt-m text--primary push-half-h--bottom">
+                ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
+              </div>
+              <div className="txt-m text--primary push-half-h--bottom">
+                Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
+              </div>
+            </Col>
+          </Row>
+        </CUICard>
         <Table celled>
           <Table.Header>
             <Table.Row>
