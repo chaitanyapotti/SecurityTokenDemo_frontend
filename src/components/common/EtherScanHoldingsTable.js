@@ -1,11 +1,12 @@
 import React, { PureComponent } from "react";
 import { Table, Button } from "semantic-ui-react";
+import { CustomToolTip } from "./FormComponents";
 import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import config from "../../config";
 
 class EtherScanHoldingsTable extends PureComponent {
   render() {
-    const { tokenBalance } = this.props || {};
+    const { tokenBalance, isOperator } = this.props || {};
     return (
       <Table celled>
         <Table.Header>
@@ -26,25 +27,31 @@ class EtherScanHoldingsTable extends PureComponent {
               <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
               <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
               <Table.Cell verticalAlign="middle">
-                <span>
-                  <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" onClick={this.onDepositClick}>
-                    Deposit
-                  </Button>
-                </span>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onDepositClick}>
+                      Deposit
+                    </Button>
+                  </span>
+                </CustomToolTip>
               </Table.Cell>
               <Table.Cell verticalAlign="middle">
-                <span>
-                  <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" onClick={this.onWithdrawClick}>
-                    Withdraw
-                  </Button>
-                </span>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onWithdrawClick}>
+                      Withdraw
+                    </Button>
+                  </span>
+                </CustomToolTip>
               </Table.Cell>
               <Table.Cell verticalAlign="middle">
-                <span>
-                  <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" onClick={this.onTradeClick}>
-                    Trade
-                  </Button>
-                </span>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onTradeClick}>
+                      Trade
+                    </Button>
+                  </span>
+                </CustomToolTip>
               </Table.Cell>
               <Table.Cell>
                 <span>

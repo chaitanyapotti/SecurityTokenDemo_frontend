@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Table, Button, Dropdown, Card, CardContent, Feed } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
-import web3 from "../../helpers/web3";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTable";
@@ -23,7 +22,8 @@ class MarketMakerDashboard extends Component {
         text: config.tokens[x].name
       })) || {};
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { reserveAddress, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    this.publicAddress = publicAddress;
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
     this.etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
@@ -41,7 +41,8 @@ class MarketMakerDashboard extends Component {
   };
 
   render() {
-    const { userBalance, tokenBalance, portfolioValue, dropDownSelect } = this.props || {};
+    const { userBalance, tokenBalance, portfolioValue, dropDownSelect, userLocalPublicAddress } = this.props || {};
+    const isOperator = userLocalPublicAddress === this.publicAddress;
     return (
       <Grid container="true">
         <CUICard style={{ marginTop: "20px" }}>
@@ -67,6 +68,7 @@ class MarketMakerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
+        {isOperator ? <div /> : null}
         {/* <CUICard>
           <Row>
             <Col lg={8}>
@@ -84,7 +86,7 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        <EtherScanHoldingsTable tokenBalance={tokenBalance} />
+        <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} />
 
         <CUICard>
           <Row center="lg">
@@ -106,14 +108,16 @@ MarketMakerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData, marketMakerData } = state;
+  const { userData, marketMakerData, signinManagerData } = state;
   const { userBalance, tokenBalance, portfolioValue } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
+  const { userLocalPublicAddress } = signinManagerData || {};
   return {
     userBalance,
     tokenBalance,
     portfolioValue,
-    dropDownSelect
+    dropDownSelect,
+    userLocalPublicAddress
   };
 };
 
