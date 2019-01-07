@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Table, Button } from "semantic-ui-react";
+import { Table, Button, Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
+import { Grid } from "../../helpers/react-flexbox-grid";
 
 class BrokerDealerDashboard extends Component {
   onLogoutClick = e => {
@@ -11,21 +12,14 @@ class BrokerDealerDashboard extends Component {
     logoutUser(history);
   };
 
-  addTableRowsDynamically() {
-    return (
-      <Table.Row>
-        <Table.Cell>Cell</Table.Cell>
-        <Table.Cell>Cell</Table.Cell>
-        <Table.Cell>Cell</Table.Cell>
-      </Table.Row>
-    );
-  }
-
   render() {
+    const tokenOptions = [{ key: "Michelle", value: "Michelle", text: "Michelle" }, { key: "Christian", value: "Christian", text: "Christian" }];
     return (
-      <div>
+      <Grid>
         <h2>Broker Dealer</h2>
-        <br />
+        <div>
+          Select Investor : <Dropdown onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
+        </div>
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -34,10 +28,9 @@ class BrokerDealerDashboard extends Component {
               <Table.HeaderCell>Token Price</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-          <Table.Body>{this.addTableRowsDynamically()}</Table.Body>
         </Table>
         <Button onClick={this.onLogoutClick}>Logout</Button>
-      </div>
+      </Grid>
     );
   }
 }

@@ -7,6 +7,11 @@
   height: 40vmin;
 }
 
+.card-brdr {
+  border: 1.75px solid #eaeaea !important;
+  box-shadow: none !important;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
