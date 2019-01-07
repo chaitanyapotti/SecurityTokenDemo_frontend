@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { Table, Button } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { logoutUserAction } from "../../actions/authActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
+import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
+import HoldingsTable from "../../components/common/HoldingsTable";
 
 class InvestorDashboard extends Component {
   onLogoutClick = e => {
@@ -46,24 +47,7 @@ class InvestorDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Value(USD)</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {Object.keys(tokenBalance).map(key => (
-              <Table.Row key={key}>
-                <Table.Cell>{key}</Table.Cell>
-                <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <HoldingsTable tokenBalance={tokenBalance} />
         <CUICard>
           <Row center="lg">
             <Col>
