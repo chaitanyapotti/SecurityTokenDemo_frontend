@@ -5,9 +5,10 @@
 .logo {
   position: relative;
   display: inline-block;
-  height: 135px;
-  width: 125px;
-  background: url(/assets/LoginScreen/logo.svg) no-repeat 0 0;
+  height: 78px;
+  width: 300px;
+  margin-top: 20px;
+  background: url(/assets/TWO12BlkWht.png) no-repeat 0 0;
   background-size: 100%;
   cursor: pointer;
 }
