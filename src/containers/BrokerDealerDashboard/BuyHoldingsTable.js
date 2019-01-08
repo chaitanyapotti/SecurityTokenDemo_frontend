@@ -2,9 +2,9 @@ import React, { PureComponent } from "react";
 import { Table, Button, Input } from "semantic-ui-react";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 import config from "../../config";
-import AlertModal from "./AlertModal";
+import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import LoadingButton from "./LoadingButton";
+import LoadingButton from "../../components/common/LoadingButton";
 
 class BuyHoldingsTable extends PureComponent {
   state = {

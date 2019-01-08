@@ -6,7 +6,7 @@ import CUICard from "../../components/CustomMUI/CUICard";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
-import BuyHoldingsTable from "../../components/common/BuyHoldingsTable";
+import BuyHoldingsTable from "./BuyHoldingsTable";
 import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
