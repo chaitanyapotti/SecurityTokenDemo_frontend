@@ -11,6 +11,7 @@ import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTab
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import Navbar from "../Navbar";
 
 class MarketMakerDashboard extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class MarketMakerDashboard extends Component {
     const isOperator = userLocalPublicAddress === this.publicAddress;
     return (
       <Grid container="true">
+        <Navbar />
         <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>

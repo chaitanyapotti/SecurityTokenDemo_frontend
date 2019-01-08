@@ -7,15 +7,11 @@ import store from "./store";
 import routes from "./routes";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import Navbar from "./containers/Navbar";
 
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App>
-        <Navbar />
-        {routes}
-      </App>
+      <App>{routes}</App>
     </Router>
   </Provider>,
   document.getElementById("root")
