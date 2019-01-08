@@ -8,26 +8,27 @@ const INITIAL_STATE = {
 };
 
 export default function(state = INITIAL_STATE, action) {
-  const currentTradeData = JSON.parse(JSON.stringify(state.tradeData));
+  const currentBuyTradeData = JSON.parse(JSON.stringify(state.buyTradeData));
+  const currentSellTradeData = JSON.parse(JSON.stringify(state.sellTradeData));
   switch (action.type) {
     case actionTypes.FETCHED_BUY_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
       const price = formatRateToPrice(rate);
-      currentTradeData[token] = { rate, price };
+      currentBuyTradeData[token] = { rate, price };
       return {
         ...state,
-        buyTradeData: currentTradeData
+        buyTradeData: currentBuyTradeData
       };
     }
     case actionTypes.FETCHED_SELL_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
       const price = formatRateToPrice(rate);
-      currentTradeData[token] = { rate, price };
+      currentSellTradeData[token] = { rate, price };
       return {
         ...state,
-        sellTradeData: currentTradeData
+        sellTradeData: currentSellTradeData
       };
     }
     default:
