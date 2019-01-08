@@ -14,7 +14,7 @@ export default function(state = INITIAL_STATE, action) {
     case actionTypes.GET_USER_BALANCE:
       return {
         ...state,
-        userBalance: formatFromWei(action.payload, 3)
+        userBalance: formatFromWei(action.payload, 5)
       };
     case actionTypes.GET_TOKEN_BALANCE: {
       const { token, data } = action.payload || {};

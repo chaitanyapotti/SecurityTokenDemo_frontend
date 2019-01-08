@@ -3,6 +3,7 @@ import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
+import { getTokenBalance } from "./userActions";
 
 export const getBuyRate = (token, etherAmount) => dispatch => {
   axios
@@ -44,7 +45,7 @@ export const buySuccess = receipt => ({
   type: actionTypes.BUY_SUCCESS
 });
 
-export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRate) => dispatch => {
+export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRate, toAddress) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
@@ -72,67 +73,7 @@ export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRa
                 transactionHash,
                 () => {
                   dispatch(buySuccess(true));
-                  dispatch({
-                    payload: { transactionHash: "" },
-                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
-                  });
-                },
-                () => {
-                  dispatch(buySuccess(false));
-                  dispatch(isBuyButtonSpinning(false));
-                  dispatch({
-                    payload: { transactionHash: "" },
-                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
-                  });
-                },
-                () => {},
-                () => {
-                  dispatch(buySuccess(false));
-                  dispatch(isBuyButtonSpinning(false));
-                  dispatch({
-                    payload: { transactionHash: "" },
-                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
-                  });
-                }
-              )
-            );
-          })
-          .catch(err => {
-            console.error(err.message);
-            dispatch(isBuyButtonSpinning(false));
-          });
-      }
-    })
-    .catch(err => console.log(err));
-};
-
-export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sellRate) => dispatch => {
-  dispatch(isBuyButtonSpinning(true));
-  axios
-    .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
-    .then(async res => {
-      if (res.status === 200) {
-        const { data } = res.data;
-        const { abi } = data || {};
-        const instance = new web3.eth.Contract(abi, config.KyberNetworkProxy, { from: userLocalPublicAddress });
-        const gasPrice = await web3.eth.getGasPrice();
-        instance.methods
-          .swapTokenToEther(config.tokens[token].address, web3.utils.toWei(tokenAmount, "ether"), sellRate)
-          .send({
-            from: userLocalPublicAddress,
-            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
-          })
-          .on("transactionHash", transactionHash => {
-            dispatch(isBuyButtonSpinning(false));
-            dispatch({
-              payload: { transactionHash },
-              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
-            });
-            dispatch(
-              pollTxHash(
-                transactionHash,
-                () => {
-                  dispatch(buySuccess(true));
+                  dispatch(transferSuccess(false));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -166,7 +107,72 @@ export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sell
     })
     .catch(err => {
       console.log(err);
-      dispatch(isBuyButtonSpinning(true));
+      dispatch(isBuyButtonSpinning(false));
+    });
+};
+
+export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sellRate, toAddress) => dispatch => {
+  dispatch(isBuyButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.KyberNetworkProxy, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .swapTokenToEther(config.tokens[token].address, web3.utils.toWei(tokenAmount, "ether"), sellRate)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isBuyButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(buySuccess(true));
+                  dispatch(transferSuccess(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(buySuccess(false));
+                  dispatch(isBuyButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(buySuccess(false));
+                  dispatch(isBuyButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isBuyButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(isBuyButtonSpinning(false));
     });
 };
 
@@ -207,6 +213,7 @@ export const transferTokensToUser = (token, quantity, userLocalPublicAddress, to
                 transactionHash,
                 () => {
                   dispatch(transferSuccess(true));
+                  dispatch(getTokenBalance(toAddress));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -271,6 +278,7 @@ export const transferTokensFromUser = (token, quantity, userLocalPublicAddress, 
                 transactionHash,
                 () => {
                   dispatch(transferSuccess(true));
+                  dispatch(getTokenBalance(fromAddress));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED

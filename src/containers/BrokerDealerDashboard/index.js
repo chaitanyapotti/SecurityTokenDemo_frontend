@@ -57,7 +57,7 @@ class BrokerDealerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
-        {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} publicAddress={publicAddress} /> : null}
+        {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} publicAddress={publicAddress} dropDownSelect={dropDownSelect} /> : null}
         <CUICard>
           <Row center="lg">
             <Col>

@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { Table, Button, Input, Label } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import LoadingButton from "../../components/common/LoadingButton";
-import { getBuyRate, getSellRate, buyTokenAction } from "../../actions/tradeActions";
+import { getBuyRate, getSellRate, buyTokenAction, transferTokensToUser, transferTokensFromUser } from "../../actions/tradeActions";
 import { CustomToolTip } from "../../components/common/FormComponents";
+import Transaction from "../../components/common/FormComponents/Transaction";
 
 class BuyHoldingsTable extends Component {
   state = {
@@ -47,8 +48,28 @@ class BuyHoldingsTable extends Component {
     fetchBuyRate(buyToken, buyInput);
   };
 
+  onTransferTokenClick = () => {
+    const { transferTokensToUser: transfer } = this.props;
+    const { buyTradeData, userLocalPublicAddress, dropDownSelect } = this.props || {};
+    const { buyToken, buyInput } = this.state;
+    const tokenCount = parseFloat(buyTradeData[buyToken].rate) * parseFloat(buyInput);
+    transfer(buyToken, Math.round(tokenCount).toString(), userLocalPublicAddress, dropDownSelect);
+  };
+
   render() {
-    const { tokenBalance, buyTradeData, buyButtonSpinning, transferButtonSpinning, userLocalPublicAddress, publicAddress } = this.props || {};
+    const {
+      tokenBalance,
+      buyTradeData,
+      buyButtonSpinning,
+      transferButtonSpinning,
+      userLocalPublicAddress,
+      publicAddress,
+      buyButtonTransactionHash,
+      transferButtonTransactionHash,
+      buySuccess,
+      transferSuccess
+    } = this.props || {};
+    console.log(buyButtonSpinning, "spin");
     const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
     const isOperator = userLocalPublicAddress === publicAddress;
@@ -112,27 +133,28 @@ class BuyHoldingsTable extends Component {
               <div>
                 <Row className="push--bottom">
                   <Col lg={12}>
-                    <div>{buyPrice}</div>
+                    <div> Token Price: {buyPrice} ETH/token</div>
+                    <div> Receivable Tokens: {formatFromWei(parseFloat(buyTradeData[buyToken].rate) * parseFloat(buyInput), 3)} tokens</div>
                   </Col>
                 </Row>
                 <Row className="push--bottom">
                   <Col lg={6}>
-                    {buyButtonSpinning ? (
-                      <LoadingButton type="pending" onClick={this.onBuyTokenClick}>
-                        Buy
-                      </LoadingButton>
-                    ) : (
-                      <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
-                    )}
+                    <Transaction
+                      txHash={buyButtonTransactionHash}
+                      buttonSpinning={buyButtonSpinning}
+                      onClick={this.onBuyTokenClick}
+                      buttonText="Buy"
+                      success={buySuccess}
+                    />
                   </Col>
                   <Col lg={6}>
-                    {transferButtonSpinning ? (
-                      <LoadingButton type="pending" onClick={this.onTransferTokenClick}>
-                        Transfer
-                      </LoadingButton>
-                    ) : (
-                      <LoadingButton onClick={this.onTransferTokenClick}>Transfer</LoadingButton>
-                    )}
+                    <Transaction
+                      txHash={transferButtonTransactionHash}
+                      buttonSpinning={transferButtonSpinning}
+                      onClick={this.onTransferTokenClick}
+                      buttonText="transfer"
+                      success={transferSuccess}
+                    />
                   </Col>
                 </Row>
               </div>
@@ -148,23 +170,38 @@ class BuyHoldingsTable extends Component {
 BuyHoldingsTable.propTypes = {
   buyTokenAction: Proptypes.func.isRequired,
   getBuyRate: Proptypes.func.isRequired,
-  getSellRate: Proptypes.func.isRequired
+  getSellRate: Proptypes.func.isRequired,
+  transferTokensToUser: Proptypes.func.isRequired,
+  transferTokensFromUser: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   const { tradeData, signinManagerData } = state;
-  const { buyTradeData, sellTradeData, buyButtonSpinning, transferButtonSpinning } = tradeData;
+  const {
+    buyTradeData,
+    sellTradeData,
+    buyButtonSpinning,
+    transferButtonSpinning,
+    buyButtonTransactionHash,
+    transferButtonTransactionHash,
+    buySuccess,
+    transferSuccess
+  } = tradeData;
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     buyTradeData,
     sellTradeData,
     userLocalPublicAddress,
     buyButtonSpinning,
-    transferButtonSpinning
+    transferButtonSpinning,
+    buyButtonTransactionHash,
+    transferButtonTransactionHash,
+    buySuccess,
+    transferSuccess
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getBuyRate, getSellRate, buyTokenAction }
+  { getBuyRate, getSellRate, buyTokenAction, transferTokensToUser, transferTokensFromUser }
 )(BuyHoldingsTable);
