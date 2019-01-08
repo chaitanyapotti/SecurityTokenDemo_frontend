@@ -20,6 +20,14 @@
   background-color: #ed8c0e !important;
 }
 
+.landing {
+  position: relative;
+  background: url("./img/HeaderCondensed.png") no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
