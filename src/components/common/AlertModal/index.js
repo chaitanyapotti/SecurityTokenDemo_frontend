@@ -8,6 +8,7 @@ const AlertModal = props => {
     <div>
       <CUIModal open={open}>
         <CUIModalContent className="ModalContent">{children}</CUIModalContent>
+        <br />
         <CUIModalActions className="ModalActions">
           <div className="hli">
             <LoadingButton onClick={handleClose}>Close</LoadingButton>

@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
-import { Table, Button } from "semantic-ui-react";
+import { Table, Button, Input } from "semantic-ui-react";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "./AlertModal";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import LoadingButton from "./LoadingButton";
 
 class BuyHoldingsTable extends PureComponent {
   state = {
@@ -65,7 +67,30 @@ class BuyHoldingsTable extends PureComponent {
             ))}
           </Table.Body>
         </Table>
-        <AlertModal open={buyModalOpen} handleClose={this.handleBuyModalClose} />
+        <AlertModal open={buyModalOpen} handleClose={this.handleBuyModalClose}>
+          <Grid>
+            <Row>
+              <Col lg={12}>
+                <Input placeholder="Enter Ether Amount" />
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col lg={12}>
+                <LoadingButton>Get Price</LoadingButton>
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col lg={6}>
+                <LoadingButton>Buy</LoadingButton>
+              </Col>
+              <Col lg={6}>
+                <LoadingButton>Transfer</LoadingButton>
+              </Col>
+            </Row>
+          </Grid>
+        </AlertModal>
         <AlertModal open={sellModalOpen} handleClose={this.handleSellModalClose} />
       </div>
     );
