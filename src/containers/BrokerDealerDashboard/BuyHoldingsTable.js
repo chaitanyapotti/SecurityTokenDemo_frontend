@@ -1,10 +1,12 @@
 import React, { PureComponent } from "react";
 import { Table, Button, Input } from "semantic-ui-react";
+import { connect } from "react-redux";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import LoadingButton from "../../components/common/LoadingButton";
+import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 
 class BuyHoldingsTable extends PureComponent {
   state = {
@@ -97,4 +99,16 @@ class BuyHoldingsTable extends PureComponent {
   }
 }
 
-export default BuyHoldingsTable;
+const mapStateToProps = state => {
+  const { tradeData } = state;
+  const { buyTradeData, sellTradeData } = tradeData;
+  return {
+    buyTradeData,
+    sellTradeData
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getBuyRate, getSellRate }
+)(BuyHoldingsTable);
