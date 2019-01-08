@@ -9,6 +9,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import HoldingsTable from "../../components/common/HoldingsTable";
+import Navbar from "../Navbar";
 
 class InvestorDashboard extends Component {
   onLogoutClick = e => {
@@ -28,6 +29,7 @@ class InvestorDashboard extends Component {
     const { userBalance, tokenBalance, portfolioValue } = this.props || {};
     return (
       <Grid container="true">
+        <Navbar />
         <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>
@@ -41,11 +43,11 @@ class InvestorDashboard extends Component {
                 Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
               </div>
             </Col>
-            <Col lg={2} xsOffset={2}>
+            {/* <Col lg={2} xsOffset={2}>
               <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
                 Logout
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </CUICard>
         <HoldingsTable tokenBalance={tokenBalance} />

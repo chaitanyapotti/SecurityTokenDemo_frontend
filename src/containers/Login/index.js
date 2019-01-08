@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
+import { Button, Form, Header, Segment } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 
 class Login extends Component {
@@ -48,37 +49,49 @@ class Login extends Component {
     `}
         </style>
         <div className="landing">
-          <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
-            <Grid.Column style={{ maxWidth: 450 }}>
-              <Form size="large">
-                <Segment stacked>
-                  <Form.Input
-                    error={!!errors.usernameOrEmail}
-                    value={usernameOrEmail}
-                    onChange={this.onUsernameOrEmailChange}
-                    fluid
-                    icon="user"
-                    iconPosition="left"
-                    placeholder="Username or E-mail address"
-                  />
-                  {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
-                  <Form.Input
-                    error={!!errors.password}
-                    value={password}
-                    onChange={this.onPasswordChange}
-                    fluid
-                    icon="lock"
-                    iconPosition="left"
-                    placeholder="Password"
-                    type="password"
-                  />
-                  {errors.password && <Form.Field>{errors.password}</Form.Field>}
-                  <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
-                    Login
-                  </Button>
-                </Segment>
-              </Form>
-            </Grid.Column>
+          <Grid>
+            <Row>
+              <Col>
+                <img src="/assets/TWO12BlkWht.png" style={{ width: "300px", height: "78px", marginTop: "20px" }} alt="Logo" />
+              </Col>
+            </Row>
+            <Row end="lg" middle="lg" start="lg">
+              <Col lg={6}>
+                <div className="text-shadow-medium text-white txt-m bold txt-xxxxl">
+                  FINANCING <br /> THE FUTURE
+                </div>
+              </Col>
+              <Col lg={6}>
+                <Form size="large" style={{ marginTop: "50%", marginLeft: "20%" }}>
+                  <Segment stacked>
+                    <Form.Input
+                      error={!!errors.usernameOrEmail}
+                      value={usernameOrEmail}
+                      onChange={this.onUsernameOrEmailChange}
+                      fluid
+                      icon="user"
+                      iconPosition="left"
+                      placeholder="Username or E-mail address"
+                    />
+                    {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
+                    <Form.Input
+                      error={!!errors.password}
+                      value={password}
+                      onChange={this.onPasswordChange}
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Password"
+                      type="password"
+                    />
+                    {errors.password && <Form.Field>{errors.password}</Form.Field>}
+                    <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
+                      Login
+                    </Button>
+                  </Segment>
+                </Form>
+              </Col>
+            </Row>
           </Grid>
         </div>
       </div>

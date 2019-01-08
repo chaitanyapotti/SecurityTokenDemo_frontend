@@ -10,6 +10,7 @@ import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import AlertModal from "../../components/common/AlertModal";
+import Navbar from "../Navbar";
 
 class BrokerDealerDashboard extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class BrokerDealerDashboard extends Component {
 
     return (
       <Grid container="true">
+        <Navbar />
         <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>

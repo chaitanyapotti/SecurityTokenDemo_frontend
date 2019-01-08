@@ -25,7 +25,9 @@ class Navbar extends PureComponent {
             <div className="collapse navbar-collapse" id="mobile-nav">
               <ul className="nav nav-pills ml-auto">
                 <li className="nav-item">
-                  <Button onClick={this.onLogoutClick}>Logout</Button>
+                  <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
+                    Logout
+                  </Button>
                 </li>
               </ul>
             </div>

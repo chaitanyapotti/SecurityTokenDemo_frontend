@@ -11,6 +11,7 @@ import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTab
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import Navbar from "../Navbar";
 
 class MarketMakerDashboard extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class MarketMakerDashboard extends Component {
     const isOperator = userLocalPublicAddress === this.publicAddress;
     return (
       <Grid container="true">
+        <Navbar />
         <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>
@@ -59,9 +61,9 @@ class MarketMakerDashboard extends Component {
               </div>
             </Col>
             <Col lg={2} xsOffset={2}>
-              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
+              {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
                 Logout
-              </Button>
+              </Button> */}
               <a className="btn bg--primary txt-p-vault txt-dddbld text--white" href={this.etherScanLink} target="_blank" rel="noopener noreferrer">
                 View Reserve on Etherscan
               </a>
