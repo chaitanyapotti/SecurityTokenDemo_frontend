@@ -3,7 +3,6 @@ import { Button, Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import BuyHoldingsTable from "../../components/common/BuyHoldingsTable";
@@ -22,12 +21,6 @@ class BrokerDealerDashboard extends Component {
         text: x.name
       })) || {};
   }
-
-  onLogoutClick = e => {
-    const { logoutUserAction: logoutUser } = this.props;
-    const { history } = this.props || {};
-    logoutUser(history);
-  };
 
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange, getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
@@ -58,11 +51,6 @@ class BrokerDealerDashboard extends Component {
                 Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
               </div>
             </Col>
-            <Col lg={2} xsOffset={2}>
-              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
-                Logout
-              </Button>
-            </Col>
           </Row>
         </CUICard>
         {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} /> : null}
@@ -79,7 +67,6 @@ class BrokerDealerDashboard extends Component {
 }
 
 BrokerDealerDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired,
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired
@@ -99,5 +86,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction }
+  { onDropdownChange, getTokenBalance, getUserBalanceAction }
 )(BrokerDealerDashboard);
