@@ -5,11 +5,11 @@ import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
+import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import BuyHoldingsTable from "../../components/common/BuyHoldingsTable";
 import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import AlertModal from "../../components/common/AlertModal";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 
@@ -79,18 +79,21 @@ BrokerDealerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { marketMakerData, userData } = state;
+  const { marketMakerData, userData, tradeData } = state;
   const { userBalance, tokenBalance, portfolioValue } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
+  const { buyTradeData, sellTradeData } = tradeData || {};
   return {
     dropDownSelect,
     tokenBalance,
     portfolioValue,
-    userBalance
+    userBalance,
+    buyTradeData,
+    sellTradeData
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onDropdownChange, getTokenBalance, getUserBalanceAction }
+  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate }
 )(BrokerDealerDashboard);
