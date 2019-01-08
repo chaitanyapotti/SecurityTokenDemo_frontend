@@ -47,38 +47,40 @@ class Login extends Component {
       }
     `}
         </style>
-        <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Form size="large">
-              <Segment stacked>
-                <Form.Input
-                  error={!!errors.usernameOrEmail}
-                  value={usernameOrEmail}
-                  onChange={this.onUsernameOrEmailChange}
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="Username or E-mail address"
-                />
-                {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
-                <Form.Input
-                  error={!!errors.password}
-                  value={password}
-                  onChange={this.onPasswordChange}
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                />
-                {errors.password && <Form.Field>{errors.password}</Form.Field>}
-                <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
-                  Login
-                </Button>
-              </Segment>
-            </Form>
-          </Grid.Column>
-        </Grid>
+        <div className="landing">
+          <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
+            <Grid.Column style={{ maxWidth: 450 }}>
+              <Form size="large">
+                <Segment stacked>
+                  <Form.Input
+                    error={!!errors.usernameOrEmail}
+                    value={usernameOrEmail}
+                    onChange={this.onUsernameOrEmailChange}
+                    fluid
+                    icon="user"
+                    iconPosition="left"
+                    placeholder="Username or E-mail address"
+                  />
+                  {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
+                  <Form.Input
+                    error={!!errors.password}
+                    value={password}
+                    onChange={this.onPasswordChange}
+                    fluid
+                    icon="lock"
+                    iconPosition="left"
+                    placeholder="Password"
+                    type="password"
+                  />
+                  {errors.password && <Form.Field>{errors.password}</Form.Field>}
+                  <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
+                    Login
+                  </Button>
+                </Segment>
+              </Form>
+            </Grid.Column>
+          </Grid>
+        </div>
       </div>
     );
   }
