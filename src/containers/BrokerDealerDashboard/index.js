@@ -41,7 +41,7 @@ class BrokerDealerDashboard extends Component {
 
     return (
       <Grid container="true">
-        <CUICard style={{ marginTop: "20px" }}>
+        <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>
               <div className="txt-xxxl text--primary">

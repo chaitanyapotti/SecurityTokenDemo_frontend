@@ -45,7 +45,7 @@ class MarketMakerDashboard extends Component {
     const isOperator = userLocalPublicAddress === this.publicAddress;
     return (
       <Grid container="true">
-        <CUICard style={{ marginTop: "20px" }}>
+        <CUICard style={{ marginTop: "100px" }}>
           <Row>
             <Col lg={8}>
               <div className="txt-xxxl text--primary">
