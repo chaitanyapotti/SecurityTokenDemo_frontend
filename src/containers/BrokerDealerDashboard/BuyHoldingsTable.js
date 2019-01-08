@@ -103,14 +103,23 @@ class BuyHoldingsTable extends Component {
                 <div>{buyPrice}</div>
               </Col>
             </Row>
-            <Row className="push--bottom">
-              <Col lg={6}>
-                <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
-              </Col>
-              <Col lg={6}>
-                <LoadingButton>Transfer</LoadingButton>
-              </Col>
-            </Row>
+            {buyPrice > 0 ? (
+              <div>
+                <Row className="push--bottom">
+                  <Col lg={12}>
+                    <div>{buyPrice}</div>
+                  </Col>
+                </Row>
+                <Row className="push--bottom">
+                  <Col lg={6}>
+                    <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
+                  </Col>
+                  <Col lg={6}>
+                    <LoadingButton>Transfer</LoadingButton>
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
           </Grid>
         </AlertModal>
         <AlertModal open={sellModalOpen} handleClose={this.handleSellModalClose} />
