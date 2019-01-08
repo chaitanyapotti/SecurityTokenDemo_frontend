@@ -4,6 +4,8 @@ const formatFromWei = (input, precision = 0) => Math.round(parseFloat(input) * M
 
 const formatTokenPrice = (input, precision = 0) => parseFloat(parseFloat(input) * Math.pow(10, -18)).toPrecision(precision);
 
+const formatRateToPrice = rate => significantDigits(1 / parseFloat(rate));
+
 const formatCent = tokenPrice => {
   if (tokenPrice < 100) {
     return `${tokenPrice}¢`;
@@ -190,5 +192,6 @@ export {
   Colors,
   getSignInStatusText,
   getEtherScanHashLink,
-  getEtherScanAddressLink
+  getEtherScanAddressLink,
+  formatRateToPrice
 };
