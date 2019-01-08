@@ -101,20 +101,24 @@ class BuyHoldingsTable extends Component {
               </Col>
             </Row>
             <br />
-            <Row>
-              <Col lg={12}>
-                <div>{buyPrice}</div>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col lg={6}>
-                <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
-              </Col>
-              <Col lg={6}>
-                <LoadingButton>Transfer</LoadingButton>
-              </Col>
-            </Row>
+            {buyPrice > 0 ? (
+              <div>
+                <Row>
+                  <Col lg={12}>
+                    <div>{buyPrice}</div>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col lg={6}>
+                    <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
+                  </Col>
+                  <Col lg={6}>
+                    <LoadingButton>Transfer</LoadingButton>
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
           </Grid>
         </AlertModal>
         <AlertModal open={sellModalOpen} handleClose={this.handleSellModalClose} />

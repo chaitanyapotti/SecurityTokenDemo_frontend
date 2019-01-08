@@ -74,7 +74,7 @@ export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRa
                   dispatch(buySuccess(true));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.R1_FINALIZE_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
                   });
                 },
                 () => {
@@ -100,6 +100,199 @@ export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRa
           .catch(err => {
             console.error(err.message);
             dispatch(isBuyButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sellRate) => dispatch => {
+  dispatch(isBuyButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.KyberNetworkProxy, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .swapTokenToEther(config.tokens[token].address, web3.utils.toWei(tokenAmount, "ether"), sellRate)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isBuyButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(buySuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(buySuccess(false));
+                  dispatch(isBuyButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(buySuccess(false));
+                  dispatch(isBuyButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isBuyButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+export const isTransferButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TRANSFER_BUTTON_SPINNING
+});
+
+export const transferSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.TRANSFER_SUCCESS
+});
+
+export const transferTokensToUser = (token, quantity, userLocalPublicAddress, toAddress) => dispatch => {
+  dispatch(isTransferButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=OmiseGo`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.tokens[token].address, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .transfer(toAddress, quantity)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isTransferButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(transferSuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(transferSuccess(false));
+                  dispatch(isTransferButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(transferSuccess(false));
+                  dispatch(isTransferButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isTransferButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+export const transferTokensFromUser = (token, quantity, userLocalPublicAddress, fromAddress) => dispatch => {
+  dispatch(isTransferButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=OmiseGo`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.tokens[token].address, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .transferFrom(fromAddress, userLocalPublicAddress, quantity)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isTransferButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(transferSuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(transferSuccess(false));
+                  dispatch(isTransferButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(transferSuccess(false));
+                  dispatch(isTransferButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isTransferButtonSpinning(false));
           });
       }
     })
