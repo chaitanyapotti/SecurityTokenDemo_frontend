@@ -15,20 +15,19 @@ import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 
 class MarketMakerDashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.tokenOptions =
+  componentWillMount() {
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
+    const tokenOptions =
       Object.keys(config.tokens).map(x => ({
         key: config.tokens[x].name,
         value: config.tokens[x].address,
         text: config.tokens[x].name
       })) || {};
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { reserveAddress, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.publicAddress = publicAddress;
-    fetchUserBalance(reserveAddress);
-    fetchTokenBalance(reserveAddress);
-    this.etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
+    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, tokenOptions });
+    fetchUserBalance(publicAddress);
+    fetchTokenBalance(publicAddress);
   }
 
   onLogoutClick = e => {
@@ -44,8 +43,8 @@ class MarketMakerDashboard extends Component {
 
   render() {
     const { userBalance, tokenBalance, portfolioValue, dropDownSelect, userLocalPublicAddress } = this.props || {};
-    const isOperator = userLocalPublicAddress === this.publicAddress;
-    const { first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { first_name, email, phone, id, role, date, status, publicAddress, etherScanLink, tokenOptions } = this.state;
+    const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <Grid container="true">
         <Navbar />
@@ -69,7 +68,7 @@ class MarketMakerDashboard extends Component {
               {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
                 Logout
               </Button> */}
-              <a className="btn bg--primary txt-p-vault txt-dddbld text--white" href={this.etherScanLink} target="_blank" rel="noopener noreferrer">
+              <a className="btn bg--primary txt-p-vault txt-dddbld text--white" href={etherScanLink} target="_blank" rel="noopener noreferrer">
                 View Reserve on Etherscan
               </a>
             </Col>
@@ -81,7 +80,7 @@ class MarketMakerDashboard extends Component {
             <Col lg={8}>
               <span className="txt-m text--primary push--bottom">
                 Select Token :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Token" options={this.tokenOptions} />
+                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
               </span>
             </Col>
             <Col lg={4} />

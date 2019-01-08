@@ -24,6 +24,11 @@ class BrokerDealerDashboard extends Component {
       })) || {};
   }
 
+  componentWillMount() {
+    const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
+  }
+
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange, getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
     dropDownChange(d.value);
@@ -33,7 +38,7 @@ class BrokerDealerDashboard extends Component {
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, portfolioValue } = this.props || {};
-    const { first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
     return (
       <Grid container="true">
         <Navbar />
@@ -59,7 +64,7 @@ class BrokerDealerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
-        {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} /> : null}
+        {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} publicAddress={publicAddress} /> : null}
         <CUICard>
           <Row center="lg">
             <Col>
