@@ -58,11 +58,11 @@ class BrokerDealerDashboard extends Component {
                 Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
               </div>
             </Col>
-            <Col lg={2} xsOffset={2}>
+            {/* <Col lg={2} xsOffset={2}>
               <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
                 Logout
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </CUICard>
         {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} /> : null}

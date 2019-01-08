@@ -59,9 +59,9 @@ class MarketMakerDashboard extends Component {
               </div>
             </Col>
             <Col lg={2} xsOffset={2}>
-              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
+              {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
                 Logout
-              </Button>
+              </Button> */}
               <a className="btn bg--primary txt-p-vault txt-dddbld text--white" href={this.etherScanLink} target="_blank" rel="noopener noreferrer">
                 View Reserve on Etherscan
               </a>
