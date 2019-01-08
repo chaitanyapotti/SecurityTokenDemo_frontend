@@ -7,7 +7,15 @@ import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import LoadingButton from "../../components/common/LoadingButton";
-import { getBuyRate, getSellRate, buyTokenAction, transferTokensToUser, transferTokensFromUser } from "../../actions/tradeActions";
+import {
+  getBuyRate,
+  getSellRate,
+  buyTokenAction,
+  sellTokenAction,
+  transferTokensToUser,
+  transferTokensFromUser,
+  approveTokenTransfer
+} from "../../actions/tradeActions";
 import { CustomToolTip } from "../../components/common/FormComponents";
 import Transaction from "../../components/common/FormComponents/Transaction";
 
@@ -16,7 +24,9 @@ class BuyHoldingsTable extends Component {
     buyModalOpen: false,
     sellModalOpen: false,
     buyInput: "",
-    buyToken: ""
+    buyToken: "",
+    sellToken: "",
+    sellInput: ""
   };
 
   handleBuyModalOpen = () => this.setState({ buyModalOpen: true });
@@ -38,14 +48,34 @@ class BuyHoldingsTable extends Component {
     doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate);
   };
 
-  onSellClick = () => {
-    this.setState({ sellModalOpen: true });
+  onSellClick = key => {
+    this.setState({ sellModalOpen: true, sellToken: key });
+  };
+
+  onSellTokenClick = () => {
+    const { sellTokenAction: doSellToken } = this.props;
+    const { sellTradeData, userLocalPublicAddress } = this.props || {};
+    const { sellToken, sellInput } = this.state;
+    doSellToken(sellToken, sellInput, userLocalPublicAddress, sellTradeData[sellToken].rate);
+  };
+
+  onApproveClick = () => {
+    const { approveTokenTransfer: doApprove } = this.props;
+    const { userLocalPublicAddress } = this.props || {};
+    const { sellToken, sellInput } = this.state;
+    doApprove(sellToken, sellInput, userLocalPublicAddress);
   };
 
   getPriceClick = () => {
     const { getBuyRate: fetchBuyRate } = this.props;
     const { buyToken, buyInput } = this.state;
     fetchBuyRate(buyToken, buyInput);
+  };
+
+  getSellPriceClick = () => {
+    const { getSellRate: fetchSellRate } = this.props;
+    const { sellToken, sellInput } = this.state;
+    fetchSellRate(sellToken, sellInput);
   };
 
   onTransferTokenClick = () => {
@@ -56,10 +86,19 @@ class BuyHoldingsTable extends Component {
     transfer(buyToken, Math.round(tokenCount).toString(), userLocalPublicAddress, dropDownSelect);
   };
 
+  onTransferFromTokenClick = () => {
+    const { transferTokensFromUser: transferFrom } = this.props;
+    const { userLocalPublicAddress, dropDownSelect } = this.props || {};
+    const { sellToken, sellInput } = this.state;
+    console.log(sellToken, sellInput);
+    transferFrom(sellToken, sellInput, userLocalPublicAddress, dropDownSelect);
+  };
+
   render() {
     const {
       tokenBalance,
       buyTradeData,
+      sellTradeData,
       buyButtonSpinning,
       transferButtonSpinning,
       userLocalPublicAddress,
@@ -67,11 +106,20 @@ class BuyHoldingsTable extends Component {
       buyButtonTransactionHash,
       transferButtonTransactionHash,
       buySuccess,
-      transferSuccess
+      transferSuccess,
+      sellButtonSpinning,
+      transferFromButtonSpinning,
+      sellButtonTransactionHash,
+      transferFromButtonTransactionHash,
+      sellSuccess,
+      transferFromSuccess,
+      approveSuccess,
+      approveButtonTransactionHash,
+      approveButtonSpinning
     } = this.props || {};
-    console.log(buyButtonSpinning, "spin");
-    const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
+    const { buyModalOpen, sellModalOpen, buyInput, buyToken, sellInput, sellToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
+    const sellPrice = sellTradeData && sellTradeData[sellToken] ? sellTradeData[sellToken].price : 0;
     const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
@@ -107,7 +155,11 @@ class BuyHoldingsTable extends Component {
                 <Table.Cell>
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
-                      <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onSellClick}>
+                      <Button
+                        className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                        disabled={!isOperator}
+                        onClick={() => this.onSellClick(key)}
+                      >
                         Sell
                       </Button>
                     </span>
@@ -152,7 +204,7 @@ class BuyHoldingsTable extends Component {
                       txHash={transferButtonTransactionHash}
                       buttonSpinning={transferButtonSpinning}
                       onClick={this.onTransferTokenClick}
-                      buttonText="transfer"
+                      buttonText="Transfer"
                       success={transferSuccess}
                     />
                   </Col>
@@ -161,7 +213,59 @@ class BuyHoldingsTable extends Component {
             ) : null}
           </Grid>
         </AlertModal>
-        <AlertModal open={sellModalOpen} handleClose={this.handleSellModalClose} />
+        <AlertModal open={sellModalOpen} handleClose={this.handleSellModalClose}>
+          <Grid>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Input placeholder="Enter Token Amount" value={sellInput} onChange={e => this.setState({ sellInput: e.target.value })} />
+              </Col>
+            </Row>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <LoadingButton onClick={this.getSellPriceClick}>Get Price</LoadingButton>
+              </Col>
+            </Row>
+            {sellPrice > 0 ? (
+              <div>
+                <Row className="push--bottom">
+                  <Col lg={12}>
+                    <div> Token Price: {sellPrice} tokens/ETH</div>
+                    <div> Receivable Ether: {formatFromWei(parseFloat(sellTradeData[sellToken].rate) * parseFloat(sellInput), 3)} ETH</div>
+                  </Col>
+                </Row>
+                <Row className="push--bottom">
+                  <Col lg={4}>
+                    <Transaction
+                      txHash={transferFromButtonTransactionHash}
+                      buttonSpinning={transferFromButtonSpinning}
+                      onClick={this.onTransferFromTokenClick}
+                      buttonText="Transfer"
+                      success={transferFromSuccess}
+                    />
+                  </Col>
+                  <Col lg={4}>
+                    <Transaction
+                      txHash={approveButtonTransactionHash}
+                      buttonSpinning={approveButtonSpinning}
+                      onClick={this.onApproveClick}
+                      buttonText="Approve"
+                      success={approveSuccess}
+                    />
+                  </Col>
+                  <Col lg={4}>
+                    <Transaction
+                      txHash={sellButtonTransactionHash}
+                      buttonSpinning={sellButtonSpinning}
+                      onClick={this.onSellTokenClick}
+                      buttonText="Sell"
+                      success={sellSuccess}
+                    />
+                  </Col>
+                </Row>
+              </div>
+            ) : null}
+          </Grid>
+        </AlertModal>
       </div>
     );
   }
@@ -169,10 +273,12 @@ class BuyHoldingsTable extends Component {
 
 BuyHoldingsTable.propTypes = {
   buyTokenAction: Proptypes.func.isRequired,
+  sellTokenAction: Proptypes.func.isRequired,
   getBuyRate: Proptypes.func.isRequired,
   getSellRate: Proptypes.func.isRequired,
   transferTokensToUser: Proptypes.func.isRequired,
-  transferTokensFromUser: Proptypes.func.isRequired
+  transferTokensFromUser: Proptypes.func.isRequired,
+  approveTokenTransfer: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -185,7 +291,16 @@ const mapStateToProps = state => {
     buyButtonTransactionHash,
     transferButtonTransactionHash,
     buySuccess,
-    transferSuccess
+    transferSuccess,
+    sellButtonSpinning,
+    transferFromButtonSpinning,
+    sellButtonTransactionHash,
+    transferFromButtonTransactionHash,
+    sellSuccess,
+    transferFromSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning
   } = tradeData;
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
@@ -197,11 +312,20 @@ const mapStateToProps = state => {
     buyButtonTransactionHash,
     transferButtonTransactionHash,
     buySuccess,
-    transferSuccess
+    transferSuccess,
+    sellButtonSpinning,
+    transferFromButtonSpinning,
+    sellButtonTransactionHash,
+    transferFromButtonTransactionHash,
+    sellSuccess,
+    transferFromSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getBuyRate, getSellRate, buyTokenAction, transferTokensToUser, transferTokensFromUser }
+  { getBuyRate, getSellRate, buyTokenAction, sellTokenAction, transferTokensToUser, transferTokensFromUser, approveTokenTransfer }
 )(BuyHoldingsTable);

@@ -10,7 +10,16 @@ const INITIAL_STATE = {
   buyButtonTransactionHash: "",
   transferButtonTransactionHash: "",
   buySuccess: false,
-  transferSuccess: true
+  transferSuccess: true,
+  sellButtonSpinning: false,
+  transferFromButtonSpinning: false,
+  sellButtonTransactionHash: "",
+  transferFromButtonTransactionHash: "",
+  sellSuccess: true,
+  transferFromSuccess: false,
+  approveSuccess: true,
+  approveButtonTransactionHash: "",
+  approveButtonSpinning: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -57,6 +66,69 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         transferButtonSpinning: receipt
+      };
+    }
+    case actionTypes.SELL_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        sellSuccess: receipt
+      };
+    }
+    case actionTypes.TRANSFER_FROM_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        transferFromSuccess: receipt
+      };
+    }
+    case actionTypes.APPROVE_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        approveSuccess: receipt
+      };
+    }
+    case actionTypes.SELL_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        sellButtonSpinning: receipt
+      };
+    }
+    case actionTypes.SELL_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        sellButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.TRANSFER_FROM_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        transferFromButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.TRANSFER_FROM_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        transferFromButtonSpinning: receipt
+      };
+    }
+    case actionTypes.APPROVE_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        approveButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.APPROVE_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        approveButtonSpinning: receipt
       };
     }
     case actionTypes.FETCHED_BUY_RATE: {
