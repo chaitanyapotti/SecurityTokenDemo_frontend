@@ -61,7 +61,7 @@ class EtherScanHoldingsTable extends PureComponent {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View on Etherscan
+                    View on Blockchain
                   </a>
                 </span>
               </Table.Cell>
