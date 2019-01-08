@@ -164,7 +164,10 @@ export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sell
           });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      dispatch(isBuyButtonSpinning(true));
+    });
 };
 
 export const isTransferButtonSpinning = receipt => ({
@@ -235,7 +238,10 @@ export const transferTokensToUser = (token, quantity, userLocalPublicAddress, to
           });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      dispatch(isTransferButtonSpinning(false));
+    });
 };
 
 export const transferTokensFromUser = (token, quantity, userLocalPublicAddress, fromAddress) => dispatch => {
@@ -296,5 +302,8 @@ export const transferTokensFromUser = (token, quantity, userLocalPublicAddress, 
           });
       }
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      dispatch(isTransferButtonSpinning(false));
+    });
 };
