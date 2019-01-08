@@ -14,19 +14,15 @@ import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 
 class BrokerDealerDashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.tokenOptions =
+  componentWillMount() {
+    const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const tokenOptions =
       JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
         key: x.name,
         value: x.address,
         text: x.name
       })) || {};
-  }
-
-  componentWillMount() {
-    const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
+    this.setState({ first_name, email, phone, id, role, date, status, publicAddress, tokenOptions });
   }
 
   onDropdownChange = (e, d) => {
@@ -38,7 +34,7 @@ class BrokerDealerDashboard extends Component {
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, portfolioValue } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
+    const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     return (
       <Grid container="true">
         <Navbar />
@@ -53,7 +49,7 @@ class BrokerDealerDashboard extends Component {
               </div>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={this.tokenOptions} />
+                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
               </div>
               <div className="txt-m text--primary push-half--bottom">
                 ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
