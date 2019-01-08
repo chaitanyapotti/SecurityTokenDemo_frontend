@@ -47,10 +47,9 @@ class BuyHoldingsTable extends Component {
   };
 
   render() {
-    const { tokenBalance, buyTradeData } = this.props || {};
+    const { tokenBalance, buyTradeData, buyBottonSpinning } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
-    console.log(buyPrice);
     return (
       <div>
         <Table celled>
@@ -89,25 +88,22 @@ class BuyHoldingsTable extends Component {
         </Table>
         <AlertModal open={buyModalOpen} handleClose={this.handleBuyModalClose}>
           <Grid>
-            <Row>
+            <Row className="push--bottom">
               <Col lg={12}>
                 <Input placeholder="Enter Ether Amount" value={buyInput} onChange={e => this.setState({ buyInput: e.target.value })} />
               </Col>
             </Row>
-            <br />
-            <Row>
+            <Row className="push--bottom">
               <Col lg={12}>
                 <LoadingButton onClick={this.getPriceClick}>Get Price</LoadingButton>
               </Col>
             </Row>
-            <br />
-            <Row>
+            <Row className="push--bottom">
               <Col lg={12}>
                 <div>{buyPrice}</div>
               </Col>
             </Row>
-            <br />
-            <Row>
+            <Row className="push--bottom">
               <Col lg={6}>
                 <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
               </Col>
@@ -131,12 +127,13 @@ BuyHoldingsTable.propTypes = {
 
 const mapStateToProps = state => {
   const { tradeData, signinManagerData } = state;
-  const { buyTradeData, sellTradeData } = tradeData;
+  const { buyTradeData, sellTradeData, buyBottonSpinning } = tradeData;
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     buyTradeData,
     sellTradeData,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    buyBottonSpinning
   };
 };
 

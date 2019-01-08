@@ -4,13 +4,20 @@ import config from "../config";
 
 const INITIAL_STATE = {
   buyTradeData: {},
-  sellTradeData: {}
+  sellTradeData: {},
+  buyButtonSpinning: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   const currentBuyTradeData = JSON.parse(JSON.stringify(state.buyTradeData));
   const currentSellTradeData = JSON.parse(JSON.stringify(state.sellTradeData));
   switch (action.type) {
+    case actionTypes.BUY_BUTTON_SPINNING: {
+      return {
+        ...state,
+        buyButtonSpinning: action.payload
+      };
+    }
     case actionTypes.FETCHED_BUY_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
