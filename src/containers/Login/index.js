@@ -52,12 +52,12 @@ class Login extends Component {
           <Grid>
             <Row>
               <Col>
-                <img src="/assets/TWO12BlkWht.png" style={{ width: "300px", height: "78px", marginTop: "20px" }} alt="Logo" />
+                <div className="logo" />
               </Col>
             </Row>
             <Row end="lg" middle="lg" start="lg">
               <Col lg={6}>
-                <div className="text-shadow-medium text-white txt-m bold txt-xxxxl">
+                <div className="text-white txt-m bold txt-xxxxl">
                   FINANCING <br /> THE FUTURE
                 </div>
               </Col>
