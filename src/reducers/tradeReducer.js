@@ -6,23 +6,57 @@ const INITIAL_STATE = {
   buyTradeData: {},
   sellTradeData: {},
   buyButtonSpinning: false,
-  transferButtonSpinning: false
+  transferButtonSpinning: false,
+  buyButtonTransactionHash: "",
+  transferButtonTransactionHash: "",
+  buySuccess: false,
+  transferSuccess: true
 };
 
 export default function(state = INITIAL_STATE, action) {
   const currentBuyTradeData = JSON.parse(JSON.stringify(state.buyTradeData));
   const currentSellTradeData = JSON.parse(JSON.stringify(state.sellTradeData));
   switch (action.type) {
-    case actionTypes.BUY_BUTTON_SPINNING: {
+    case actionTypes.BUY_SUCCESS: {
+      const { receipt } = action.payload;
       return {
         ...state,
-        buyButtonSpinning: action.payload
+        buySuccess: receipt
+      };
+    }
+    case actionTypes.TRANSFER_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        transferSuccess: receipt
+      };
+    }
+    case actionTypes.BUY_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        buyButtonSpinning: receipt
+      };
+    }
+    case actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        buyButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.TRANSFER_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        transferButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.TRANSFER_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
       return {
         ...state,
-        transferButtonSpinning: action.payload
+        transferButtonSpinning: receipt
       };
     }
     case actionTypes.FETCHED_BUY_RATE: {
@@ -38,7 +72,7 @@ export default function(state = INITIAL_STATE, action) {
     case actionTypes.FETCHED_SELL_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
-      const price = formatRateToPrice(rate);
+      const price = formatRateToPrice(formatFromWei(rate, 18));
       currentSellTradeData[token] = { rate, price };
       return {
         ...state,
