@@ -7,7 +7,7 @@ import store from "./store";
 import routes from "./routes";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import Navbar from "./components/common/Navbar";
+import Navbar from "./containers/Navbar";
 
 ReactDOM.render(
   <Provider store={store}>

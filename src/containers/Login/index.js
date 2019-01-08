@@ -49,7 +49,6 @@ class Login extends Component {
         </style>
         <Grid textAlign="center" style={{ height: "100%" }} verticalAlign="middle">
           <Grid.Column style={{ maxWidth: 450 }}>
-            
             <Form size="large">
               <Segment stacked>
                 <Form.Input
@@ -73,7 +72,7 @@ class Login extends Component {
                   type="password"
                 />
                 {errors.password && <Form.Field>{errors.password}</Form.Field>}
-                <Button onClick={this.onSubmitClick} className="btn bg--primary txt-p-vault txt-dddbld text--white" fluid size="large">
+                <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
                   Login
                 </Button>
               </Segment>

@@ -16,6 +16,10 @@
   box-shadow: none !important;
 }
 
+.bg-test {
+  background-color: #ed8c0e !important;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
