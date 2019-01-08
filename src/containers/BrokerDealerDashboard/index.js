@@ -11,6 +11,7 @@ import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import AlertModal from "../../components/common/AlertModal";
 import Navbar from "../Navbar";
+import BioTable from "../../components/common/BioTable";
 
 class BrokerDealerDashboard extends Component {
   constructor(props) {
@@ -32,11 +33,14 @@ class BrokerDealerDashboard extends Component {
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, portfolioValue } = this.props || {};
-
+    const { first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
     return (
       <Grid container="true">
         <Navbar />
-        <CUICard style={{ marginTop: "100px" }}>
+        <div style={{ marginTop: "100px" }}>
+          <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
+        </div>
+        <CUICard style={{ marginTop: "10px" }}>
           <Row>
             <Col lg={8}>
               <div className="txt-xxxl text--primary">

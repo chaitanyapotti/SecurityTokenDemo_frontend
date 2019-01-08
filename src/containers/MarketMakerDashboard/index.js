@@ -12,6 +12,7 @@ import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import Navbar from "../Navbar";
+import BioTable from "../../components/common/BioTable";
 
 class MarketMakerDashboard extends Component {
   constructor(props) {
@@ -44,10 +45,14 @@ class MarketMakerDashboard extends Component {
   render() {
     const { userBalance, tokenBalance, portfolioValue, dropDownSelect, userLocalPublicAddress } = this.props || {};
     const isOperator = userLocalPublicAddress === this.publicAddress;
+    const { first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
     return (
       <Grid container="true">
         <Navbar />
-        <CUICard style={{ marginTop: "100px" }}>
+        <div style={{ marginTop: "100px" }}>
+          <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
+        </div>
+        <CUICard style={{ marginTop: "10px" }}>
           <Row>
             <Col lg={8}>
               <div className="txt-xxxl text--primary">
