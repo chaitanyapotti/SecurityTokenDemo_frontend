@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Navbar extends PureComponent {
   render() {
@@ -29,4 +29,4 @@ class Navbar extends PureComponent {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

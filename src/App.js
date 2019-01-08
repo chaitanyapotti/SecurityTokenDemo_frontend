@@ -8,7 +8,6 @@ import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import { setCurrentUser, logoutUserAction } from "./actions/authActions";
 import SigninManager from "./containers/SigninManager";
-import Navbar from "./components/common/Navbar";
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -27,7 +26,6 @@ class App extends PureComponent {
     const { children } = this.props || {};
     return (
       <div className="App">
-        <Navbar />
         {children}
         <SigninManager />
       </div>
