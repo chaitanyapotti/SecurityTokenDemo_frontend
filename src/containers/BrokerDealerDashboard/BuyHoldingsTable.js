@@ -48,7 +48,7 @@ class BuyHoldingsTable extends Component {
   };
 
   render() {
-    const { tokenBalance, buyTradeData, buyBottonSpinning, userLocalPublicAddress, publicAddress } = this.props || {};
+    const { tokenBalance, buyTradeData, buyButtonSpinning, transferButtonSpinning, userLocalPublicAddress, publicAddress } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
     const isOperator = userLocalPublicAddress === publicAddress;
@@ -108,11 +108,6 @@ class BuyHoldingsTable extends Component {
                 <LoadingButton onClick={this.getPriceClick}>Get Price</LoadingButton>
               </Col>
             </Row>
-            <Row className="push--bottom">
-              <Col lg={12}>
-                <div>{buyPrice}</div>
-              </Col>
-            </Row>
             {buyPrice > 0 ? (
               <div>
                 <Row className="push--bottom">
@@ -122,10 +117,22 @@ class BuyHoldingsTable extends Component {
                 </Row>
                 <Row className="push--bottom">
                   <Col lg={6}>
-                    <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
+                    {buyButtonSpinning ? (
+                      <LoadingButton type="pending" onClick={this.onBuyTokenClick}>
+                        Buy
+                      </LoadingButton>
+                    ) : (
+                      <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
+                    )}
                   </Col>
                   <Col lg={6}>
-                    <LoadingButton>Transfer</LoadingButton>
+                    {transferButtonSpinning ? (
+                      <LoadingButton type="pending" onClick={this.onTransferTokenClick}>
+                        Transfer
+                      </LoadingButton>
+                    ) : (
+                      <LoadingButton onClick={this.onTransferTokenClick}>Transfer</LoadingButton>
+                    )}
                   </Col>
                 </Row>
               </div>
@@ -146,13 +153,14 @@ BuyHoldingsTable.propTypes = {
 
 const mapStateToProps = state => {
   const { tradeData, signinManagerData } = state;
-  const { buyTradeData, sellTradeData, buyBottonSpinning } = tradeData;
+  const { buyTradeData, sellTradeData, buyButtonSpinning, transferButtonSpinning } = tradeData;
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     buyTradeData,
     sellTradeData,
     userLocalPublicAddress,
-    buyBottonSpinning
+    buyButtonSpinning,
+    transferButtonSpinning
   };
 };
 
