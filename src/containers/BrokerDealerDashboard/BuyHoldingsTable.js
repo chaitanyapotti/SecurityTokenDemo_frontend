@@ -1,17 +1,20 @@
-import React, { PureComponent } from "react";
-import { Table, Button, Input } from "semantic-ui-react";
+import React, { Component } from "react";
+import { Table, Button, Input, Label } from "semantic-ui-react";
 import { connect } from "react-redux";
+import Proptypes from "prop-types";
 import { formatCurrencyNumber, formatMoney } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import LoadingButton from "../../components/common/LoadingButton";
-import { getBuyRate, getSellRate } from "../../actions/tradeActions";
+import { getBuyRate, getSellRate, buyTokenAction } from "../../actions/tradeActions";
 
-class BuyHoldingsTable extends PureComponent {
+class BuyHoldingsTable extends Component {
   state = {
     buyModalOpen: false,
-    sellModalOpen: false
+    sellModalOpen: false,
+    buyInput: "",
+    buyToken: ""
   };
 
   handleBuyModalOpen = () => this.setState({ buyModalOpen: true });
@@ -22,8 +25,15 @@ class BuyHoldingsTable extends PureComponent {
 
   handleSellModalClose = () => this.setState({ sellModalOpen: false });
 
-  onBuyClick = () => {
-    this.setState({ buyModalOpen: true });
+  onBuyClick = key => {
+    this.setState({ buyModalOpen: true, buyToken: key });
+  };
+
+  onBuyTokenClick = () => {
+    const { buyTokenAction: doBuyToken } = this.props;
+    const { buyTradeData, userLocalPublicAddress } = this.props || {};
+    const { buyToken, buyInput } = this.state;
+    doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate);
   };
 
   onSellClick = () => {
@@ -31,13 +41,16 @@ class BuyHoldingsTable extends PureComponent {
   };
 
   getPriceClick = () => {
-    const { getBuyRate: fetchBuyRate } = this.props || {};
-    fetchBuyRate("RIV", "10");
+    const { getBuyRate: fetchBuyRate } = this.props;
+    const { buyToken, buyInput } = this.state;
+    fetchBuyRate(buyToken, buyInput);
   };
 
   render() {
     const { tokenBalance, buyTradeData } = this.props || {};
-    const { buyModalOpen, sellModalOpen } = this.state;
+    const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
+    const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
+    console.log(buyPrice);
     return (
       <div>
         <Table celled>
@@ -58,7 +71,7 @@ class BuyHoldingsTable extends PureComponent {
                 <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
                 <Table.Cell>
                   <span>
-                    <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" onClick={this.onBuyClick}>
+                    <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" onClick={() => this.onBuyClick(key)}>
                       Buy
                     </Button>
                   </span>
@@ -78,7 +91,7 @@ class BuyHoldingsTable extends PureComponent {
           <Grid>
             <Row>
               <Col lg={12}>
-                <Input placeholder="Enter Ether Amount" />
+                <Input placeholder="Enter Ether Amount" value={buyInput} onChange={e => this.setState({ buyInput: e.target.value })} />
               </Col>
             </Row>
             <br />
@@ -89,8 +102,14 @@ class BuyHoldingsTable extends PureComponent {
             </Row>
             <br />
             <Row>
+              <Col lg={12}>
+                <div>{buyPrice}</div>
+              </Col>
+            </Row>
+            <br />
+            <Row>
               <Col lg={6}>
-                <LoadingButton>Buy</LoadingButton>
+                <LoadingButton onClick={this.onBuyTokenClick}>Buy</LoadingButton>
               </Col>
               <Col lg={6}>
                 <LoadingButton>Transfer</LoadingButton>
@@ -104,16 +123,24 @@ class BuyHoldingsTable extends PureComponent {
   }
 }
 
+BuyHoldingsTable.propTypes = {
+  buyTokenAction: Proptypes.func.isRequired,
+  getBuyRate: Proptypes.func.isRequired,
+  getSellRate: Proptypes.func.isRequired
+};
+
 const mapStateToProps = state => {
-  const { tradeData } = state;
+  const { tradeData, signinManagerData } = state;
   const { buyTradeData, sellTradeData } = tradeData;
+  const { userLocalPublicAddress } = signinManagerData || {};
   return {
     buyTradeData,
-    sellTradeData
+    sellTradeData,
+    userLocalPublicAddress
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getBuyRate, getSellRate }
+  { getBuyRate, getSellRate, buyTokenAction }
 )(BuyHoldingsTable);

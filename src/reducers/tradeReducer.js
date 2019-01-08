@@ -1,5 +1,5 @@
 import actionTypes from "../actionTypes";
-import { formatRateToPrice } from "../helpers/numberHelpers";
+import { formatRateToPrice, formatFromWei } from "../helpers/numberHelpers";
 import config from "../config";
 
 const INITIAL_STATE = {
@@ -14,7 +14,7 @@ export default function(state = INITIAL_STATE, action) {
     case actionTypes.FETCHED_BUY_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
-      const price = formatRateToPrice(rate);
+      const price = formatRateToPrice(formatFromWei(rate, 18));
       currentBuyTradeData[token] = { rate, price };
       return {
         ...state,

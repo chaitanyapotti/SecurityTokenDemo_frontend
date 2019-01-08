@@ -44,7 +44,7 @@ export const buySuccess = receipt => ({
   type: actionTypes.BUY_SUCCESS
 });
 
-export const buyToken = (token, etherAmount, userLocalPublicAddress, buyRate) => dispatch => {
+export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRate) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
