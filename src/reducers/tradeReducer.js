@@ -5,7 +5,8 @@ import config from "../config";
 const INITIAL_STATE = {
   buyTradeData: {},
   sellTradeData: {},
-  buyButtonSpinning: false
+  buyButtonSpinning: false,
+  transferButtonSpinning: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -16,6 +17,12 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         buyButtonSpinning: action.payload
+      };
+    }
+    case actionTypes.TRANSFER_BUTTON_SPINNING: {
+      return {
+        ...state,
+        transferButtonSpinning: action.payload
       };
     }
     case actionTypes.FETCHED_BUY_RATE: {
