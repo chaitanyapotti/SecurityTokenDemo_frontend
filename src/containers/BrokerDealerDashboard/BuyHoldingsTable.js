@@ -7,7 +7,8 @@ import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import LoadingButton from "../../components/common/LoadingButton";
-import { getBuyRate, getSellRate, buyTokenAction, isBuyButtonSpinning } from "../../actions/tradeActions";
+import { getBuyRate, getSellRate, buyTokenAction } from "../../actions/tradeActions";
+import { CustomToolTip } from "../../components/common/FormComponents";
 
 class BuyHoldingsTable extends Component {
   state = {
@@ -47,9 +48,10 @@ class BuyHoldingsTable extends Component {
   };
 
   render() {
-    const { tokenBalance, buyTradeData, buyButtonSpinning, transferButtonSpinning } = this.props || {};
+    const { tokenBalance, buyTradeData, buyButtonSpinning, transferButtonSpinning, userLocalPublicAddress, publicAddress } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
+    const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
         <Table celled>
@@ -69,18 +71,26 @@ class BuyHoldingsTable extends Component {
                 <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
                 <Table.Cell>
-                  <span>
-                    <Button className="btn bg--primary txt-p-vault txt-dddbld text--white test" onClick={() => this.onBuyClick(key)}>
-                      Buy
-                    </Button>
-                  </span>
+                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                    <span>
+                      <Button
+                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                        disabled={!isOperator}
+                        onClick={() => this.onBuyClick(key)}
+                      >
+                        Buy
+                      </Button>
+                    </span>
+                  </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell>
-                  <span>
-                    <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" onClick={this.onSellClick}>
-                      Sell
-                    </Button>
-                  </span>
+                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                    <span>
+                      <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onSellClick}>
+                        Sell
+                      </Button>
+                    </span>
+                  </CustomToolTip>
                 </Table.Cell>
               </Table.Row>
             ))}

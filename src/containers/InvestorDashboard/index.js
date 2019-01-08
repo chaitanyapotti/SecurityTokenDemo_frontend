@@ -20,16 +20,17 @@ class InvestorDashboard extends Component {
     logoutUser(history);
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
+    this.setState({ first_name, email, phone, id, role, date, status });
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
   }
 
   render() {
     const { userBalance, tokenBalance, portfolioValue } = this.props || {};
-    const { first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { first_name, email, phone, id, role, date, status } = this.state;
     return (
       <Grid container="true">
         <Navbar />
