@@ -40,9 +40,6 @@ class InvestorDashboard extends Component {
         <CUICard style={{ marginTop: "10px" }}>
           <Row>
             <Col lg={8}>
-              <div className="txt-xxxl text--primary">
-                Role : <span className="txt-xxxl txt-m text--secondary">Investor</span>
-              </div>
               <div className="txt-m text--primary push-half--bottom push-top--35">
                 ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
               </div>

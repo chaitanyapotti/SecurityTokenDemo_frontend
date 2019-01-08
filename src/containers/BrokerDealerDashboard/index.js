@@ -44,9 +44,6 @@ class BrokerDealerDashboard extends Component {
         <CUICard style={{ marginTop: "10px" }}>
           <Row>
             <Col lg={8}>
-              <div className="txt-xxxl text--primary">
-                Role : <span className="txt-xxxl txt-m text--secondary">Broker Dealer</span>
-              </div>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
                 <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
