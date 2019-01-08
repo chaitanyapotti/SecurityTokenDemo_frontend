@@ -30,8 +30,13 @@ class BuyHoldingsTable extends PureComponent {
     this.setState({ sellModalOpen: true });
   };
 
+  getPriceClick = () => {
+    const { getBuyRate: fetchBuyRate } = this.props || {};
+    fetchBuyRate("RIV", "10");
+  };
+
   render() {
-    const { tokenBalance } = this.props || {};
+    const { tokenBalance, buyTradeData } = this.props || {};
     const { buyModalOpen, sellModalOpen } = this.state;
     return (
       <div>
@@ -79,7 +84,7 @@ class BuyHoldingsTable extends PureComponent {
             <br />
             <Row>
               <Col lg={12}>
-                <LoadingButton>Get Price</LoadingButton>
+                <LoadingButton onClick={this.getPriceClick}>Get Price</LoadingButton>
               </Col>
             </Row>
             <br />
