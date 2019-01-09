@@ -5,6 +5,7 @@ import Proptypes from "prop-types";
 import { stat } from "fs";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { logoutUserAction } from "../../actions/authActions";
+import { getPriceHistory } from "../../actions/priceHistoryActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
@@ -12,6 +13,7 @@ import TokenChart from "../../components/common/TokenChart";
 import HoldingsTable from "../../components/common/HoldingsTable";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
+import { getPortfolioSelector } from "../../selectors";
 
 class InvestorDashboard extends Component {
   onLogoutClick = e => {
@@ -21,15 +23,16 @@ class InvestorDashboard extends Component {
   };
 
   componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getPriceHistory: fetchPriceHistory } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
     this.setState({ first_name, email, phone, id, role, date, status });
+    fetchPriceHistory();
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
   }
 
   render() {
-    const { userBalance, tokenBalance, portfolioValue } = this.props || {};
+    const { userBalance, tokenBalance, portfolioValue, priceHistory } = this.props || {};
     const { first_name, email, phone, id, role, date, status } = this.state;
     return (
       <Grid container="true">
@@ -54,7 +57,7 @@ class InvestorDashboard extends Component {
             </Col> */}
           </Row>
         </CUICard>
-        <HoldingsTable tokenBalance={tokenBalance} />
+        <HoldingsTable tokenBalance={tokenBalance} priceHistory={priceHistory} />
         <CUICard>
           <Row center="lg">
             <Col>
@@ -70,20 +73,23 @@ class InvestorDashboard extends Component {
 InvestorDashboard.propTypes = {
   logoutUserAction: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
-  getTokenBalance: Proptypes.func.isRequired
+  getTokenBalance: Proptypes.func.isRequired,
+  getPriceHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
-  const { userData } = state;
-  const { userBalance, tokenBalance, portfolioValue } = userData || {};
+  const { userData, priceHistoryData } = state;
+  const { userBalance, tokenBalance } = userData || {};
+  const { priceHistory } = priceHistoryData || {};
   return {
     userBalance,
     tokenBalance,
-    portfolioValue
+    portfolioValue: getPortfolioSelector(state),
+    priceHistory
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, getUserBalanceAction, getTokenBalance }
+  { logoutUserAction, getUserBalanceAction, getTokenBalance, getPriceHistory }
 )(InvestorDashboard);

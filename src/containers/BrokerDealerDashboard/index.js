@@ -12,10 +12,13 @@ import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
+import { getPriceHistory } from "../../actions/priceHistoryActions";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
     const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { getPriceHistory: fetchPriceHistory } = this.props;
+    fetchPriceHistory();
     const tokenOptions =
       JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
         key: x.name,
@@ -33,7 +36,7 @@ class BrokerDealerDashboard extends Component {
   };
 
   render() {
-    const { dropDownSelect, tokenBalance, userBalance, portfolioValue } = this.props || {};
+    const { dropDownSelect, tokenBalance, userBalance, portfolioValue, priceHistory } = this.props || {};
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     return (
       <Grid container="true">
@@ -57,7 +60,9 @@ class BrokerDealerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
-        {dropDownSelect ? <BuyHoldingsTable tokenBalance={tokenBalance} publicAddress={publicAddress} dropDownSelect={dropDownSelect} /> : null}
+        {dropDownSelect ? (
+          <BuyHoldingsTable priceHistory={priceHistory} tokenBalance={tokenBalance} publicAddress={publicAddress} dropDownSelect={dropDownSelect} />
+        ) : null}
         <CUICard>
           <Row center="lg">
             <Col>
@@ -73,25 +78,28 @@ class BrokerDealerDashboard extends Component {
 BrokerDealerDashboard.propTypes = {
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
-  getUserBalanceAction: Proptypes.func.isRequired
+  getUserBalanceAction: Proptypes.func.isRequired,
+  getPriceHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
-  const { marketMakerData, userData, tradeData } = state;
+  const { marketMakerData, userData, tradeData, priceHistoryData } = state;
   const { userBalance, tokenBalance, portfolioValue } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
   const { buyTradeData, sellTradeData } = tradeData || {};
+  const { priceHistory } = priceHistoryData || {};
   return {
     dropDownSelect,
     tokenBalance,
     portfolioValue,
     userBalance,
     buyTradeData,
-    sellTradeData
+    sellTradeData,
+    priceHistory
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate }
+  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate, getPriceHistory }
 )(BrokerDealerDashboard);

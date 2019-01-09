@@ -90,7 +90,6 @@ class BuyHoldingsTable extends Component {
     const { transferTokensFromUser: transferFrom } = this.props;
     const { userLocalPublicAddress, dropDownSelect } = this.props || {};
     const { sellToken, sellInput } = this.state;
-    console.log(sellToken, sellInput);
     transferFrom(sellToken, sellInput, userLocalPublicAddress, dropDownSelect);
   };
 
@@ -115,7 +114,8 @@ class BuyHoldingsTable extends Component {
       transferFromSuccess,
       approveSuccess,
       approveButtonTransactionHash,
-      approveButtonSpinning
+      approveButtonSpinning,
+      priceHistory
     } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken, sellInput, sellToken } = this.state;
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
@@ -128,7 +128,9 @@ class BuyHoldingsTable extends Component {
             <Table.Row>
               <Table.HeaderCell>Token Name</Table.HeaderCell>
               <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Value(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Invested Value(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Current Value(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Change</Table.HeaderCell>
               <Table.HeaderCell>Buy</Table.HeaderCell>
               <Table.HeaderCell>Sell</Table.HeaderCell>
             </Table.Row>
@@ -139,6 +141,17 @@ class BuyHoldingsTable extends Component {
                 <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">
+                  {formatMoney(tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice, 0)}
+                </Table.Cell>
+                <Table.Cell verticalAlign="middle">
+                {`+${formatMoney(
+                tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue,0)}(+${Math.round(
+                ((tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue) * 100) /
+                      tokenBalance[key].dollarValue,
+                  2
+                )}%)`}
+              </Table.Cell>
                 <Table.Cell>
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>

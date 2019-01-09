@@ -5,6 +5,7 @@ import userReducer from "./userReducer";
 import marketMakerReducer from "./marketMakerReducer";
 import signinManagerReducer from "./signinManagerReducer";
 import tradeReducer from "./tradeReducer";
+import priceHistoryReducer from "./priceHistoryReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   userData: userReducer,
   marketMakerData: marketMakerReducer,
   signinManagerData: signinManagerReducer,
-  tradeData: tradeReducer
+  tradeData: tradeReducer,
+  priceHistoryData: priceHistoryReducer
 });
