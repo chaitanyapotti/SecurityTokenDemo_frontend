@@ -3,7 +3,7 @@ import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
-import { getTokenBalance } from "./userActions";
+import { getTokenBalance, getUserBalanceAction } from "./userActions";
 
 export const onDropdownChange = value => dispatch => {
   dispatch({
@@ -43,6 +43,7 @@ export const depositEther = (amount, reserveAddress, userLocalPublicAddress) => 
           transactionHash,
           () => {
             dispatch(depositEtherSuccess(true));
+            dispatch(getUserBalanceAction(reserveAddress));
             dispatch({
               payload: { transactionHash: "" },
               type: actionTypes.DEPOSIT_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -169,13 +170,10 @@ export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAdd
         const { data } = res.data;
         const { abi } = data || {};
         const instance = new web3.eth.Contract(abi, reserveAddress, { from: userLocalPublicAddress });
-        console.log("here");
         const gasPrice = await web3.eth.getGasPrice();
         const omg = (await axios.get(`${config.api}/api/contractdata?name=OmiseGo`)).data.data.abi;
         const addr = token === "ETH" ? "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" : config.tokens[token].address;
-        console.log("her2", addr);
         const omgInstance = new web3.eth.Contract(omg, addr, { from: userLocalPublicAddress });
-        console.log("omg");
         instance.methods
           .withdraw(omgInstance.options.address, web3.utils.toWei(amount), config.withdrawAddress)
           .send({

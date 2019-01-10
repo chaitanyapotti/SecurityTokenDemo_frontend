@@ -22,13 +22,7 @@ class MarketMakerDashboard extends Component {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
-    const tokenOptions =
-      Object.keys(config.tokens).map(x => ({
-        key: config.tokens[x].name,
-        value: config.tokens[x].address,
-        text: config.tokens[x].name
-      })) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, tokenOptions, publicAddress });
+    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress });
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
   }
