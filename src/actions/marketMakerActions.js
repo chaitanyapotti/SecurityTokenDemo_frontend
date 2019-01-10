@@ -84,6 +84,7 @@ export const transferTokenSuccess = receipt => ({
 });
 
 export const depositToken = (quantity, token, reserveAddress, userLocalPublicAddress) => async dispatch => {
+  dispatch(isTransferTokenButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=OmiseGo`)
     .then(async res => {
@@ -93,7 +94,7 @@ export const depositToken = (quantity, token, reserveAddress, userLocalPublicAdd
         const instance = new web3.eth.Contract(abi, config.tokens[token].address, { from: userLocalPublicAddress });
         const gasPrice = await web3.eth.getGasPrice();
         instance.methods
-          .transfer(reserveAddress, quantity)
+          .transfer(reserveAddress, web3.utils.toWei(quantity, "ether"))
           .send({
             from: userLocalPublicAddress,
             gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
