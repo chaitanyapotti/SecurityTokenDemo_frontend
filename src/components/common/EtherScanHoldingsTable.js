@@ -14,30 +14,18 @@ class EtherScanHoldingsTable extends PureComponent {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
-    depositEtherModalOpen: false,
-    withdrawEtherModalOpen: false,
     depositTokenInput: "",
     withdrawTokenInput: "",
-    depositEtherInput: "",
-    token: "",
-    withdrawEtherInput: ""
+    token: ""
   };
 
   handleDepositTokenModalOpen = () => this.setState({ depositTokenModalOpen: true });
 
-  handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false });
+  handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false, depositTokenInput: "" });
 
-  handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
+  handleWithdrawTokenModalOpen = () => this.setState({ withdrawTokenModalOpen: true });
 
-  handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false });
-
-  handleWithdrawTokenModalOpen = () => this.setState({ WithdrawTokenModalOpen: true });
-
-  handleWithdrawTokenModalClose = () => this.setState({ withdrawTokenModalOpen: false });
-
-  handleWithdrawEtherModalOpen = () => this.setState({ WithdrawEtherModalOpen: true });
-
-  handleWithdrawEtherModalClose = () => this.setState({ WithdrawEtherModalOpen: false });
+  handleWithdrawTokenModalClose = () => this.setState({ withdrawTokenModalOpen: false, withdrawTokenInput: "" });
 
   onDepositClick = key => {
     this.setState({ depositTokenModalOpen: true, token: key });

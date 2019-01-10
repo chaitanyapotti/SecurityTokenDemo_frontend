@@ -3,7 +3,7 @@ import { Button, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
-import { onDropdownChange, depositToken } from "../../actions/marketMakerActions";
+import { onDropdownChange, depositEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
@@ -15,6 +15,7 @@ import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
+import { CustomToolTip } from "../../components/common/FormComponents";
 
 class MarketMakerDashboard extends Component {
   componentWillMount() {
@@ -32,6 +33,15 @@ class MarketMakerDashboard extends Component {
     fetchTokenBalance(reserveAddress);
   }
 
+  state = {
+    depositEtherModalOpen: false,
+    depositEtherInput: ""
+  };
+
+  handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
+
+  handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false });
+
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
@@ -43,12 +53,16 @@ class MarketMakerDashboard extends Component {
     dropDownChange(d.value);
   };
 
-  onDepositClick = e => {
-    this.setState({ depositTokenModalOpen: true });
+  onDepositEtherClick = e => {
+    this.setState({ depositEtherModalOpen: true, depositEtherInput: "" });
   };
 
-  depositTokenClick = e => {
-    const { depositToken: depositTokens } = this.props;
+  depositClick = e => {
+    const { depositEther: deposit } = this.props;
+    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { userLocalPublicAddress } = this.props || {};
+    const { depositEtherInput } = this.state;
+    deposit(depositEtherInput, reserveAddress, userLocalPublicAddress);
   };
 
   render() {
@@ -56,26 +70,12 @@ class MarketMakerDashboard extends Component {
       userBalance,
       tokenBalance,
       portfolioValue,
-      dropDownSelect,
       userLocalPublicAddress,
-      transferTokenButtonSpinning,
-      transferTokenButtonTransactionHash,
-      transferTokenSuccess
+      depositEtherButtonSpinning,
+      depositEtherButtonTransactionHash,
+      depositEtherSuccess
     } = this.props || {};
-    const {
-      first_name,
-      email,
-      phone,
-      id,
-      role,
-      date,
-      status,
-      publicAddress,
-      etherScanLink,
-      tokenOptions,
-      depositTokenInput,
-      depositTokenModalOpen
-    } = this.state;
+    const { first_name, email, phone, id, role, date, status, publicAddress, etherScanLink, depositEtherInput, depositEtherModalOpen } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <Grid container="true">
@@ -102,6 +102,21 @@ class MarketMakerDashboard extends Component {
               </a>
             </Col>
           </Row>
+          <Row>
+            <Col lg={12}>
+              <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                <span>
+                  <Button
+                    className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                    disabled={!isOperator}
+                    onClick={this.onDepositEtherClick}
+                  >
+                    Deposit Ether
+                  </Button>
+                </span>
+              </CustomToolTip>
+            </Col>
+          </Row>
         </CUICard>
         {/* <CUICard>
           <Row>
@@ -120,7 +135,7 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        <EtherScanHoldingsTable onClick={this.onDepositClick} tokenBalance={tokenBalance} isOperator={isOperator} />
+        <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} />
 
         <CUICard>
           <Row center="lg">
@@ -129,6 +144,30 @@ class MarketMakerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
+        <AlertModal open={depositEtherModalOpen} handleClose={this.handleDepositEtherModalClose}>
+          <Grid>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Input
+                  placeholder="Enter No Of Tokens"
+                  value={depositEtherInput}
+                  onChange={e => this.setState({ depositEtherInput: e.target.value })}
+                />
+              </Col>
+            </Row>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Transaction
+                  onClick={this.depositClick}
+                  buttonText="Deposit"
+                  success={depositEtherSuccess}
+                  txHash={depositEtherButtonTransactionHash}
+                  buttonSpinning={depositEtherButtonSpinning}
+                />
+              </Col>
+            </Row>
+          </Grid>
+        </AlertModal>
       </Grid>
     );
   }
@@ -139,13 +178,13 @@ MarketMakerDashboard.propTypes = {
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
-  depositToken: Proptypes.func.isRequired
+  depositEther: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   const { userData, marketMakerData, signinManagerData } = state;
   const { userBalance, tokenBalance, portfolioValue } = userData || {};
-  const { dropDownSelect, transferTokenButtonSpinning, transferTokenButtonTransactionHash, transferTokenSuccess } = marketMakerData || {};
+  const { dropDownSelect, depositEtherButtonSpinning, depositEtherButtonTransactionHash, depositEtherSuccess } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     userBalance,
@@ -153,13 +192,13 @@ const mapStateToProps = state => {
     portfolioValue,
     dropDownSelect,
     userLocalPublicAddress,
-    transferTokenButtonSpinning,
-    transferTokenButtonTransactionHash,
-    transferTokenSuccess
+    depositEtherButtonSpinning,
+    depositEtherButtonTransactionHash,
+    depositEtherSuccess
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositToken }
+  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther }
 )(MarketMakerDashboard);

@@ -23,6 +23,7 @@ export const depositEtherSuccess = receipt => ({
 });
 
 export const depositEther = (amount, reserveAddress, userLocalPublicAddress) => async dispatch => {
+  dispatch(isDepositEtherButtonSpinning(true));
   const gasPrice = await web3.eth.getGasPrice();
   web3.eth
     .sendTransaction({
