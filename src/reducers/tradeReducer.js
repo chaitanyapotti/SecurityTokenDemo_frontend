@@ -26,6 +26,12 @@ export default function(state = INITIAL_STATE, action) {
   const currentBuyTradeData = JSON.parse(JSON.stringify(state.buyTradeData));
   const currentSellTradeData = JSON.parse(JSON.stringify(state.sellTradeData));
   switch (action.type) {
+    case actionTypes.CLEAR_STORE: {
+      return {
+        ...state,
+        ...INITIAL_STATE
+      };
+    }
     case actionTypes.BUY_SUCCESS: {
       const { receipt } = action.payload;
       return {

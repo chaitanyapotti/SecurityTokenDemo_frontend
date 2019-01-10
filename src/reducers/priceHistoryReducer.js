@@ -7,6 +7,12 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   const currentPriceHistory = JSON.parse(JSON.stringify(state.priceHistory));
   switch (action.type) {
+    case actionTypes.CLEAR_STORE: {
+      return {
+        ...state,
+        ...INITIAL_STATE
+      };
+    }
     case actionTypes.PRICE_HISTORY_SUCCESS: {
       const { token, data } = action.payload || {};
       currentPriceHistory[token] = data;

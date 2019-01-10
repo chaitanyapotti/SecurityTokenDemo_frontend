@@ -11,6 +11,12 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   const currentTokenBalances = JSON.parse(JSON.stringify(state.tokenBalance));
   switch (action.type) {
+    case actionTypes.CLEAR_STORE: {
+      return {
+        ...state,
+        ...INITIAL_STATE
+      };
+    }
     case actionTypes.GET_USER_BALANCE:
       return {
         ...state,

@@ -47,6 +47,10 @@ export const logoutUserAction = history => dispatch => {
     type: actionTypes.SET_PASSWORD,
     payload: ""
   });
+  dispatch({
+    type: actionTypes.CLEAR_STORE,
+    payload: ""
+  });
 };
 
 export const setUsernameOrEmailAction = input => dispatch => {

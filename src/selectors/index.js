@@ -1,16 +1,23 @@
 import { createSelector } from "reselect";
 import config from "../config";
 
-const getTokenBalanceRIV = state => state.userData.tokenBalance.RIV || {};
-const getPriceHistoryRIV = state => state.priceHistoryData.priceHistory.RIV || {};
-const getTokenBalanceLMD = state => state.userData.tokenBalance.LMD || {};
-const getPriceHistoryLMD = state => state.priceHistoryData.priceHistory.LMD || {};
+const getTokenBalance = state => state.userData.tokenBalance || {};
+const getPriceHistory = state => state.priceHistoryData.priceHistory || {};
 
 export const getPortfolioSelector = createSelector(
-  getTokenBalanceRIV,
-  getPriceHistoryRIV,
-  getTokenBalanceLMD,
-  getPriceHistoryLMD,
-  (tokenBalanceRIV, priceHistoryRIV, tokenBalanceLMD, priceHistoryLMD) =>
-    (tokenBalanceRIV.balance * priceHistoryRIV.currentprice + tokenBalanceLMD.balance * priceHistoryLMD.currentprice) * config.etherPrice
+  getTokenBalance,
+  getPriceHistory,
+  (tokenBalance, priceHistory) => {
+    let portfolio = 0;
+    for (const key in config.tokens) {
+      if (
+        Object.prototype.hasOwnProperty.call(config.tokens, key) &&
+        Object.prototype.hasOwnProperty.call(tokenBalance, key) &&
+        Object.prototype.hasOwnProperty.call(priceHistory, key)
+      ) {
+        portfolio += tokenBalance[key].balance * priceHistory[key].currentprice;
+      }
+    }
+    return portfolio * config.etherPrice;
+  }
 );
