@@ -136,7 +136,6 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        
         <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} isOwner={isOwner} />
 
         <CUICard>
@@ -151,7 +150,7 @@ class MarketMakerDashboard extends Component {
             <Row className="push--bottom">
               <Col lg={12}>
                 <Input
-                  placeholder="Enter No Of Tokens"
+                  placeholder="Enter Ether Amount"
                   value={depositEtherInput}
                   onChange={e => this.setState({ depositEtherInput: e.target.value })}
                 />
