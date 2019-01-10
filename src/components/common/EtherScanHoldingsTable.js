@@ -112,11 +112,11 @@ class EtherScanHoldingsTable extends PureComponent {
                   </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
+                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
                       <Button
                         className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOwner}
+                        disabled={!isOperator}
                         onClick={() => this.onWithdrawClick(key)}
                       >
                         Withdraw
