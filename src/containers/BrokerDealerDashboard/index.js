@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Dropdown } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";

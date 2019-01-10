@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Header, Segment } from "semantic-ui-react";
+import { Button, Form, Segment } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";

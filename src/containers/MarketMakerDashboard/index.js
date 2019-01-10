@@ -71,7 +71,6 @@ class MarketMakerDashboard extends Component {
             </Col>
           </Row>
         </CUICard>
-        {isOperator ? <div /> : null}
         {/* <CUICard>
           <Row>
             <Col lg={8}>

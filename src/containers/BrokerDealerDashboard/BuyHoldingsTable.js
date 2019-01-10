@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Input, Label } from "semantic-ui-react";
+import { Table, Button, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { formatCurrencyNumber, formatMoney, formatFromWei } from "../../helpers/numberHelpers";
@@ -145,13 +145,15 @@ class BuyHoldingsTable extends Component {
                   {formatMoney(tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice, 0)}
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                {`+${formatMoney(
-                tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue,0)}(+${Math.round(
-                ((tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue) * 100) /
+                  {`+${formatMoney(
+                    tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue,
+                    0
+                  )}(+${Math.round(
+                    ((tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue) * 100) /
                       tokenBalance[key].dollarValue,
-                  2
-                )}%)`}
-              </Table.Cell>
+                    2
+                  )}%)`}
+                </Table.Cell>
                 <Table.Cell>
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>

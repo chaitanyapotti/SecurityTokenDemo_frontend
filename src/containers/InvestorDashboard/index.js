@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { stat } from "fs";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { logoutUserAction } from "../../actions/authActions";
 import { getPriceHistory } from "../../actions/priceHistoryActions";
