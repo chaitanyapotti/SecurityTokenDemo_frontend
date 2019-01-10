@@ -25,9 +25,9 @@ class MarketMakerDashboard extends Component {
         value: config.tokens[x].address,
         text: config.tokens[x].name
       })) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, tokenOptions });
-    fetchUserBalance(publicAddress);
-    fetchTokenBalance(publicAddress);
+    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, tokenOptions, publicAddress });
+    fetchUserBalance(reserveAddress);
+    fetchTokenBalance(reserveAddress);
   }
 
   onLogoutClick = e => {

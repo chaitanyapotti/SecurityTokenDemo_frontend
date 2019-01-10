@@ -8,6 +8,8 @@ module.exports = {
     RIV: { address: "0x42692adF9155525815A2C3097424CBcf72bE14c5", price: "10", name: "RIV-A" }
   },
   KNC: "0xdea23beaEEcF968EB987ce9c318683DA5FD943bE",
+  ETH: "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
   KyberNetworkProxy: "0x6624d80FC06169FAbeaa8c534693cc6bcd7513cc",
-  ConversionRates: "0xCf1c95803997cc1512931138e57ad4aC7F02C246"
+  ConversionRates: "0xCf1c95803997cc1512931138e57ad4aC7F02C246",
+  withdrawAddress: "0xfEF8a9dB4a79A343A0b9728943C04e712D5C56Ed"
 };
