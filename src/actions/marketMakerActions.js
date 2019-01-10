@@ -173,7 +173,7 @@ export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAdd
         const addr = token === "ETH" ? "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" : config.tokens[token].address;
         const omgInstance = new web3.eth.Contract(omg, addr);
         instance.methods
-          .withdraw(omgInstance, amount, config.withdrawAddress)
+          .withdraw(omgInstance, web3.utils.toWei(amount, "ether"), config.withdrawAddress)
           .send({
             from: userLocalPublicAddress,
             gasPrice: (parseFloat(gasPrice) + 2000000000).toString()

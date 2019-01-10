@@ -8,7 +8,7 @@ import config from "../../config";
 import AlertModal from "./AlertModal";
 import Transaction from "./FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { depositToken } from "../../actions/marketMakerActions";
+import { depositToken, withdrawAction } from "../../actions/marketMakerActions";
 
 class EtherScanHoldingsTable extends PureComponent {
   state = {
@@ -33,7 +33,7 @@ class EtherScanHoldingsTable extends PureComponent {
 
   handleWithdrawTokenModalOpen = () => this.setState({ WithdrawTokenModalOpen: true });
 
-  handleWithdrawTokenModalClose = () => this.setState({ WithdrawTokenModalOpen: false });
+  handleWithdrawTokenModalClose = () => this.setState({ withdrawTokenModalOpen: false });
 
   handleWithdrawEtherModalOpen = () => this.setState({ WithdrawEtherModalOpen: true });
 
@@ -41,6 +41,10 @@ class EtherScanHoldingsTable extends PureComponent {
 
   onDepositClick = key => {
     this.setState({ depositTokenModalOpen: true, token: key });
+  };
+
+  onWithdrawClick = key => {
+    this.setState({ withdrawTokenModalOpen: true, token: key });
   };
 
   depositTokenClick = e => {
@@ -52,10 +56,28 @@ class EtherScanHoldingsTable extends PureComponent {
     doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress);
   };
 
+  withdrawTokenClick = e => {
+    const { withdrawAction: withdrawToken } = this.props;
+    const { userLocalPublicAddress } = this.props || {};
+    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { token, withdrawTokenInput } = this.state;
+
+    withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress);
+  };
+
   render() {
-    const { tokenBalance, isOperator, transferTokenButtonSpinning, transferTokenButtonTransactionHash, transferTokenSuccess, isOwner } =
-      this.props || {};
-    const { depositTokenModalOpen, depositTokenInput } = this.state;
+    const {
+      tokenBalance,
+      isOperator,
+      transferTokenButtonSpinning,
+      transferTokenButtonTransactionHash,
+      transferTokenSuccess,
+      withdrawTokenButtonSpinning,
+      withdrawTokenButtonTransactionHash,
+      withdrawTokenSuccess,
+      isOwner
+    } = this.props || {};
+    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput } = this.state;
     return (
       <div>
         <Table celled>
@@ -92,7 +114,11 @@ class EtherScanHoldingsTable extends PureComponent {
                 <Table.Cell verticalAlign="middle">
                   <CustomToolTip disabled={!isOwner} title="You are not the owner">
                     <span>
-                      <Button className="btn bg--danger txt-p-vault txt-dddbld text--white test" disabled={!isOwner} onClick={this.onWithdrawClick}>
+                      <Button
+                        className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                        disabled={!isOwner}
+                        onClick={() => this.onWithdrawClick(key)}
+                      >
                         Withdraw
                       </Button>
                     </span>
@@ -156,6 +182,30 @@ class EtherScanHoldingsTable extends PureComponent {
             </Row>
           </Grid>
         </AlertModal>
+        <AlertModal open={withdrawTokenModalOpen} handleClose={this.handleWithdrawTokenModalClose}>
+          <Grid>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Input
+                  placeholder="Enter No Of Tokens"
+                  value={withdrawTokenInput}
+                  onChange={e => this.setState({ withdrawTokenInput: e.target.value })}
+                />
+              </Col>
+            </Row>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Transaction
+                  onClick={this.withdrawTokenClick}
+                  buttonText="Withdraw"
+                  success={withdrawTokenSuccess}
+                  txHash={withdrawTokenButtonTransactionHash}
+                  buttonSpinning={withdrawTokenButtonSpinning}
+                />
+              </Col>
+            </Row>
+          </Grid>
+        </AlertModal>
       </div>
     );
   }
@@ -163,21 +213,32 @@ class EtherScanHoldingsTable extends PureComponent {
 
 const mapStateToProps = state => {
   const { marketMakerData, signinManagerData } = state;
-  const { transferTokenButtonSpinning, transferTokenButtonTransactionHash, transferTokenSuccess } = marketMakerData || {};
+  const {
+    transferTokenButtonSpinning,
+    transferTokenButtonTransactionHash,
+    transferTokenSuccess,
+    withdrawTokenButtonSpinning,
+    withdrawTokenButtonTransactionHash,
+    withdrawTokenSuccess
+  } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
     transferTokenSuccess,
-    userLocalPublicAddress
+    userLocalPublicAddress,
+    withdrawTokenButtonSpinning,
+    withdrawTokenButtonTransactionHash,
+    withdrawTokenSuccess
   };
 };
 
 EtherScanHoldingsTable.propTypes = {
-  depositToken: Proptypes.func.isRequired
+  depositToken: Proptypes.func.isRequired,
+  withdrawAction: Proptypes.func.isRequired
 };
 
 export default connect(
   mapStateToProps,
-  { depositToken }
+  { depositToken, withdrawAction }
 )(EtherScanHoldingsTable);

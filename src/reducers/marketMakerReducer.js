@@ -4,7 +4,10 @@ const INITIAL_STATE = {
   dropDownSelect: "",
   transferTokenButtonSpinning: false,
   transferTokenButtonTransactionHash: "",
-  transferTokenSuccess: false
+  transferTokenSuccess: false,
+  withdrawTokenButtonSpinning: false,
+  withdrawTokenButtonTransactionHash: "",
+  withdrawTokenSuccess: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -34,6 +37,27 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         transferTokenButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.WITHDRAW_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        withdrawTokenButtonSpinning: receipt
+      };
+    }
+    case actionTypes.WITHDRAW_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        withdrawTokenSuccess: receipt
+      };
+    }
+    case actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        withdrawTokenButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.ON_DROPDOWN_CHANGE:
