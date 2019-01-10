@@ -77,6 +77,7 @@ class MarketMakerDashboard extends Component {
       depositTokenModalOpen
     } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
+    const isOwner = userLocalPublicAddress === config.owner;
     return (
       <Grid container="true">
         <Navbar />
@@ -120,7 +121,7 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        <EtherScanHoldingsTable onClick={this.onDepositClick} tokenBalance={tokenBalance} isOperator={isOperator} />
+        <EtherScanHoldingsTable onClick={this.onDepositClick} tokenBalance={tokenBalance} isOperator={isOperator} isOwner={isOwner} />
 
         <CUICard>
           <Row center="lg">
