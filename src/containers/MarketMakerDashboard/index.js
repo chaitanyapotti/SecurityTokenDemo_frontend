@@ -77,6 +77,7 @@ class MarketMakerDashboard extends Component {
     } = this.props || {};
     const { first_name, email, phone, id, role, date, status, publicAddress, etherScanLink, depositEtherInput, depositEtherModalOpen } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
+    const isOwner = userLocalPublicAddress === config.owner;
     return (
       <Grid container="true">
         <Navbar />
@@ -135,7 +136,8 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} />
+        
+        <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} isOwner={isOwner} />
 
         <CUICard>
           <Row center="lg">

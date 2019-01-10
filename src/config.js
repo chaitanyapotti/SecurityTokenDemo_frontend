@@ -10,6 +10,7 @@ module.exports = {
   KNC: "0xdea23beaEEcF968EB987ce9c318683DA5FD943bE",
   ETH: "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
   KyberNetworkProxy: "0x6624d80FC06169FAbeaa8c534693cc6bcd7513cc",
+  owner: "0x43CE12056AA1E8372ab4aBF0C0cC658D2d41077f",
   ConversionRates: "0xCf1c95803997cc1512931138e57ad4aC7F02C246",
   withdrawAddress: "0xfEF8a9dB4a79A343A0b9728943C04e712D5C56Ed"
 };

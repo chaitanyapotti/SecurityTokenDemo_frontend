@@ -62,7 +62,8 @@ class EtherScanHoldingsTable extends PureComponent {
       transferTokenSuccess,
       withdrawTokenButtonSpinning,
       withdrawTokenButtonTransactionHash,
-      withdrawTokenSuccess
+      withdrawTokenSuccess,
+      isOwner
     } = this.props || {};
     const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput } = this.state;
     return (
@@ -86,11 +87,11 @@ class EtherScanHoldingsTable extends PureComponent {
                 <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
                     <span>
                       <Button
                         className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
+                        disabled={!isOwner}
                         onClick={() => this.onDepositClick(key)}
                       >
                         Deposit
@@ -112,13 +113,27 @@ class EtherScanHoldingsTable extends PureComponent {
                   </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" disabled={!isOperator} onClick={this.onTradeClick}>
-                        Trade
-                      </Button>
-                    </span>
-                  </CustomToolTip>
+                  {!isOperator ? (
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <Button
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={this.onTradeClick}
+                        >
+                          Trade
+                        </Button>
+                      </span>
+                    </CustomToolTip>
+                  ) : (
+                    <CustomToolTip disabled title="Trade is enabled in a desktop application mode">
+                      <span>
+                        <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" disabled onClick={this.onTradeClick}>
+                          Trade
+                        </Button>
+                      </span>
+                    </CustomToolTip>
+                  )}
                 </Table.Cell>
                 <Table.Cell>
                   <span>
