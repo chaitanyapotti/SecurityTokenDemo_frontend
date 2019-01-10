@@ -17,7 +17,7 @@ class EtherScanHoldingsTable extends PureComponent {
             <Table.HeaderCell>Deposit</Table.HeaderCell>
             <Table.HeaderCell>Withdraw</Table.HeaderCell>
             <Table.HeaderCell>Trade</Table.HeaderCell>
-            <Table.HeaderCell>Etherscan</Table.HeaderCell>
+            {/* <Table.HeaderCell>Etherscan</Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -53,7 +53,7 @@ class EtherScanHoldingsTable extends PureComponent {
                   </span>
                 </CustomToolTip>
               </Table.Cell>
-              <Table.Cell>
+              {/* <Table.Cell>
                 <span>
                   <a
                     className="btn bg--primary txt-p-vault txt-dddbld text--white"
@@ -64,7 +64,7 @@ class EtherScanHoldingsTable extends PureComponent {
                     View on Blockchain
                   </a>
                 </span>
-              </Table.Cell>
+              </Table.Cell> */}
             </Table.Row>
           ))}
         </Table.Body>

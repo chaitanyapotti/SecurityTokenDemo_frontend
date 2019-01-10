@@ -15,7 +15,7 @@ class HoldingsTable extends PureComponent {
             <Table.HeaderCell>Invested Value(USD)</Table.HeaderCell>
             <Table.HeaderCell>Current Value(USD)</Table.HeaderCell>
             <Table.HeaderCell>Change</Table.HeaderCell>
-            <Table.HeaderCell>EtherScan</Table.HeaderCell>
+            {/* <Table.HeaderCell>EtherScan</Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -36,7 +36,7 @@ class HoldingsTable extends PureComponent {
                   2
                 )}%)`}
               </Table.Cell>
-              <Table.Cell>
+              {/* <Table.Cell>
                 <span>
                   <a
                     className="btn bg--primary txt-p-vault txt-dddbld text--white"
@@ -47,7 +47,7 @@ class HoldingsTable extends PureComponent {
                     View on Blockchain
                   </a>
                 </span>
-              </Table.Cell>
+              </Table.Cell> */}
             </Table.Row>
           ))}
         </Table.Body>
