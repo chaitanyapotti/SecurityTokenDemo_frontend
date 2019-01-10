@@ -24,7 +24,7 @@ const BioTable = props => {
           <Table.Cell>{phone}</Table.Cell>
           <Table.Cell>{id}</Table.Cell>
           {role === "INVESTOR" ? (
-            <Table.Cell>Investor</Table.Cell>
+            <Table.Cell>Pro-Investor</Table.Cell>
           ) : role === "BROKER_DEALER" ? (
             <Table.Cell>Broker Dealer</Table.Cell>
           ) : (

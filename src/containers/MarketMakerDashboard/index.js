@@ -66,7 +66,7 @@ class MarketMakerDashboard extends Component {
                 Logout
               </Button> */}
               <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
-                View Reserve on Etherscan
+                View Reserve on Blockchain
               </a>
             </Col>
           </Row>
