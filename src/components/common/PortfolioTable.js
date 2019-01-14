@@ -6,7 +6,6 @@ import config from "../../config";
 class PortfolioTable extends PureComponent {
   render() {
     const { currentHoldings } = this.props || {};
-    console.log(currentHoldings);
     return (
       <Table celled>
         <Table.Header>
