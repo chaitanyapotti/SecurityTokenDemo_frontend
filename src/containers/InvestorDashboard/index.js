@@ -23,48 +23,51 @@ class InvestorDashboard extends Component {
   componentWillMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getPriceHistory: fetchPriceHistory } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.setState({ first_name, email, phone, id, role, date, status });
+    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
     fetchPriceHistory();
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
   }
 
   render() {
-    const { userBalance, tokenBalance, portfolioValue, priceHistory } = this.props || {};
-    const { first_name, email, phone, id, role, date, status } = this.state;
-    return (
-      <Grid container="true">
-        <Navbar />
-        <div style={{ marginTop: "100px" }}>
-          <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-        </div>
-        <CUICard style={{ marginTop: "10px" }}>
-          <Row>
-            <Col lg={8}>
-              <div className="txt-m text--primary push-half--bottom push-top--35">
-                ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
-              </div>
-              <div className="txt-m text--primary push-half--bottom">
-                Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
-              </div>
-            </Col>
-            {/* <Col lg={2} xsOffset={2}>
+    const { userBalance, tokenBalance, currentPortfolioValue } = this.props || {};
+    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
+    if (tokenBalance[publicAddress] && currentPortfolioValue[publicAddress]) {
+      return (
+        <Grid container="true">
+          <Navbar />
+          <div style={{ marginTop: "100px" }}>
+            <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
+          </div>
+          <CUICard style={{ marginTop: "10px" }}>
+            <Row>
+              <Col lg={8}>
+                <div className="txt-m text--primary push-half--bottom push-top--35">
+                  ETH Balance : <span className="txt-m text--secondary">{userBalance[publicAddress]}</span>
+                </div>
+                <div className="txt-m text--primary push-half--bottom">
+                  Portfolio Value : <span className="txt-m text--secondary">{formatMoney(currentPortfolioValue[publicAddress].total, 0)}</span>
+                </div>
+              </Col>
+              {/* <Col lg={2} xsOffset={2}>
               <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
                 Logout
               </Button>
             </Col> */}
-          </Row>
-        </CUICard>
-        <HoldingsTable tokenBalance={tokenBalance} priceHistory={priceHistory} />
-        <CUICard>
-          <Row center="lg">
-            <Col>
-              <TokenChart tokenBalance={tokenBalance} />
-            </Col>
-          </Row>
-        </CUICard>
-      </Grid>
-    );
+            </Row>
+          </CUICard>
+          <HoldingsTable tokenBalance={tokenBalance[publicAddress]} currentPortfolioValue={currentPortfolioValue[publicAddress]} />
+          <CUICard>
+            <Row center="lg">
+              <Col>
+                <TokenChart tokenBalance={tokenBalance[publicAddress]} />
+              </Col>
+            </Row>
+          </CUICard>
+        </Grid>
+      );
+    }
+    return <div />;
   }
 }
 
@@ -76,14 +79,12 @@ InvestorDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData, priceHistoryData } = state;
+  const { userData } = state;
   const { userBalance, tokenBalance } = userData || {};
-  const { priceHistory } = priceHistoryData || {};
   return {
     userBalance,
     tokenBalance,
-    portfolioValue: getPortfolioSelector(state),
-    priceHistory
+    currentPortfolioValue: getPortfolioSelector(state)
   };
 };
 

@@ -13,30 +13,33 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 import { getPriceHistory } from "../../actions/priceHistoryActions";
+import { getPortfolioSelector } from "../../selectors";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
     const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    const { getPriceHistory: fetchPriceHistory } = this.props;
+    const { getPriceHistory: fetchPriceHistory, getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
     fetchPriceHistory();
     const tokenOptions =
       JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
         key: x.name,
         value: x.address,
         text: x.name
-      })) || {};
+      })) || [];
     this.setState({ first_name, email, phone, id, role, date, status, publicAddress, tokenOptions });
+    for (const iterator of tokenOptions) {
+      fetchTokenBalance(iterator.value);
+      fetchUserBalance(iterator.value);
+    }
   }
 
   onDropdownChange = (e, d) => {
-    const { onDropdownChange: dropDownChange, getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
+    const { onDropdownChange: dropDownChange } = this.props;
     dropDownChange(d.value);
-    fetchTokenBalance(d.value);
-    fetchUserBalance(d.value);
   };
 
   render() {
-    const { dropDownSelect, tokenBalance, userBalance, portfolioValue, priceHistory } = this.props || {};
+    const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue } = this.props || {};
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     return (
       <Grid container="true">
@@ -44,32 +47,42 @@ class BrokerDealerDashboard extends Component {
         <div style={{ marginTop: "100px" }}>
           <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
         </div>
-        <CUICard style={{ marginTop: "10px" }}>
+        <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
           <Row>
             <Col lg={8}>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
                 <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
               </div>
-              <div className="txt-m text--primary push-half--bottom">
-                ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
-              </div>
-              <div className="txt-m text--primary push-half--bottom">
-                Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
-              </div>
+              {dropDownSelect ? (
+                <div>
+                  <div className="txt-m text--primary push-half--bottom">
+                    ETH Balance : <span className="txt-m text--secondary">{userBalance[dropDownSelect]}</span>
+                  </div>
+                  <div className="txt-m text--primary push-half--bottom">
+                    Portfolio Value : <span className="txt-m text--secondary">{formatMoney(currentPortfolioValue[dropDownSelect].total, 0)}</span>
+                  </div>
+                </div>
+              ) : null}
             </Col>
           </Row>
         </CUICard>
         {dropDownSelect ? (
-          <BuyHoldingsTable priceHistory={priceHistory} tokenBalance={tokenBalance} publicAddress={publicAddress} dropDownSelect={dropDownSelect} />
+          <div>
+            <BuyHoldingsTable
+              publicAddress={publicAddress}
+              dropDownSelect={dropDownSelect}
+              currentPortfolioValue={currentPortfolioValue[dropDownSelect]}
+            />
+            <CUICard>
+              <Row center="lg">
+                <Col>
+                  <TokenChart tokenBalance={tokenBalance[dropDownSelect]} />
+                </Col>
+              </Row>
+            </CUICard>
+          </div>
         ) : null}
-        <CUICard>
-          <Row center="lg">
-            <Col>
-              <TokenChart tokenBalance={tokenBalance} />
-            </Col>
-          </Row>
-        </CUICard>
       </Grid>
     );
   }
@@ -84,14 +97,14 @@ BrokerDealerDashboard.propTypes = {
 
 const mapStateToProps = state => {
   const { marketMakerData, userData, tradeData, priceHistoryData } = state;
-  const { userBalance, tokenBalance, portfolioValue } = userData || {};
+  const { userBalance, tokenBalance } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
   const { buyTradeData, sellTradeData } = tradeData || {};
   const { priceHistory } = priceHistoryData || {};
   return {
     dropDownSelect,
     tokenBalance,
-    portfolioValue,
+    currentPortfolioValue: getPortfolioSelector(state),
     userBalance,
     buyTradeData,
     sellTradeData,

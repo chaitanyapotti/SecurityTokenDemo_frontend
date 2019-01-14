@@ -10,7 +10,7 @@ export const getUserBalanceAction = publicAddress => async dispatch => {
         const { data } = res.data;
         dispatch({
           type: actionTypes.GET_USER_BALANCE,
-          payload: data
+          payload: { data, user: publicAddress }
         });
       }
     })
@@ -29,7 +29,7 @@ export const getTokenBalance = publicAddress => dispatch => {
             const { data } = res.data;
             dispatch({
               type: actionTypes.GET_TOKEN_BALANCE,
-              payload: { token, data }
+              payload: { token, data, user: publicAddress }
             });
           }
         })

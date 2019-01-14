@@ -3,13 +3,16 @@ import { formatFromWei } from "../helpers/numberHelpers";
 import config from "../config";
 
 const INITIAL_STATE = {
-  userBalance: "",
+  userBalance: {},
   tokenBalance: {},
-  portfolioValue: 0
+  portfolioValue: {}
 };
 
 export default function(state = INITIAL_STATE, action) {
   const currentTokenBalances = JSON.parse(JSON.stringify(state.tokenBalance));
+  const currentUserBalances = JSON.parse(JSON.stringify(state.userBalance));
+  const currentPortfolioValues = JSON.parse(JSON.stringify(state.portfolioValue));
+
   switch (action.type) {
     case actionTypes.CLEAR_STORE: {
       return {
@@ -17,26 +20,33 @@ export default function(state = INITIAL_STATE, action) {
         ...INITIAL_STATE
       };
     }
-    case actionTypes.GET_USER_BALANCE:
+    case actionTypes.GET_USER_BALANCE: {
+      const { user, data } = action.payload || {};
+      currentUserBalances[user] = formatFromWei(data, 5);
       return {
         ...state,
-        userBalance: formatFromWei(action.payload, 5)
+        userBalance: currentUserBalances
       };
+    }
     case actionTypes.GET_TOKEN_BALANCE: {
-      const { token, data } = action.payload || {};
+      const { token, data, user } = action.payload || {};
       const balance = formatFromWei(data, 3);
       const dollarValue = parseFloat(balance) * config.tokens[token].price;
-      currentTokenBalances[token] = { balance, dollarValue };
-      let portfolioValue = 0;
+      currentTokenBalances[user] = currentTokenBalances[user] ? currentTokenBalances[user] : {};
+      currentTokenBalances[user][token] = { balance, dollarValue };
       for (const key in currentTokenBalances) {
         if (Object.prototype.hasOwnProperty.call(currentTokenBalances, key)) {
-          portfolioValue += currentTokenBalances[key].dollarValue;
+          for (const item in currentTokenBalances[key]) {
+            if (Object.prototype.hasOwnProperty.call(currentTokenBalances[key], item)) {
+              currentPortfolioValues[key] += currentTokenBalances[key][item].dollarValue;
+            }
+          }
         }
       }
       return {
         ...state,
         tokenBalance: currentTokenBalances,
-        portfolioValue
+        portfolioValue: currentPortfolioValues
       };
     }
     default:

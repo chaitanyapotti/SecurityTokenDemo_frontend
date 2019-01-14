@@ -5,7 +5,7 @@ import config from "../../config";
 
 class HoldingsTable extends PureComponent {
   render() {
-    const { tokenBalance, priceHistory } = this.props || {};
+    const { tokenBalance, currentPortfolioValue } = this.props || {};
     return (
       <Table celled>
         <Table.Header>
@@ -24,15 +24,11 @@ class HoldingsTable extends PureComponent {
               <Table.Cell>{config.tokens[key].name}</Table.Cell>
               <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
-              <Table.Cell>{formatMoney(tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice, 0)}</Table.Cell>
+              <Table.Cell>{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
 
               <Table.Cell>
-                {`+${formatMoney(
-                  tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue,
-                  0
-                )}(+${Math.round(
-                  ((tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue) * 100) /
-                    tokenBalance[key].dollarValue,
+                {`+${formatMoney(currentPortfolioValue[key] - tokenBalance[key].dollarValue, 0)}(+${Math.round(
+                  ((currentPortfolioValue[key] - tokenBalance[key].dollarValue) * 100) / tokenBalance[key].dollarValue,
                   2
                 )}%)`}
               </Table.Cell>

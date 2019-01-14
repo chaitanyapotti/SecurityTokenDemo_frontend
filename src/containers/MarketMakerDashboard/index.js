@@ -5,6 +5,7 @@ import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
+import { getPriceHistory } from "../../actions/priceHistoryActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTable";
@@ -16,13 +17,15 @@ import BioTable from "../../components/common/BioTable";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { CustomToolTip } from "../../components/common/FormComponents";
+import { getPortfolioSelector } from "../../selectors";
 
 class MarketMakerDashboard extends Component {
   componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getPriceHistory: fetchPriceHistory } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
-    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress });
+    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress });
+    fetchPriceHistory();
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
   }
@@ -53,9 +56,8 @@ class MarketMakerDashboard extends Component {
 
   depositClick = e => {
     const { depositEther: deposit } = this.props;
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { userLocalPublicAddress } = this.props || {};
-    const { depositEtherInput } = this.state;
+    const { depositEtherInput, reserveAddress } = this.state;
     deposit(depositEtherInput, reserveAddress, userLocalPublicAddress);
   };
 
@@ -63,57 +65,72 @@ class MarketMakerDashboard extends Component {
     const {
       userBalance,
       tokenBalance,
-      portfolioValue,
+      currentPortfolioValue,
       userLocalPublicAddress,
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
       depositEtherSuccess
     } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress, etherScanLink, depositEtherInput, depositEtherModalOpen } = this.state;
+    const {
+      first_name,
+      email,
+      phone,
+      id,
+      role,
+      date,
+      status,
+      publicAddress,
+      etherScanLink,
+      depositEtherInput,
+      depositEtherModalOpen,
+      reserveAddress
+    } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     const isOwner = userLocalPublicAddress === config.owner;
-    return (
-      <Grid container="true">
-        <Navbar />
-        <div style={{ marginTop: "100px" }}>
-          <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-        </div>
-        <CUICard style={{ marginTop: "10px" }}>
-          <Row>
-            <Col lg={8}>
-              <div className="txt-m text--primary push-half--bottom  push-top--35">
-                Reserve ETH Balance : <span className="txt-m text--secondary">{userBalance}</span>
-              </div>
-              <div className="txt-m text--primary push-half--bottom">
-                Reserve Portfolio Value : <span className="txt-m text--secondary">{formatMoney(portfolioValue, 0)}</span>
-              </div>
-            </Col>
-            <Col lg={2} xsOffset={2}>
-              {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
+    if (tokenBalance[reserveAddress] && currentPortfolioValue[reserveAddress]) {
+      return (
+        <Grid container="true">
+          <Navbar />
+          <div style={{ marginTop: "100px" }}>
+            <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
+          </div>
+          <CUICard style={{ marginTop: "10px" }}>
+            <Row>
+              <Col lg={8}>
+                <div className="txt-m text--primary push-half--bottom  push-top--35">
+                  Reserve ETH Balance : <span className="txt-m text--secondary">{userBalance[reserveAddress]}</span>
+                </div>
+                <div className="txt-m text--primary push-half--bottom">
+                  Reserve Portfolio Value :{" "}
+                  <span className="txt-m text--secondary">{formatMoney(currentPortfolioValue[reserveAddress].total, 0)}</span>
+                </div>
+              </Col>
+              <Col lg={2} xsOffset={2}>
+                {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
                 Logout
               </Button> */}
-              <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
-                View Reserve on Blockchain
-              </a>
-            </Col>
-          </Row>
-          <Row>
-            <Col lg={12}>
-              <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                <span>
-                  <Button
-                    className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                    disabled={!isOperator}
-                    onClick={this.onDepositEtherClick}
-                  >
-                    Deposit Ether
-                  </Button>
-                </span>
-              </CustomToolTip>
-            </Col>
-          </Row>
-        </CUICard>
-        {/* <CUICard>
+                <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
+                  View Reserve on Blockchain
+                </a>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={12}>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <Button
+                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                      disabled={!isOperator}
+                      onClick={this.onDepositEtherClick}
+                    >
+                      Deposit Ether
+                    </Button>
+                  </span>
+                </CustomToolTip>
+              </Col>
+            </Row>
+          </CUICard>
+          {/* <CUICard>
           <Row>
             <Col lg={8}>
               <span className="txt-m text--primary push--bottom">
@@ -130,41 +147,48 @@ class MarketMakerDashboard extends Component {
           ) : null}
         </CUICard> */}
 
-        <EtherScanHoldingsTable tokenBalance={tokenBalance} isOperator={isOperator} isOwner={isOwner} />
+          <EtherScanHoldingsTable
+            tokenBalance={tokenBalance[reserveAddress]}
+            currentPortfolioValue={currentPortfolioValue[reserveAddress]}
+            isOperator={isOperator}
+            isOwner={isOwner}
+          />
 
-        <CUICard>
-          <Row center="lg">
-            <Col>
-              <TokenChart tokenBalance={tokenBalance} />
-            </Col>
-          </Row>
-        </CUICard>
-        <AlertModal open={depositEtherModalOpen} handleClose={this.handleDepositEtherModalClose}>
-          <Grid>
-            <Row className="push--bottom">
-              <Col lg={12}>
-                <Input
-                  placeholder="Enter Ether Amount"
-                  value={depositEtherInput}
-                  onChange={e => this.setState({ depositEtherInput: e.target.value })}
-                />
+          <CUICard>
+            <Row center="lg">
+              <Col>
+                <TokenChart tokenBalance={tokenBalance[reserveAddress]} />
               </Col>
             </Row>
-            <Row className="push--bottom">
-              <Col lg={12}>
-                <Transaction
-                  onClick={this.depositClick}
-                  buttonText="Deposit"
-                  success={depositEtherSuccess}
-                  txHash={depositEtherButtonTransactionHash}
-                  buttonSpinning={depositEtherButtonSpinning}
-                />
-              </Col>
-            </Row>
-          </Grid>
-        </AlertModal>
-      </Grid>
-    );
+          </CUICard>
+          <AlertModal open={depositEtherModalOpen} handleClose={this.handleDepositEtherModalClose}>
+            <Grid>
+              <Row className="push--bottom">
+                <Col lg={12}>
+                  <Input
+                    placeholder="Enter Ether Amount"
+                    value={depositEtherInput}
+                    onChange={e => this.setState({ depositEtherInput: e.target.value })}
+                  />
+                </Col>
+              </Row>
+              <Row className="push--bottom">
+                <Col lg={12}>
+                  <Transaction
+                    onClick={this.depositClick}
+                    buttonText="Deposit"
+                    success={depositEtherSuccess}
+                    txHash={depositEtherButtonTransactionHash}
+                    buttonSpinning={depositEtherButtonSpinning}
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </AlertModal>
+        </Grid>
+      );
+    }
+    return <div />;
   }
 }
 
@@ -178,13 +202,13 @@ MarketMakerDashboard.propTypes = {
 
 const mapStateToProps = state => {
   const { userData, marketMakerData, signinManagerData } = state;
-  const { userBalance, tokenBalance, portfolioValue } = userData || {};
+  const { userBalance, tokenBalance } = userData || {};
   const { dropDownSelect, depositEtherButtonSpinning, depositEtherButtonTransactionHash, depositEtherSuccess } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     userBalance,
     tokenBalance,
-    portfolioValue,
+    currentPortfolioValue: getPortfolioSelector(state),
     dropDownSelect,
     userLocalPublicAddress,
     depositEtherButtonSpinning,
@@ -195,5 +219,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther }
+  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther, getPriceHistory }
 )(MarketMakerDashboard);

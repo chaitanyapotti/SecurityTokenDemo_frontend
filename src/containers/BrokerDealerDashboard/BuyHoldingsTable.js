@@ -96,6 +96,7 @@ class BuyHoldingsTable extends Component {
   render() {
     const {
       tokenBalance,
+      currentPortfolioValue,
       buyTradeData,
       sellTradeData,
       buyButtonSpinning,
@@ -115,9 +116,10 @@ class BuyHoldingsTable extends Component {
       approveSuccess,
       approveButtonTransactionHash,
       approveButtonSpinning,
-      priceHistory
+      dropDownSelect
     } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken, sellInput, sellToken } = this.state;
+    const userTokenBalance = tokenBalance[dropDownSelect] || {};
     const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
     const sellPrice = sellTradeData && sellTradeData[sellToken] ? sellTradeData[sellToken].price : 0;
     const isOperator = userLocalPublicAddress === publicAddress;
@@ -136,21 +138,15 @@ class BuyHoldingsTable extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {Object.keys(tokenBalance).map(key => (
+            {Object.keys(userTokenBalance).map(key => (
               <Table.Row key={key}>
                 <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{formatCurrencyNumber(userTokenBalance[key].balance, 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{formatMoney(userTokenBalance[key].dollarValue, 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  {formatMoney(tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice, 0)}
-                </Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  {`+${formatMoney(
-                    tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue,
-                    0
-                  )}(+${Math.round(
-                    ((tokenBalance[key].balance * priceHistory[key].currentprice * config.etherPrice - tokenBalance[key].dollarValue) * 100) /
-                      tokenBalance[key].dollarValue,
+                  {`+${formatMoney(currentPortfolioValue[key] - userTokenBalance[key].dollarValue, 0)}(+${Math.round(
+                    ((currentPortfolioValue[key] - userTokenBalance[key].dollarValue) * 100) / userTokenBalance[key].dollarValue,
                     2
                   )}%)`}
                 </Table.Cell>
@@ -297,7 +293,8 @@ BuyHoldingsTable.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { tradeData, signinManagerData } = state;
+  const { tradeData, signinManagerData, userData } = state;
+  const { tokenBalance } = userData || {};
   const {
     buyTradeData,
     sellTradeData,
@@ -316,7 +313,7 @@ const mapStateToProps = state => {
     approveSuccess,
     approveButtonTransactionHash,
     approveButtonSpinning
-  } = tradeData;
+  } = tradeData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     buyTradeData,
@@ -336,7 +333,8 @@ const mapStateToProps = state => {
     transferFromSuccess,
     approveSuccess,
     approveButtonTransactionHash,
-    approveButtonSpinning
+    approveButtonSpinning,
+    tokenBalance
   };
 };
 

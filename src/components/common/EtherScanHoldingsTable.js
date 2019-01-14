@@ -57,6 +57,7 @@ class EtherScanHoldingsTable extends PureComponent {
     const {
       tokenBalance,
       isOperator,
+      currentPortfolioValue,
       transferTokenButtonSpinning,
       transferTokenButtonTransactionHash,
       transferTokenSuccess,
@@ -85,7 +86,7 @@ class EtherScanHoldingsTable extends PureComponent {
               <Table.Row key={key}>
                 <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">
                   <CustomToolTip disabled={!isOwner} title="You are not the owner">
                     <span>

@@ -8,16 +8,27 @@ export const getPortfolioSelector = createSelector(
   getTokenBalance,
   getPriceHistory,
   (tokenBalance, priceHistory) => {
-    let portfolio = 0;
-    for (const key in config.tokens) {
-      if (
-        Object.prototype.hasOwnProperty.call(config.tokens, key) &&
-        Object.prototype.hasOwnProperty.call(tokenBalance, key) &&
-        Object.prototype.hasOwnProperty.call(priceHistory, key)
-      ) {
-        portfolio += tokenBalance[key].balance * priceHistory[key].currentprice;
+    const portfolio = {};
+    for (const key in tokenBalance) {
+      // per user
+      if (Object.prototype.hasOwnProperty.call(tokenBalance, key)) {
+        const element = tokenBalance[key];
+        portfolio[key] = {};
+        portfolio[key].total = 0;
+        for (const item in config.tokens) {
+          // per token
+          if (
+            Object.prototype.hasOwnProperty.call(config.tokens, item) &&
+            Object.prototype.hasOwnProperty.call(element, item) &&
+            Object.prototype.hasOwnProperty.call(priceHistory, item)
+          ) {
+            portfolio[key][item] = element[item].balance * priceHistory[item].currentprice * config.etherPrice;
+            portfolio[key].total += element[item].balance * priceHistory[item].currentprice * config.etherPrice;
+          }
+        }
       }
     }
-    return portfolio * config.etherPrice;
+
+    return portfolio;
   }
 );
