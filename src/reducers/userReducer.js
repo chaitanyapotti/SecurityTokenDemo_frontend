@@ -35,8 +35,10 @@ export default function(state = INITIAL_STATE, action) {
       currentTokenBalances[user] = currentTokenBalances[user] ? currentTokenBalances[user] : {};
       currentTokenBalances[user][token] = { balance, dollarValue };
       for (const key in currentTokenBalances) {
+        // user is key
         if (Object.prototype.hasOwnProperty.call(currentTokenBalances, key)) {
           for (const item in currentTokenBalances[key]) {
+            // item is token
             if (Object.prototype.hasOwnProperty.call(currentTokenBalances[key], item)) {
               currentPortfolioValues[key] += currentTokenBalances[key][item].dollarValue;
             }

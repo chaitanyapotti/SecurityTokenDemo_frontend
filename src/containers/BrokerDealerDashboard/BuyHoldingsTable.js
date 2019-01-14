@@ -138,46 +138,49 @@ class BuyHoldingsTable extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {Object.keys(userTokenBalance).map(key => (
-              <Table.Row key={key}>
-                <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatCurrencyNumber(userTokenBalance[key].balance, 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatMoney(userTokenBalance[key].dollarValue, 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  {`+${formatMoney(currentPortfolioValue[key] - userTokenBalance[key].dollarValue, 0)}(+${Math.round(
-                    ((currentPortfolioValue[key] - userTokenBalance[key].dollarValue) * 100) / userTokenBalance[key].dollarValue,
-                    2
-                  )}%)`}
-                </Table.Cell>
-                <Table.Cell>
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <Button
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onBuyClick(key)}
-                      >
-                        Buy
-                      </Button>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell>
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <Button
-                        className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onSellClick(key)}
-                      >
-                        Sell
-                      </Button>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+            {Object.keys(userTokenBalance).map(key => {
+              const { balance, dollarValue } = userTokenBalance[key] || {};
+              return (
+                <Table.Row key={key}>
+                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{formatMoney(dollarValue, 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
+                      ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
+                      2
+                    )}%)`}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <Button
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onBuyClick(key)}
+                        >
+                          Buy
+                        </Button>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <Button
+                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onSellClick(key)}
+                        >
+                          Sell
+                        </Button>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table>
         <AlertModal open={buyModalOpen} handleClose={this.handleBuyModalClose}>
