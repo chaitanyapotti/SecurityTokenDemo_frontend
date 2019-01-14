@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { logoutUserAction } from "../../actions/authActions";
-import { getPriceHistory } from "../../actions/priceHistoryActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
@@ -21,10 +20,9 @@ class InvestorDashboard extends Component {
   };
 
   componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getPriceHistory: fetchPriceHistory } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
     this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
-    fetchPriceHistory();
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
   }
@@ -74,8 +72,7 @@ class InvestorDashboard extends Component {
 InvestorDashboard.propTypes = {
   logoutUserAction: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
-  getTokenBalance: Proptypes.func.isRequired,
-  getPriceHistory: Proptypes.func.isRequired
+  getTokenBalance: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -90,5 +87,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, getUserBalanceAction, getTokenBalance, getPriceHistory }
+  { logoutUserAction, getUserBalanceAction, getTokenBalance }
 )(InvestorDashboard);

@@ -12,14 +12,12 @@ import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
-import { getPriceHistory } from "../../actions/priceHistoryActions";
 import { getPortfolioSelector } from "../../selectors";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
     const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    const { getPriceHistory: fetchPriceHistory, getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
-    fetchPriceHistory();
+    const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
     const tokenOptions =
       JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
         key: x.name,
@@ -91,8 +89,7 @@ class BrokerDealerDashboard extends Component {
 BrokerDealerDashboard.propTypes = {
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
-  getUserBalanceAction: Proptypes.func.isRequired,
-  getPriceHistory: Proptypes.func.isRequired
+  getUserBalanceAction: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -114,5 +111,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate, getPriceHistory }
+  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate }
 )(BrokerDealerDashboard);

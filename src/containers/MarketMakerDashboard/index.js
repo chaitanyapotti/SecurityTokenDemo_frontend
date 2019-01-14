@@ -5,10 +5,9 @@ import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
-import { getPriceHistory } from "../../actions/priceHistoryActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
-import EtherScanHoldingsTable from "../../components/common/EtherScanHoldingsTable";
+import EtherScanHoldingsTable from "./EtherScanHoldingsTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
@@ -21,11 +20,10 @@ import { getPortfolioSelector } from "../../selectors";
 
 class MarketMakerDashboard extends Component {
   componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getPriceHistory: fetchPriceHistory } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
     this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress });
-    fetchPriceHistory();
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
   }
@@ -219,5 +217,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther, getPriceHistory }
+  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther }
 )(MarketMakerDashboard);

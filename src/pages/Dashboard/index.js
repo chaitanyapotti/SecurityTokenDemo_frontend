@@ -6,6 +6,7 @@ import { logoutUserAction } from "../../actions/authActions";
 import InvestorDashboard from "../../containers/InvestorDashboard";
 import MarketMakerDashboard from "../../containers/MarketMakerDashboard";
 import BrokerDealerDashboard from "../../containers/BrokerDealerDashboard";
+import { getPriceHistory } from "../../actions/priceHistoryActions";
 
 class Dashboard extends Component {
   onLogoutClick = e => {
@@ -16,9 +17,11 @@ class Dashboard extends Component {
 
   componentDidMount() {
     const { isAuthenticated, history } = this.props || {};
+    const { getPriceHistory: fetchPriceHistory } = this.props;
     if (!isAuthenticated) {
       history.push("/");
     }
+    fetchPriceHistory();
   }
 
   render() {
@@ -38,7 +41,8 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired
+  logoutUserAction: Proptypes.func.isRequired,
+  getPriceHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -50,5 +54,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction }
+  { logoutUserAction, getPriceHistory }
 )(Dashboard);

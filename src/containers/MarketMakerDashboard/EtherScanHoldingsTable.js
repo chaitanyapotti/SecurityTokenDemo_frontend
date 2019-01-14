@@ -1,16 +1,16 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { Table, Button, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { CustomToolTip } from "./FormComponents";
+import { CustomToolTip } from "../../components/common/FormComponents";
 import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import config from "../../config";
-import AlertModal from "./AlertModal";
-import Transaction from "./FormComponents/Transaction";
+import AlertModal from "../../components/common/AlertModal";
+import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction } from "../../actions/marketMakerActions";
 
-class EtherScanHoldingsTable extends PureComponent {
+class EtherScanHoldingsTable extends Component {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
