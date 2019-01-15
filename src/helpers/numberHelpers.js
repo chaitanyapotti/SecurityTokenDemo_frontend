@@ -180,6 +180,15 @@ const getEtherScanAddressLink = (address, network = null) => {
   return network === "main" ? `https://etherscan.io/address/${address}` : `https://${localNetwork}.etherscan.io/address/${address}`;
 };
 
+const bytesToHex = byteArray => {
+  const strNum = toHexString(byteArray);
+  const num = `0x${strNum}`;
+  return num;
+};
+
+// eslint-disable-next-line
+const toHexString = byteArray => Array.from(byteArray, byte => `0${(byte & 0xff).toString(16)}`.slice(-2)).join("");
+
 export {
   formatFromWei,
   formatMoney,
@@ -193,5 +202,6 @@ export {
   getSignInStatusText,
   getEtherScanHashLink,
   getEtherScanAddressLink,
-  formatRateToPrice
+  formatRateToPrice,
+  bytesToHex
 };

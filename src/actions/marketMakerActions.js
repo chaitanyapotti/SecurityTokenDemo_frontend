@@ -1,6 +1,7 @@
 import axios from "axios";
 import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
+import { bytesToHex } from "../helpers/numberHelpers";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
 import { getTokenBalance, getUserBalanceAction } from "./userActions";
@@ -226,5 +227,159 @@ export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAdd
     .catch(err => {
       console.log(err);
       dispatch(isWithdrawButtonSpinning(false));
+    });
+};
+
+export const isSetCompactDataButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.COMPACT_DATA_BUTTON_SPINNING
+});
+
+export const compactDataSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.COMPACT_DATA_SUCCESS
+});
+
+// order should be knc, riv, lmd - one pt is 0.1% change
+// refer https://developer.kyber.network/docs/ReservesGuide/
+// userlocalpublicaddress must be operator address
+export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dispatch => {
+  const compactBuyHex = bytesToHex(buyData.map(item => item * 10));
+  const compactSellHex = bytesToHex(sellData.map(item => item * 10));
+  dispatch(isSetCompactDataButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=ConversionRates`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.ConversionRates, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        const blockNumber = await web3.eth.getBlockNumber();
+        instance.methods
+          .setCompactData(compactBuyHex, compactSellHex, blockNumber, [0])
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isSetCompactDataButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(compactDataSuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(compactDataSuccess(false));
+                  dispatch(isSetCompactDataButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(compactDataSuccess(false));
+                  dispatch(isSetCompactDataButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isSetCompactDataButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(isSetCompactDataButtonSpinning(false));
+    });
+};
+
+export const isSetQtyStepButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.QTY_STEP_BUTTON_SPINNING
+});
+
+export const qtyStepSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.QTY_STEP_SUCCESS
+});
+
+export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
+  dispatch(isSetQtyStepButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=ConversionRates`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.ConversionRates, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .setQtyStepFunction(config[token].address, xBuy, yBuy, xSell, ySell)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isSetQtyStepButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(qtyStepSuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(qtyStepSuccess(false));
+                  dispatch(isSetQtyStepButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(qtyStepSuccess(false));
+                  dispatch(isSetQtyStepButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isSetQtyStepButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(isSetQtyStepButtonSpinning(false));
     });
 };
