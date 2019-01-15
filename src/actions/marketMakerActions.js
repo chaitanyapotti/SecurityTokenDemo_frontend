@@ -244,8 +244,8 @@ export const compactDataSuccess = receipt => ({
 // refer https://developer.kyber.network/docs/ReservesGuide/
 // userlocalpublicaddress must be operator address
 export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dispatch => {
-  const compactBuyHex = bytesToHex(buyData.map(item => item * 10));
-  const compactSellHex = bytesToHex(sellData.map(item => item * 10));
+  const compactBuyHex = [0, ...bytesToHex(buyData.map(item => item * 10))];
+  const compactSellHex = [0, ...bytesToHex(sellData.map(item => item * 10))];
   dispatch(isSetCompactDataButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
