@@ -3,7 +3,7 @@ import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
-import { getTokenBalance } from "./userActions";
+import { getTokenBalance, getTransactionHistory } from "./userActions";
 
 export const getBuyRate = (token, etherAmount) => dispatch => {
   axios
@@ -45,7 +45,23 @@ export const buySuccess = receipt => ({
   type: actionTypes.BUY_SUCCESS
 });
 
-export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRate, toAddress) => dispatch => {
+const postTransactionApi = (tokenAddress, transactionType, transactionHash, bdAddress, tokenCount, investorAddress, dispatch, special = true) => {
+  const body = {
+    tokenAddress,
+    transactionType,
+    transactionHash,
+    bdAddress,
+    tokenCount: special ? web3.utils.fromWei(tokenCount.toString()) : tokenCount.toString(),
+    investorAddress
+  };
+  console.log("posting");
+  axios
+    .post(`${config.api}/api/transaction`, body)
+    .then(response => dispatch(getTransactionHistory(bdAddress, investorAddress))) // maybe update backend to send response as this
+    .catch(err => console.log(err));
+};
+
+export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRate, investorAddress) => dispatch => {
   dispatch(isBuyButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
@@ -68,6 +84,15 @@ export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRa
               payload: { transactionHash },
               type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
             });
+            postTransactionApi(
+              config.tokens[token].address,
+              "BUY",
+              transactionHash,
+              userLocalPublicAddress,
+              parseFloat(buyRate) * parseFloat(etherAmount),
+              investorAddress,
+              dispatch
+            );
             dispatch(
               pollTxHash(
                 transactionHash,
@@ -121,7 +146,7 @@ export const sellSuccess = receipt => ({
   type: actionTypes.SELL_SUCCESS
 });
 
-export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sellRate) => dispatch => {
+export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sellRate, investorAddress) => dispatch => {
   dispatch(isSellButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=KyberNetworkProxy`)
@@ -143,6 +168,16 @@ export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sell
               payload: { transactionHash },
               type: actionTypes.SELL_BUTTON_TRANSACTION_HASH_RECEIVED
             });
+            postTransactionApi(
+              config.tokens[token].address,
+              "SELL",
+              transactionHash,
+              userLocalPublicAddress,
+              tokenAmount,
+              investorAddress,
+              dispatch,
+              false
+            );
             dispatch(
               pollTxHash(
                 transactionHash,

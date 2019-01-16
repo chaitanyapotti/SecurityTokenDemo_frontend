@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Input } from "semantic-ui-react";
+import { Table, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { formatCurrencyNumber, formatMoney, formatFromWei } from "../../helpers/numberHelpers";
@@ -43,9 +43,9 @@ class BuyHoldingsTable extends Component {
 
   onBuyTokenClick = () => {
     const { buyTokenAction: doBuyToken } = this.props;
-    const { buyTradeData, userLocalPublicAddress } = this.props || {};
+    const { buyTradeData, userLocalPublicAddress, dropDownSelect } = this.props || {};
     const { buyToken, buyInput } = this.state;
-    doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate);
+    doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate, dropDownSelect);
   };
 
   onSellClick = key => {
@@ -54,9 +54,9 @@ class BuyHoldingsTable extends Component {
 
   onSellTokenClick = () => {
     const { sellTokenAction: doSellToken } = this.props;
-    const { sellTradeData, userLocalPublicAddress } = this.props || {};
+    const { sellTradeData, userLocalPublicAddress, dropDownSelect } = this.props || {};
     const { sellToken, sellInput } = this.state;
-    doSellToken(sellToken, sellInput, userLocalPublicAddress, sellTradeData[sellToken].rate);
+    doSellToken(sellToken, sellInput, userLocalPublicAddress, sellTradeData[sellToken].rate, dropDownSelect);
   };
 
   onApproveClick = () => {

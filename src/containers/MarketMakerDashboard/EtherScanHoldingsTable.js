@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Input, Divider } from "semantic-ui-react";
+import { Table, Input, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
