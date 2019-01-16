@@ -16,10 +16,15 @@ class EtherScanHoldingsTable extends Component {
     withdrawTokenModalOpen: false,
     depositTokenInput: "",
     withdrawTokenInput: "",
-    token: ""
+    token: "",
+    tradeModalOpen: false
   };
 
   handleDepositTokenModalOpen = () => this.setState({ depositTokenModalOpen: true });
+
+  handleTradeModalOpen = () => this.setState({ tradeModalOpen: true });
+
+  handleTradeModalClose = () => this.setState({ tradeModalOpen: false });
 
   handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false, depositTokenInput: "" });
 
@@ -33,6 +38,10 @@ class EtherScanHoldingsTable extends Component {
 
   onWithdrawClick = key => {
     this.setState({ withdrawTokenModalOpen: true, token: key });
+  };
+
+  onTradeClick = e => {
+    this.setState({ tradeModalOpen: true });
   };
 
   depositTokenClick = e => {
@@ -64,9 +73,12 @@ class EtherScanHoldingsTable extends Component {
       withdrawTokenButtonSpinning,
       withdrawTokenButtonTransactionHash,
       withdrawTokenSuccess,
-      isOwner
+      isOwner,
+      tradeButtonSpinning,
+      tradeButtonTransactionHash,
+      tradeSuccess
     } = this.props || {};
-    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput } = this.state;
+    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput, tradeModalOpen } = this.state;
     return (
       <div>
         <Table celled>
@@ -114,7 +126,7 @@ class EtherScanHoldingsTable extends Component {
                   </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  {!isOperator ? (
+                  {isOperator ? (
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <Button
@@ -127,9 +139,9 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   ) : (
-                    <CustomToolTip disabled title="Trade is enabled in a desktop application mode">
+                    <CustomToolTip title="Trade is enabled in a desktop application mode">
                       <span>
-                        <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" disabled onClick={this.onTradeClick}>
+                        <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" onClick={this.onTradeClick}>
                           Trade
                         </Button>
                       </span>
@@ -195,6 +207,7 @@ class EtherScanHoldingsTable extends Component {
             </Row>
           </Grid>
         </AlertModal>
+        <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose} />
       </div>
     );
   }

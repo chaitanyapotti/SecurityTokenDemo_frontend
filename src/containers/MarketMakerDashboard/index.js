@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Button, Input } from "semantic-ui-react";
+import { Button, Input, Table } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
-import { onDropdownChange, depositEther } from "../../actions/marketMakerActions";
+import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
@@ -30,12 +30,22 @@ class MarketMakerDashboard extends Component {
 
   state = {
     depositEtherModalOpen: false,
-    depositEtherInput: ""
+    modifyRatesModalOpen: false,
+    depositEtherInput: "",
+    LMDBuyPercent: "",
+    RIVBuyPercent: "",
+    LMDSellPercent: "",
+    RIVSellPercent: ""
   };
 
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
 
-  handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false });
+  handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
+
+  handleModifyRatesModalClose = () =>
+    this.setState({ modifyRatesModalOpen: false, LMDBuyPercent: "", LMDSellPercent: "", RIVBuyPercent: "", RIVSellPercent: "" });
+
+  handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
@@ -49,7 +59,16 @@ class MarketMakerDashboard extends Component {
   };
 
   onDepositEtherClick = e => {
-    this.setState({ depositEtherModalOpen: true, depositEtherInput: "" });
+    this.setState({ depositEtherModalOpen: true });
+  };
+
+  onModifyRatesClick = e => {
+    this.setState({ modifyRatesModalOpen: true });
+  };
+
+  onModifyClick = e => {
+    const { setCompactData: modifyRatesAction } = this.props;
+    modifyRatesAction();
   };
 
   depositClick = e => {
@@ -67,7 +86,13 @@ class MarketMakerDashboard extends Component {
       userLocalPublicAddress,
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
-      depositEtherSuccess
+      depositEtherSuccess,
+      modifyRatesButtonSpinning,
+      modifyRatesTransactionHash,
+      tradeButtonSpinning,
+      tradeButtonTransactionHash,
+      modifyRatesSuccess,
+      tradeSuccess
     } = this.props || {};
     const {
       first_name,
@@ -81,7 +106,12 @@ class MarketMakerDashboard extends Component {
       etherScanLink,
       depositEtherInput,
       depositEtherModalOpen,
-      reserveAddress
+      modifyRatesModalOpen,
+      reserveAddress,
+      LMDBuyPercent,
+      RIVBuyPercent,
+      LMDSellPercent,
+      RIVSellPercent
     } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     const isOwner = userLocalPublicAddress === config.owner;
@@ -113,7 +143,7 @@ class MarketMakerDashboard extends Component {
               </Col>
             </Row>
             <Row>
-              <Col lg={12}>
+              <Col lg={2}>
                 <CustomToolTip disabled={!isOperator} title="You are not the operator">
                   <span>
                     <Button
@@ -122,6 +152,20 @@ class MarketMakerDashboard extends Component {
                       onClick={this.onDepositEtherClick}
                     >
                       Deposit Ether
+                    </Button>
+                  </span>
+                </CustomToolTip>
+              </Col>
+              <Col lg={2}>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <Button
+                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                      disabled={!isOperator}
+                      onClick={this.onModifyRatesClick}
+                    >
+                      Modify Rates
                     </Button>
                   </span>
                 </CustomToolTip>
@@ -150,6 +194,9 @@ class MarketMakerDashboard extends Component {
             currentPortfolioValue={currentPortfolioValue[reserveAddress]}
             isOperator={isOperator}
             isOwner={isOwner}
+            tradeButtonSpinning={tradeButtonSpinning}
+            tradeButtonTransactionHash={tradeButtonTransactionHash}
+            tradeSuccess={tradeSuccess}
           />
 
           <CUICard>
@@ -183,6 +230,59 @@ class MarketMakerDashboard extends Component {
               </Row>
             </Grid>
           </AlertModal>
+          <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
+            <Grid>
+              <Table celled>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>Token</Table.HeaderCell>
+                    <Table.HeaderCell>Buy(%)</Table.HeaderCell>
+                    <Table.HeaderCell>Sell(%)</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>LMD</Table.Cell>
+                    <Table.Cell>
+                      <Input placeholder="Enter Buy Percent" value={LMDBuyPercent} onChange={e => this.setState({ LMDBuyPercent: e.target.value })} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input
+                        placeholder="Enter Sell Percent"
+                        value={LMDSellPercent}
+                        onChange={e => this.setState({ LMDSellPercent: e.target.value })}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>RIV</Table.Cell>
+                    <Table.Cell>
+                      <Input placeholder="Enter Buy Percent" value={RIVBuyPercent} onChange={e => this.setState({ RIVBuyPercent: e.target.value })} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input
+                        placeholder="Enter Sell Percent"
+                        value={RIVSellPercent}
+                        onChange={e => this.setState({ RIVSellPercent: e.target.value })}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+              <Row className="push--bottom">
+                <Col lg={9} />
+                <Col lg={3}>
+                  <Transaction
+                    buttonText="Modify"
+                    onClick={this.ModifyClick}
+                    txHash={modifyRatesTransactionHash}
+                    success={modifyRatesSuccess}
+                    buttonSpinning={modifyRatesButtonSpinning}
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </AlertModal>
         </Grid>
       );
     }
@@ -195,13 +295,25 @@ MarketMakerDashboard.propTypes = {
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
-  depositEther: Proptypes.func.isRequired
+  depositEther: Proptypes.func.isRequired,
+  setCompactData: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   const { userData, marketMakerData, signinManagerData } = state;
   const { userBalance, tokenBalance } = userData || {};
-  const { dropDownSelect, depositEtherButtonSpinning, depositEtherButtonTransactionHash, depositEtherSuccess } = marketMakerData || {};
+  const {
+    dropDownSelect,
+    depositEtherButtonSpinning,
+    depositEtherButtonTransactionHash,
+    depositEtherSuccess,
+    modifyRatesButtonSpinning,
+    modifyRatesTransactionHash,
+    tradeButtonSpinning,
+    tradeButtonTransactionHash,
+    modifyRatesSuccess,
+    tradeSuccess
+  } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     userBalance,
@@ -211,11 +323,17 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     depositEtherButtonSpinning,
     depositEtherButtonTransactionHash,
-    depositEtherSuccess
+    depositEtherSuccess,
+    modifyRatesButtonSpinning,
+    modifyRatesTransactionHash,
+    tradeButtonSpinning,
+    tradeButtonTransactionHash,
+    modifyRatesSuccess,
+    tradeSuccess
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther }
+  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther, setCompactData, setQtyStepFunction }
 )(MarketMakerDashboard);

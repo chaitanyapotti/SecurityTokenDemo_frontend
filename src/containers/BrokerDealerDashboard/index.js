@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { onDropdownChange } from "../../actions/marketMakerActions";
-import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
+import { getTokenBalance, getUserBalanceAction, getTransactionHistory } from "../../actions/userActions";
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import BuyHoldingsTable from "./BuyHoldingsTable";
 import { formatMoney } from "../../helpers/numberHelpers";
@@ -14,11 +14,13 @@ import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector, getTokenPortfolioSelector } from "../../selectors";
 import PortfolioTable from "../../components/common/PortfolioTable";
+import TransactionHistory from "../../components/common/TransactionHistory";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
     const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
-    const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance } = this.props;
+    const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
+
     const tokenOptions =
       JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
         key: x.name,
@@ -29,6 +31,7 @@ class BrokerDealerDashboard extends Component {
     for (const iterator of tokenOptions) {
       fetchTokenBalance(iterator.value);
       fetchUserBalance(iterator.value);
+      fetchTransactionHistory(JSON.parse(localStorage.getItem("user_data")).publicAddress, iterator.value);
     }
   }
 
@@ -38,7 +41,7 @@ class BrokerDealerDashboard extends Component {
   };
 
   render() {
-    const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings } = this.props || {};
+    const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
@@ -72,6 +75,7 @@ class BrokerDealerDashboard extends Component {
         {dropDownSelect ? (
           <div>
             <BuyHoldingsTable publicAddress={publicAddress} dropDownSelect={dropDownSelect} currentPortfolioValue={dropDownSelectedPortfolio} />
+            <TransactionHistory transactionHistory={transactionHistory} dropDownSelect={dropDownSelect} />
             <CUICard>
               <Row center="lg">
                 <Col>
@@ -89,12 +93,13 @@ class BrokerDealerDashboard extends Component {
 BrokerDealerDashboard.propTypes = {
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
-  getUserBalanceAction: Proptypes.func.isRequired
+  getUserBalanceAction: Proptypes.func.isRequired,
+  getTransactionHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   const { marketMakerData, userData, tradeData, priceHistoryData } = state;
-  const { userBalance, tokenBalance } = userData || {};
+  const { userBalance, tokenBalance, transactionHistory } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
   const { buyTradeData, sellTradeData } = tradeData || {};
   const { priceHistory } = priceHistoryData || {};
@@ -106,11 +111,12 @@ const mapStateToProps = state => {
     userBalance,
     buyTradeData,
     sellTradeData,
-    priceHistory
+    priceHistory,
+    transactionHistory
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate }
+  { onDropdownChange, getTokenBalance, getUserBalanceAction, getBuyRate, getSellRate, getTransactionHistory }
 )(BrokerDealerDashboard);

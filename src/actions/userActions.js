@@ -37,3 +37,18 @@ export const getTokenBalance = publicAddress => dispatch => {
     }
   }
 };
+
+export const getTransactionHistory = (bdAddress, publicAddress) => dispatch => {
+  axios
+    .get(`${config.api}/api/transaction?bd_address=${bdAddress}&investor_address=${publicAddress}`)
+    .then(res => {
+      if (res.status === 200) {
+        const { data } = res;
+        dispatch({
+          type: actionTypes.GET_TRANSACTION_HISTORY,
+          payload: { data, user: publicAddress }
+        });
+      }
+    })
+    .catch(err => console.log(err));
+};

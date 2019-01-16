@@ -5,12 +5,14 @@ import config from "../config";
 const INITIAL_STATE = {
   userBalance: {},
   tokenBalance: {},
-  portfolioValue: {}
+  portfolioValue: {},
+  transactionHistory: {}
 };
 
 export default function(state = INITIAL_STATE, action) {
   const currentTokenBalances = JSON.parse(JSON.stringify(state.tokenBalance));
   const currentUserBalances = JSON.parse(JSON.stringify(state.userBalance));
+  const currentTransactionHistory = JSON.parse(JSON.stringify(state.transactionHistory));
   const currentPortfolioValues = JSON.parse(JSON.stringify(state.portfolioValue));
 
   switch (action.type) {
@@ -26,6 +28,14 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         userBalance: currentUserBalances
+      };
+    }
+    case actionTypes.GET_TRANSACTION_HISTORY: {
+      const { user, data } = action.payload || {};
+      currentTransactionHistory[user] = data;
+      return {
+        ...state,
+        transactionHistory: currentTransactionHistory
       };
     }
     case actionTypes.GET_TOKEN_BALANCE: {

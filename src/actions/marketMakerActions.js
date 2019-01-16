@@ -266,7 +266,7 @@ export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dis
             dispatch(isSetCompactDataButtonSpinning(false));
             dispatch({
               payload: { transactionHash },
-              type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+              type: actionTypes.COMPACT_DATA_TRANSACTION_HASH_RECEIVED
             });
             dispatch(
               pollTxHash(
@@ -275,7 +275,7 @@ export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dis
                   dispatch(compactDataSuccess(true));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.COMPACT_DATA_TRANSACTION_HASH_RECEIVED
                   });
                 },
                 () => {
@@ -283,7 +283,7 @@ export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dis
                   dispatch(isSetCompactDataButtonSpinning(false));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.COMPACT_DATA_TRANSACTION_HASH_RECEIVED
                   });
                 },
                 () => {},
@@ -292,7 +292,7 @@ export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dis
                   dispatch(isSetCompactDataButtonSpinning(false));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.COMPACT_DATA_TRANSACTION_HASH_RECEIVED
                   });
                 }
               )
@@ -340,7 +340,7 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
             dispatch(isSetQtyStepButtonSpinning(false));
             dispatch({
               payload: { transactionHash },
-              type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+              type: actionTypes.QTY_STEP__TRANSACTION_HASH_RECEIVED
             });
             dispatch(
               pollTxHash(
@@ -349,7 +349,7 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
                   dispatch(qtyStepSuccess(true));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.QTY_STEP__TRANSACTION_HASH_RECEIVED
                   });
                 },
                 () => {
@@ -357,7 +357,7 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
                   dispatch(isSetQtyStepButtonSpinning(false));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.QTY_STEP__TRANSACTION_HASH_RECEIVED
                   });
                 },
                 () => {},
@@ -366,7 +366,7 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
                   dispatch(isSetQtyStepButtonSpinning(false));
                   dispatch({
                     payload: { transactionHash: "" },
-                    type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED
+                    type: actionTypes.QTY_STEP__TRANSACTION_HASH_RECEIVED
                   });
                 }
               )
