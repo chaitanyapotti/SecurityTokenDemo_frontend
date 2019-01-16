@@ -161,7 +161,6 @@ class MarketMakerDashboard extends Component {
                   <span>
                     <Button
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                       disabled={!isOperator}
                       onClick={this.onModifyRatesClick}
                     >
