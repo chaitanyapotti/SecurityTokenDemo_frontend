@@ -33,18 +33,15 @@ class MarketMakerDashboard extends Component {
     depositEtherModalOpen: false,
     modifyRatesModalOpen: false,
     depositEtherInput: "",
-    LMDBuyPercent: "",
-    RIVBuyPercent: "",
-    LMDSellPercent: "",
-    RIVSellPercent: ""
+    buyPercent: { RIV: "", LMD: "" },
+    sellPercent: { RIV: "", LMD: "" }
   };
 
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
 
   handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
 
-  handleModifyRatesModalClose = () =>
-    this.setState({ modifyRatesModalOpen: false, LMDBuyPercent: "", LMDSellPercent: "", RIVBuyPercent: "", RIVSellPercent: "" });
+  handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, buyPercent: {}, sellPercent: {} });
 
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
@@ -69,7 +66,9 @@ class MarketMakerDashboard extends Component {
 
   onModifyClick = e => {
     const { setCompactData: modifyRatesAction } = this.props;
-    modifyRatesAction();
+    const { userLocalPublicAddress } = this.props || {};
+    const { buyPercent, sellPercent } = this.state;
+    modifyRatesAction(Object.keys(buyPercent).map(i => buyPercent[i]), Object.keys(sellPercent).map(i => sellPercent[i]), userLocalPublicAddress);
   };
 
   depositClick = e => {
@@ -109,10 +108,8 @@ class MarketMakerDashboard extends Component {
       depositEtherModalOpen,
       modifyRatesModalOpen,
       reserveAddress,
-      LMDBuyPercent,
-      RIVBuyPercent,
-      LMDSellPercent,
-      RIVSellPercent
+      buyPercent,
+      sellPercent
     } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     const isOwner = userLocalPublicAddress === config.owner;
@@ -241,40 +238,32 @@ class MarketMakerDashboard extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>LMD</Table.Cell>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Percent" value={LMDBuyPercent} onChange={e => this.setState({ LMDBuyPercent: e.target.value })} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input
-                        placeholder="Enter Sell Percent"
-                        value={LMDSellPercent}
-                        onChange={e => this.setState({ LMDSellPercent: e.target.value })}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>RIV</Table.Cell>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Percent" value={RIVBuyPercent} onChange={e => this.setState({ RIVBuyPercent: e.target.value })} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input
-                        placeholder="Enter Sell Percent"
-                        value={RIVSellPercent}
-                        onChange={e => this.setState({ RIVSellPercent: e.target.value })}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
+                  {Object.keys(config.tokens).map(key => (
+                    <Table.Row key={key}>
+                      <Table.Cell>{key}</Table.Cell>
+                      <Table.Cell>
+                        <Input
+                          placeholder="Enter Buy Percent"
+                          value={buyPercent[key]}
+                          onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Input
+                          placeholder="Enter Sell Percent"
+                          value={sellPercent[key]}
+                          onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
                 </Table.Body>
               </Table>
               <Row className="push--bottom">
-                <Col lg={9} />
-                <Col lg={3}>
+                <Col lgOffset={9} lg={3}>
                   <Transaction
                     buttonText="Modify"
-                    onClick={this.ModifyClick}
+                    onClick={this.onModifyClick}
                     txHash={modifyRatesTransactionHash}
                     success={modifyRatesSuccess}
                     buttonSpinning={modifyRatesButtonSpinning}
