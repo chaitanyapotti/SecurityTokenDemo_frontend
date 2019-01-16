@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Input } from "semantic-ui-react";
+import { Table, Button, Input, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
@@ -208,7 +208,79 @@ class EtherScanHoldingsTable extends Component {
             </Row>
           </Grid>
         </AlertModal>
-        <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose} />
+        <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose}>
+          <Grid>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Rate</Table.HeaderCell>
+                  <Table.HeaderCell>%</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+            <Divider horizontal>Sell</Divider>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Rate</Table.HeaderCell>
+                  <Table.HeaderCell>%</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input />
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Grid>
+        </AlertModal>
       </div>
     );
   }
