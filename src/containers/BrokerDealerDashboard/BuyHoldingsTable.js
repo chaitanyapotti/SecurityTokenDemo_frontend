@@ -155,26 +155,26 @@ class BuyHoldingsTable extends Component {
                   <Table.Cell>
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
-                        <Button
+                        <LoadingButton
                           className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                           disabled={!isOperator}
                           onClick={() => this.onBuyClick(key)}
                         >
                           Buy
-                        </Button>
+                        </LoadingButton>
                       </span>
                     </CustomToolTip>
                   </Table.Cell>
                   <Table.Cell>
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
-                        <Button
+                        <LoadingButton
                           className="btn bg--danger txt-p-vault txt-dddbld text--white test"
                           disabled={!isOperator}
                           onClick={() => this.onSellClick(key)}
                         >
                           Sell
-                        </Button>
+                        </LoadingButton>
                       </span>
                     </CustomToolTip>
                   </Table.Cell>

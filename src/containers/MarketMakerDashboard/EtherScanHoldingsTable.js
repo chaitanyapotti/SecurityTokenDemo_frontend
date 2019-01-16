@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Button, Input } from "semantic-ui-react";
+import { Table, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
@@ -9,6 +9,7 @@ import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction } from "../../actions/marketMakerActions";
+import LoadingButton from "../../components/common/LoadingButton";
 
 class EtherScanHoldingsTable extends Component {
   state = {
@@ -102,26 +103,26 @@ class EtherScanHoldingsTable extends Component {
                 <Table.Cell verticalAlign="middle">
                   <CustomToolTip disabled={!isOwner} title="You are not the owner">
                     <span>
-                      <Button
+                      <LoadingButton
                         className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                         disabled={!isOwner}
                         onClick={() => this.onDepositClick(key)}
                       >
                         Deposit
-                      </Button>
+                      </LoadingButton>
                     </span>
                   </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
-                      <Button
+                      <LoadingButton
                         className="btn bg--danger txt-p-vault txt-dddbld text--white test"
                         disabled={!isOperator}
                         onClick={() => this.onWithdrawClick(key)}
                       >
                         Withdraw
-                      </Button>
+                      </LoadingButton>
                     </span>
                   </CustomToolTip>
                 </Table.Cell>
@@ -129,21 +130,21 @@ class EtherScanHoldingsTable extends Component {
                   {isOperator ? (
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
-                        <Button
+                        <LoadingButton
                           className="btn bg--pending txt-p-vault txt-dddbld text--white test"
                           disabled={!isOperator}
                           onClick={this.onTradeClick}
                         >
                           Trade
-                        </Button>
+                        </LoadingButton>
                       </span>
                     </CustomToolTip>
                   ) : (
                     <CustomToolTip title="Trade is enabled in a desktop application mode">
                       <span>
-                        <Button className="btn bg--pending txt-p-vault txt-dddbld text--white test" onClick={this.onTradeClick}>
+                        <LoadingButton className="btn bg--pending txt-p-vault txt-dddbld text--white test" onClick={this.onTradeClick}>
                           Trade
-                        </Button>
+                        </LoadingButton>
                       </span>
                     </CustomToolTip>
                   )}

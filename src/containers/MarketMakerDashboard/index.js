@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button, Input, Table } from "semantic-ui-react";
+import { Input, Table } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
+import LoadingButton from "../../components/common/LoadingButton";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
@@ -146,27 +147,27 @@ class MarketMakerDashboard extends Component {
               <Col lg={2}>
                 <CustomToolTip disabled={!isOperator} title="You are not the operator">
                   <span>
-                    <Button
+                    <LoadingButton
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                       disabled={!isOperator}
                       onClick={this.onDepositEtherClick}
                     >
                       Deposit Ether
-                    </Button>
+                    </LoadingButton>
                   </span>
                 </CustomToolTip>
               </Col>
               <Col lg={2}>
                 <CustomToolTip disabled={!isOperator} title="You are not the operator">
                   <span>
-                    <Button
+                    <LoadingButton
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                       disabled={!isOperator}
                       onClick={this.onModifyRatesClick}
                     >
                       Modify Rates
-                    </Button>
+                    </LoadingButton>
                   </span>
                 </CustomToolTip>
               </Col>
