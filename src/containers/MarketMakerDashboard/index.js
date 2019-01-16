@@ -89,10 +89,7 @@ class MarketMakerDashboard extends Component {
       depositEtherSuccess,
       modifyRatesButtonSpinning,
       modifyRatesTransactionHash,
-      tradeButtonSpinning,
-      tradeButtonTransactionHash,
-      modifyRatesSuccess,
-      tradeSuccess
+      modifyRatesSuccess
     } = this.props || {};
     const {
       first_name,
@@ -191,9 +188,6 @@ class MarketMakerDashboard extends Component {
             currentPortfolioValue={currentPortfolioValue[reserveAddress]}
             isOperator={isOperator}
             isOwner={isOwner}
-            tradeButtonSpinning={tradeButtonSpinning}
-            tradeButtonTransactionHash={tradeButtonTransactionHash}
-            tradeSuccess={tradeSuccess}
           />
 
           <CUICard>
@@ -298,10 +292,7 @@ const mapStateToProps = state => {
     depositEtherSuccess,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash,
-    tradeButtonSpinning,
-    tradeButtonTransactionHash,
-    modifyRatesSuccess,
-    tradeSuccess
+    modifyRatesSuccess
   } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
@@ -315,10 +306,7 @@ const mapStateToProps = state => {
     depositEtherSuccess,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash,
-    tradeButtonSpinning,
-    tradeButtonTransactionHash,
-    modifyRatesSuccess,
-    tradeSuccess
+    modifyRatesSuccess
   };
 };
 

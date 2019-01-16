@@ -322,6 +322,8 @@ export const qtyStepSuccess = receipt => ({
 });
 
 export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
+  const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
+  const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
   dispatch(isSetQtyStepButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
@@ -332,7 +334,7 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
         const instance = new web3.eth.Contract(abi, config.ConversionRates, { from: userLocalPublicAddress });
         const gasPrice = await web3.eth.getGasPrice();
         instance.methods
-          .setQtyStepFunction(config[token].address, xBuy, yBuy, xSell, ySell)
+          .setQtyStepFunction(config.tokens[token].address, buyx, yBuy, sellx, ySell)
           .send({
             from: userLocalPublicAddress,
             gasPrice: (parseFloat(gasPrice) + 2000000000).toString()

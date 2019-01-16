@@ -3,12 +3,12 @@ import { Table, Input, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { depositToken, withdrawAction } from "../../actions/marketMakerActions";
+import { depositToken, withdrawAction, setQtyStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
 
 class EtherScanHoldingsTable extends Component {
@@ -18,14 +18,21 @@ class EtherScanHoldingsTable extends Component {
     depositTokenInput: "",
     withdrawTokenInput: "",
     token: "",
-    tradeModalOpen: false
+    tradeModalOpen: false,
+    buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+    sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
   };
 
   handleDepositTokenModalOpen = () => this.setState({ depositTokenModalOpen: true });
 
   handleTradeModalOpen = () => this.setState({ tradeModalOpen: true });
 
-  handleTradeModalClose = () => this.setState({ tradeModalOpen: false });
+  handleTradeModalClose = () =>
+    this.setState({
+      tradeModalOpen: false,
+      sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+      buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
+    });
 
   handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false, depositTokenInput: "" });
 
@@ -41,8 +48,8 @@ class EtherScanHoldingsTable extends Component {
     this.setState({ withdrawTokenModalOpen: true, token: key });
   };
 
-  onTradeClick = e => {
-    this.setState({ tradeModalOpen: true });
+  onTradeClick = key => {
+    this.setState({ tradeModalOpen: true, token: key });
   };
 
   depositTokenClick = e => {
@@ -63,6 +70,38 @@ class EtherScanHoldingsTable extends Component {
     withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress);
   };
 
+  updateBuyArray = (e, i, obj) => {
+    const { buyTradeData } = this.state;
+    const newArray = buyTradeData.map((item, index) => {
+      if (index !== i) return item;
+      return { ...item, [obj]: e.target.value };
+    });
+    this.setState({ buyTradeData: newArray });
+  };
+
+  updateSellArray = (e, i, obj) => {
+    const { sellTradeData } = this.state;
+    const newArray = sellTradeData.map((item, index) => {
+      if (index !== i) return item;
+      return { ...item, [obj]: e.target.value };
+    });
+    this.setState({ sellTradeData: newArray });
+  };
+
+  setQtyStepFunc = () => {
+    const { buyTradeData, sellTradeData, token } = this.state;
+    const { userLocalPublicAddress } = this.props || {};
+    const { setQtyStepFunction: setQtySteps } = this.props;
+    setQtySteps(
+      token,
+      buyTradeData.map(x => significantDigits(1 / x.rate)),
+      buyTradeData.map(x => Math.round(x.percent * 100)),
+      sellTradeData.map(x => significantDigits(1 / x.rate)),
+      sellTradeData.map(x => Math.round(x.percent * 100)),
+      userLocalPublicAddress
+    );
+  };
+
   render() {
     const {
       tokenBalance,
@@ -75,11 +114,19 @@ class EtherScanHoldingsTable extends Component {
       withdrawTokenButtonTransactionHash,
       withdrawTokenSuccess,
       isOwner,
+      tradeSuccess,
       tradeButtonSpinning,
-      tradeButtonTransactionHash,
-      tradeSuccess
+      tradeButtonTransactionHash
     } = this.props || {};
-    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput, tradeModalOpen } = this.state;
+    const {
+      depositTokenModalOpen,
+      depositTokenInput,
+      withdrawTokenModalOpen,
+      withdrawTokenInput,
+      tradeModalOpen,
+      buyTradeData,
+      sellTradeData
+    } = this.state;
     return (
       <div>
         <Table celled>
@@ -127,27 +174,17 @@ class EtherScanHoldingsTable extends Component {
                   </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell verticalAlign="middle">
-                  {isOperator ? (
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={this.onTradeClick}
-                        >
-                          Trade
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  ) : (
-                    <CustomToolTip title="Trade is enabled in a desktop application mode">
-                      <span>
-                        <LoadingButton className="btn bg--pending txt-p-vault txt-dddbld text--white test" onClick={this.onTradeClick}>
-                          Trade
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  )}
+                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                    <span>
+                      <LoadingButton
+                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                        disabled={!isOperator}
+                        onClick={() => this.onTradeClick(key)}
+                      >
+                        Set Step Price
+                      </LoadingButton>
+                    </span>
+                  </CustomToolTip>
                 </Table.Cell>
                 <Table.Cell>
                   <span>
@@ -210,75 +247,61 @@ class EtherScanHoldingsTable extends Component {
         </AlertModal>
         <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose}>
           <Grid>
+            <Divider horizontal>Buy</Divider>
             <Table celled>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Rate</Table.HeaderCell>
+                  <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
+                {buyTradeData.map((item, index) => (
+                  // eslint-disable-next-line
+                  <Table.Row key={index}>
+                    <Table.Cell>
+                      <Input placeholder="Enter Buy Price" value={item.rate} onChange={e => this.updateBuyArray(e, index, "rate")} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input placeholder="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
             <Divider horizontal>Sell</Divider>
             <Table celled>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Rate</Table.HeaderCell>
+                  <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input />
-                  </Table.Cell>
-                </Table.Row>
+                {sellTradeData.map((item, index) => (
+                  // eslint-disable-next-line
+                  <Table.Row key={index}>
+                    <Table.Cell>
+                      <Input placeholder="Enter Sell Price" value={item.rate} onChange={e => this.updateSellArray(e, index, "rate")} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input placeholder="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
+            <Row className="push--bottom">
+              <Col lg={12}>
+                <Transaction
+                  onClick={this.setQtyStepFunc}
+                  buttonText="Set Rate Steps"
+                  success={tradeSuccess}
+                  txHash={tradeButtonTransactionHash}
+                  buttonSpinning={tradeButtonSpinning}
+                />
+              </Col>
+            </Row>
           </Grid>
         </AlertModal>
       </div>
@@ -294,7 +317,10 @@ const mapStateToProps = state => {
     transferTokenSuccess,
     withdrawTokenButtonSpinning,
     withdrawTokenButtonTransactionHash,
-    withdrawTokenSuccess
+    withdrawTokenSuccess,
+    tradeSuccess,
+    tradeButtonSpinning,
+    tradeButtonTransactionHash
   } = marketMakerData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
@@ -304,16 +330,20 @@ const mapStateToProps = state => {
     userLocalPublicAddress,
     withdrawTokenButtonSpinning,
     withdrawTokenButtonTransactionHash,
-    withdrawTokenSuccess
+    withdrawTokenSuccess,
+    tradeSuccess,
+    tradeButtonSpinning,
+    tradeButtonTransactionHash
   };
 };
 
 EtherScanHoldingsTable.propTypes = {
   depositToken: Proptypes.func.isRequired,
-  withdrawAction: Proptypes.func.isRequired
+  withdrawAction: Proptypes.func.isRequired,
+  setQtyStepFunction: Proptypes.func.isRequired
 };
 
 export default connect(
   mapStateToProps,
-  { depositToken, withdrawAction }
+  { depositToken, withdrawAction, setQtyStepFunction }
 )(EtherScanHoldingsTable);
