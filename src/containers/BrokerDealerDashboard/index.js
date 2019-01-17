@@ -51,6 +51,7 @@ class BrokerDealerDashboard extends Component {
         <div style={{ marginTop: "100px" }}>
           <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
         </div>
+        <div className="txt-m text--black text-align push--bottom push-top--35 ">Portfolio Under Management</div>
         <PortfolioTable currentHoldings={currentHoldings} />
         <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
           <Row>

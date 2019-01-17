@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Table, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { formatCurrencyNumber, formatMoney, formatFromWei } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, formatFromWei, significantDigits } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -132,6 +132,7 @@ class BuyHoldingsTable extends Component {
               <Table.HeaderCell>Token Count</Table.HeaderCell>
               <Table.HeaderCell>Invested Value(USD)</Table.HeaderCell>
               <Table.HeaderCell>Current Value(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Token Price</Table.HeaderCell>
               <Table.HeaderCell>Change</Table.HeaderCell>
               <Table.HeaderCell>Buy</Table.HeaderCell>
               <Table.HeaderCell>Sell</Table.HeaderCell>
@@ -146,6 +147,7 @@ class BuyHoldingsTable extends Component {
                   <Table.Cell verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{formatMoney(dollarValue, 0)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">
                     {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                       ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,

@@ -324,6 +324,10 @@ button:focus {
   color: #3d3d3d;
 }
 
+.text-align {
+  text-align: center;
+}
+
 .text--success {
   color: #599a02;
 }
