@@ -6,6 +6,7 @@ import LoadingButton from "../../components/common/LoadingButton";
 import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
+import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import EtherScanHoldingsTable from "./EtherScanHoldingsTable";
@@ -21,12 +22,21 @@ import { getPortfolioSelector } from "../../selectors";
 
 class MarketMakerDashboard extends Component {
   componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const {
+      getUserBalanceAction: fetchUserBalance,
+      getTokenBalance: fetchTokenBalance,
+      getBuyRate: fetchBuyRate,
+      getSellRate: fetchSellRate
+    } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
     this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress });
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
+    Object.keys(config.tokens).forEach(x => {
+      fetchBuyRate(x, 0.1);
+      fetchSellRate(x, 10);
+    });
   }
 
   state = {
@@ -86,10 +96,10 @@ class MarketMakerDashboard extends Component {
       userLocalPublicAddress,
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
-      depositEtherSuccess,
+      // depositEtherSuccess,
       modifyRatesButtonSpinning,
-      modifyRatesTransactionHash,
-      modifyRatesSuccess
+      modifyRatesTransactionHash
+      // modifyRatesSuccess
     } = this.props || {};
     const {
       first_name,
@@ -213,7 +223,6 @@ class MarketMakerDashboard extends Component {
                   <Transaction
                     onClick={this.depositClick}
                     buttonText="Deposit"
-                    success={depositEtherSuccess}
                     txHash={depositEtherButtonTransactionHash}
                     buttonSpinning={depositEtherButtonSpinning}
                   />
@@ -259,7 +268,6 @@ class MarketMakerDashboard extends Component {
                     buttonText="Modify"
                     onClick={this.onModifyClick}
                     txHash={modifyRatesTransactionHash}
-                    success={modifyRatesSuccess}
                     buttonSpinning={modifyRatesButtonSpinning}
                   />
                 </Col>
@@ -279,7 +287,9 @@ MarketMakerDashboard.propTypes = {
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
   depositEther: Proptypes.func.isRequired,
-  setCompactData: Proptypes.func.isRequired
+  setCompactData: Proptypes.func.isRequired,
+  getBuyRate: Proptypes.func.isRequired,
+  getSellRate: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -312,5 +322,15 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, onDropdownChange, getTokenBalance, getUserBalanceAction, depositEther, setCompactData, setQtyStepFunction }
+  {
+    logoutUserAction,
+    onDropdownChange,
+    getTokenBalance,
+    getUserBalanceAction,
+    depositEther,
+    setCompactData,
+    setQtyStepFunction,
+    getBuyRate,
+    getSellRate
+  }
 )(MarketMakerDashboard);

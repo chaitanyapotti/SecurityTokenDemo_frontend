@@ -109,10 +109,10 @@ class EtherScanHoldingsTable extends Component {
       currentPortfolioValue,
       transferTokenButtonSpinning,
       transferTokenButtonTransactionHash,
-      transferTokenSuccess,
+      // transferTokenSuccess,
       withdrawTokenButtonSpinning,
       withdrawTokenButtonTransactionHash,
-      withdrawTokenSuccess,
+      // withdrawTokenSuccess,
       isOwner,
       tradeSuccess,
       tradeButtonSpinning,
@@ -213,7 +213,6 @@ class EtherScanHoldingsTable extends Component {
                 <Transaction
                   onClick={this.depositTokenClick}
                   buttonText="Deposit"
-                  success={transferTokenSuccess}
                   txHash={transferTokenButtonTransactionHash}
                   buttonSpinning={transferTokenButtonSpinning}
                 />
@@ -237,7 +236,6 @@ class EtherScanHoldingsTable extends Component {
                 <Transaction
                   onClick={this.withdrawTokenClick}
                   buttonText="Withdraw"
-                  success={withdrawTokenSuccess}
                   txHash={withdrawTokenButtonTransactionHash}
                   buttonSpinning={withdrawTokenButtonSpinning}
                 />
