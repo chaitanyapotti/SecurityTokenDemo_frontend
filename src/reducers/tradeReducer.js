@@ -139,17 +139,18 @@ export default function(state = INITIAL_STATE, action) {
     case actionTypes.FETCHED_BUY_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
-      const price = formatRateToPrice(formatFromWei(rate, 18));
+      const price = 1 / formatFromWei(rate, 18);
       currentBuyTradeData[token] = { rate, price };
       return {
         ...state,
         buyTradeData: currentBuyTradeData
       };
     }
+
     case actionTypes.FETCHED_SELL_RATE: {
       const { token, data } = action.payload || {};
       const rate = data.expectedRate;
-      const price = formatRateToPrice(formatFromWei(rate, 18));
+      const price = 1 / formatFromWei(rate, 18);
       currentSellTradeData[token] = { rate, price };
       return {
         ...state,

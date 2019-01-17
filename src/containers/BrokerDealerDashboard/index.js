@@ -18,11 +18,11 @@ import TransactionHistory from "../../components/common/TransactionHistory";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
-    const { first_name, email, phone, id, role, date, status, publicAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { first_name, email, phone, id, role, date, status, publicAddress, investors } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
 
     const tokenOptions =
-      JSON.parse(localStorage.getItem("user_data")).investors.map(x => ({
+      investors.map(x => ({
         key: x.name,
         value: x.address,
         text: x.name
@@ -31,7 +31,7 @@ class BrokerDealerDashboard extends Component {
     for (const iterator of tokenOptions) {
       fetchTokenBalance(iterator.value);
       fetchUserBalance(iterator.value);
-      fetchTransactionHistory(JSON.parse(localStorage.getItem("user_data")).publicAddress, iterator.value);
+      fetchTransactionHistory(publicAddress, iterator.value);
     }
   }
 

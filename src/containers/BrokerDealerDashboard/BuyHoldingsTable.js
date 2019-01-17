@@ -120,8 +120,18 @@ class BuyHoldingsTable extends Component {
     } = this.props || {};
     const { buyModalOpen, sellModalOpen, buyInput, buyToken, sellInput, sellToken } = this.state;
     const userTokenBalance = tokenBalance[dropDownSelect] || {};
-    const buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
-    const sellPrice = sellTradeData && sellTradeData[sellToken] ? sellTradeData[sellToken].price : 0;
+    let buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price : 0;
+    let sellPrice = sellTradeData && sellTradeData[sellToken] ? sellTradeData[sellToken].price : 0;
+    if (!isFinite(buyPrice)) {
+      buyPrice = "No trades available";
+    } else {
+      buyPrice = `${buyPrice.toFixed(8)} ETH/token`;
+    }
+    if (!isFinite(sellPrice)) {
+      sellPrice = "No trades available";
+    } else {
+      sellPrice = `${sellPrice.toFixed(8)}tokens/ETH`;
+    }
     const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
@@ -197,11 +207,11 @@ class BuyHoldingsTable extends Component {
                 <LoadingButton onClick={this.getPriceClick}>Get Price</LoadingButton>
               </Col>
             </Row>
-            {buyPrice > 0 ? (
+            {buyPrice && buyTradeData[buyToken] ? (
               <div>
                 <Row className="push--bottom">
                   <Col lg={12}>
-                    <div> Token Price: {buyPrice} ETH/token</div>
+                    <div> Token Price: {buyPrice}</div>
                     <div> Receivable Tokens: {formatFromWei(parseFloat(buyTradeData[buyToken].rate) * parseFloat(buyInput), 3)} tokens</div>
                   </Col>
                 </Row>
@@ -241,11 +251,11 @@ class BuyHoldingsTable extends Component {
                 <LoadingButton onClick={this.getSellPriceClick}>Get Price</LoadingButton>
               </Col>
             </Row>
-            {sellPrice > 0 ? (
+            {sellPrice && sellTradeData[sellToken] ? (
               <div>
                 <Row className="push--bottom">
                   <Col lg={12}>
-                    <div> Token Price: {sellPrice} tokens/ETH</div>
+                    <div> Token Price: {sellPrice}</div>
                     <div> Receivable Ether: {formatFromWei(parseFloat(sellTradeData[sellToken].rate) * parseFloat(sellInput), 3)} ETH</div>
                   </Col>
                 </Row>
