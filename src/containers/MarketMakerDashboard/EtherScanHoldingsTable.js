@@ -116,17 +116,11 @@ class EtherScanHoldingsTable extends Component {
       isOwner,
       tradeSuccess,
       tradeButtonSpinning,
-      tradeButtonTransactionHash
-    } = this.props || {};
-    const {
-      depositTokenModalOpen,
-      depositTokenInput,
-      withdrawTokenModalOpen,
-      withdrawTokenInput,
-      tradeModalOpen,
+      tradeButtonTransactionHash,
       buyTradeData,
       sellTradeData
-    } = this.state;
+    } = this.props || {};
+    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput, tradeModalOpen } = this.state;
     return (
       <div>
         <Table celled>
@@ -136,6 +130,8 @@ class EtherScanHoldingsTable extends Component {
               <Table.HeaderCell>Token Count</Table.HeaderCell>
               <Table.HeaderCell>Token Value(USD)</Table.HeaderCell>
               <Table.HeaderCell>Token Price(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Buy Price(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Sell Price(USD)</Table.HeaderCell>
               <Table.HeaderCell>Deposit</Table.HeaderCell>
               <Table.HeaderCell>Withdraw</Table.HeaderCell>
               <Table.HeaderCell>Trade</Table.HeaderCell>
@@ -148,6 +144,8 @@ class EtherScanHoldingsTable extends Component {
                 <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
+                <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
                 <Table.Cell verticalAlign="middle">
                   <CustomToolTip disabled={!isOwner} title="You are not the owner">
@@ -310,7 +308,7 @@ class EtherScanHoldingsTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const { marketMakerData, signinManagerData } = state;
+  const { marketMakerData, signinManagerData, tradeData } = state;
   const {
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
@@ -322,6 +320,7 @@ const mapStateToProps = state => {
     tradeButtonSpinning,
     tradeButtonTransactionHash
   } = marketMakerData || {};
+
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     transferTokenButtonSpinning,
