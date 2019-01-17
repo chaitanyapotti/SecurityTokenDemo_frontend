@@ -140,9 +140,9 @@ class BuyHoldingsTable extends Component {
             <Table.Row>
               <Table.HeaderCell>Token Name</Table.HeaderCell>
               <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Invested Value(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Current Value(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Token Price(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Invested Value($)</Table.HeaderCell>
+              <Table.HeaderCell>Current Value($)</Table.HeaderCell>
+              <Table.HeaderCell>Token Price($)</Table.HeaderCell>
               <Table.HeaderCell>Change</Table.HeaderCell>
               <Table.HeaderCell>Buy</Table.HeaderCell>
               <Table.HeaderCell>Sell</Table.HeaderCell>

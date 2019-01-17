@@ -117,10 +117,18 @@ class EtherScanHoldingsTable extends Component {
       tradeSuccess,
       tradeButtonSpinning,
       tradeButtonTransactionHash,
-      buyTradeData,
-      sellTradeData
+      buyPriceData,
+      sellPriceData
     } = this.props || {};
-    const { depositTokenModalOpen, depositTokenInput, withdrawTokenModalOpen, withdrawTokenInput, tradeModalOpen } = this.state;
+    const {
+      buyTradeData,
+      sellTradeData,
+      depositTokenModalOpen,
+      depositTokenInput,
+      withdrawTokenModalOpen,
+      withdrawTokenInput,
+      tradeModalOpen
+    } = this.state;
     return (
       <div>
         <Table celled>
@@ -128,10 +136,10 @@ class EtherScanHoldingsTable extends Component {
             <Table.Row>
               <Table.HeaderCell>Token Name</Table.HeaderCell>
               <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Value(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Token Price(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Buy Price(USD)</Table.HeaderCell>
-              <Table.HeaderCell>Sell Price(USD)</Table.HeaderCell>
+              <Table.HeaderCell>Token Value($)</Table.HeaderCell>
+              <Table.HeaderCell>Token Price($)</Table.HeaderCell>
+              <Table.HeaderCell>Buy Price($)</Table.HeaderCell>
+              <Table.HeaderCell>Sell Price($)</Table.HeaderCell>
               <Table.HeaderCell>Deposit</Table.HeaderCell>
               <Table.HeaderCell>Withdraw</Table.HeaderCell>
               <Table.HeaderCell>Trade</Table.HeaderCell>
@@ -139,62 +147,68 @@ class EtherScanHoldingsTable extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {Object.keys(tokenBalance).map(key => (
-              <Table.Row key={key}>
-                <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
+            {Object.keys(tokenBalance).map(key => {
+              const buyDollarPrice =
+                buyPriceData[key] && buyPriceData[key].price ? significantDigits(buyPriceData[key].price * config.etherPrice) : 0;
+              const sellDollarPrice =
+                sellPriceData[key] && sellPriceData[key].price ? significantDigits(config.etherPrice / sellPriceData[key].price) : 0;
+              return (
+                <Table.Row key={key}>
+                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{buyDollarPrice}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{sellDollarPrice}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOwner} title="You are not the owner">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOwner}
+                          onClick={() => this.onDepositClick(key)}
+                        >
+                          Deposit
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onWithdrawClick(key)}
+                        >
+                          Withdraw
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onTradeClick(key)}
+                        >
+                          Set Step Price
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell>
                     <span>
-                      <LoadingButton
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOwner}
-                        onClick={() => this.onDepositClick(key)}
-                      >
-                        Deposit
-                      </LoadingButton>
+                      <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
+                        View on Blockchain
+                      </a>
                     </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onWithdrawClick(key)}
-                      >
-                        Withdraw
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onTradeClick(key)}
-                      >
-                        Set Step Price
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell>
-                  <span>
-                    <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
-                      View on Blockchain
-                    </a>
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+                  </Table.Cell>
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table>
         <AlertModal open={depositTokenModalOpen} handleClose={this.handleDepositTokenModalClose}>
@@ -321,6 +335,8 @@ const mapStateToProps = state => {
     tradeButtonTransactionHash
   } = marketMakerData || {};
 
+  const { buyTradeData: buyPriceData, sellTradeData: sellPriceData } = tradeData || {};
+
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     transferTokenButtonSpinning,
@@ -332,7 +348,9 @@ const mapStateToProps = state => {
     withdrawTokenSuccess,
     tradeSuccess,
     tradeButtonSpinning,
-    tradeButtonTransactionHash
+    tradeButtonTransactionHash,
+    buyPriceData,
+    sellPriceData
   };
 };
 
