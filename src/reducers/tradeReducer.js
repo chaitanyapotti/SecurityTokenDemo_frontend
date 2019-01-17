@@ -1,5 +1,5 @@
 import actionTypes from "../actionTypes";
-import { formatRateToPrice, formatFromWei } from "../helpers/numberHelpers";
+import { formatFromWei } from "../helpers/numberHelpers";
 
 const INITIAL_STATE = {
   buyTradeData: {},

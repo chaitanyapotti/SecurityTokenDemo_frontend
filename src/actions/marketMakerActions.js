@@ -322,8 +322,8 @@ export const qtyStepSuccess = receipt => ({
 });
 
 export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
-  const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
-  const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
+  const buyx = xBuy.map(item => web3.utils.toWei((item / config.etherPrice).toString()));
+  const sellx = xSell.map(item => web3.utils.toWei((item / config.etherPrice).toString()));
   dispatch(isSetQtyStepButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
