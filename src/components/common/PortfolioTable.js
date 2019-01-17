@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Table } from "semantic-ui-react";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits } from "../../helpers/numberHelpers";
 import config from "../../config";
 
 class PortfolioTable extends PureComponent {
@@ -14,6 +14,7 @@ class PortfolioTable extends PureComponent {
             <Table.HeaderCell>Token Count</Table.HeaderCell>
             <Table.HeaderCell>Invested Value(USD)</Table.HeaderCell>
             <Table.HeaderCell>Current Value(USD)</Table.HeaderCell>
+            <Table.HeaderCell>Token Price(USD)</Table.HeaderCell>
             <Table.HeaderCell>Change</Table.HeaderCell>
             <Table.HeaderCell>Commission</Table.HeaderCell>
             <Table.HeaderCell>EtherScan</Table.HeaderCell>
@@ -28,6 +29,7 @@ class PortfolioTable extends PureComponent {
                 <Table.Cell>{formatCurrencyNumber(tokenCount, 0)}</Table.Cell>
                 <Table.Cell>{formatMoney(totalInvested, 0)}</Table.Cell>
                 <Table.Cell>{formatMoney(currentNetPrice, 0)}</Table.Cell>
+                <Table.Cell>{significantDigits(currentNetPrice / tokenCount)}</Table.Cell>
                 <Table.Cell>{`+${formatMoney(changeValue, 0)}(+${Math.round(changePercent, 2)}%)`}</Table.Cell>
                 <Table.Cell>{formatMoney(commission, 0)}</Table.Cell>
                 <Table.Cell>
