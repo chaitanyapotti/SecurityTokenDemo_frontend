@@ -138,8 +138,8 @@ class EtherScanHoldingsTable extends Component {
               <Table.HeaderCell>Token Count</Table.HeaderCell>
               <Table.HeaderCell>Token Value($)</Table.HeaderCell>
               <Table.HeaderCell>Token Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Buy Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Sell Price($)</Table.HeaderCell>
+              <Table.HeaderCell>Ask Price($)</Table.HeaderCell>
+              <Table.HeaderCell>Bid Price($)</Table.HeaderCell>
               <Table.HeaderCell>Deposit</Table.HeaderCell>
               <Table.HeaderCell>Withdraw</Table.HeaderCell>
               <Table.HeaderCell>Trade</Table.HeaderCell>

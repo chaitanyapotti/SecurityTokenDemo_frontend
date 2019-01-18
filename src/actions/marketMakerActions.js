@@ -246,7 +246,7 @@ export const compactDataSuccess = receipt => ({
 export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dispatch => {
   const compactBuyHex = [bytesToHex([0, ...buyData.map(item => item * 10)])];
   const compactSellHex = [bytesToHex([0, ...sellData.map(item => item * 10)])];
-  console.log(compactBuyHex, compactSellHex);
+  console.log(compactBuyHex, compactSellHex, buyData, sellData);
   dispatch(isSetCompactDataButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
@@ -322,8 +322,9 @@ export const qtyStepSuccess = receipt => ({
 });
 
 export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
-  const buyx = xBuy.map(item => web3.utils.toWei((item / config.etherPrice).toString()));
-  const sellx = xSell.map(item => web3.utils.toWei((item / config.etherPrice).toString()));
+  const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
+  const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
+  console.log(buyx, sellx);
   dispatch(isSetQtyStepButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
