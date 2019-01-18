@@ -149,18 +149,16 @@ class EtherScanHoldingsTable extends Component {
           </Table.Header>
           <Table.Body>
             {Object.keys(tokenBalance).map(key => {
-              const buyDollarPrice =
-                buyPriceData[key] && buyPriceData[key].price ? significantDigits(buyPriceData[key].price * config.etherPrice) : 0;
-              const sellDollarPrice =
-                sellPriceData[key] && sellPriceData[key].price ? significantDigits(config.etherPrice / sellPriceData[key].price) : 0;
+              const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
+              const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
               return (
                 <Table.Row key={key}>
                   <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / tokenBalance[key].balance)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{buyDollarPrice}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{sellDollarPrice}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{sellDollarPrice.toFixed(3)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
@@ -281,10 +279,9 @@ class EtherScanHoldingsTable extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <Input
-                        value={
-                          item.rate -
-                          (sellPriceData[token] && sellPriceData[token].price ? significantDigits(config.etherPrice / sellPriceData[token].price) : 0)
-                        }
+                        value={parseFloat(
+                          item.rate - (sellPriceData[token] && sellPriceData[token].price ? config.etherPrice / sellPriceData[token].price : 0)
+                        ).toFixed(4)}
                       />
                     </Table.Cell>
                   </Table.Row>
@@ -312,10 +309,9 @@ class EtherScanHoldingsTable extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <Input
-                        value={
-                          item.rate -
-                          (buyPriceData[token] && buyPriceData[token].price ? significantDigits(buyPriceData[token].price * config.etherPrice) : 0)
-                        }
+                        value={parseFloat(
+                          item.rate - (buyPriceData[token] && buyPriceData[token].price ? buyPriceData[token].price * config.etherPrice : 0)
+                        ).toFixed(4)}
                       />
                     </Table.Cell>
                   </Table.Row>

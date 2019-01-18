@@ -50,18 +50,18 @@ class Login extends Component {
         </style>
         <div className="landing">
           <Grid>
-            <Row>
+            {/* <Row>
               <Col>
                 <div className="logo" />
               </Col>
-            </Row>
+            </Row> */}
             <Row end="lg" middle="lg" start="lg">
-              <Col lg={6}>
+              {/* <Col lg={6}>
                 <div className="text-white txt-m bold txt-xxxxl">
                   FINANCING <br /> THE FUTURE
                 </div>
-              </Col>
-              <Col lg={6}>
+              </Col> */}
+              <Col lgOffset={6} lg={6}>
                 <Form size="large" style={{ marginTop: "50%", marginLeft: "20%" }}>
                   <Segment stacked>
                     <Form.Input
