@@ -127,7 +127,8 @@ class EtherScanHoldingsTable extends Component {
       depositTokenInput,
       withdrawTokenModalOpen,
       withdrawTokenInput,
-      tradeModalOpen
+      tradeModalOpen,
+      token
     } = this.state;
     return (
       <div>
@@ -265,6 +266,7 @@ class EtherScanHoldingsTable extends Component {
                 <Table.Row>
                   <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
+                  <Table.HeaderCell>Calculated Spread</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -277,6 +279,14 @@ class EtherScanHoldingsTable extends Component {
                     <Table.Cell>
                       <Input placeholder="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
                     </Table.Cell>
+                    <Table.Cell>
+                      <Input
+                        value={
+                          item.rate -
+                          (sellPriceData[token] && sellPriceData[token].price ? significantDigits(config.etherPrice / sellPriceData[token].price) : 0)
+                        }
+                      />
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -287,6 +297,7 @@ class EtherScanHoldingsTable extends Component {
                 <Table.Row>
                   <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
+                  <Table.HeaderCell>Calculated Spread</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -298,6 +309,14 @@ class EtherScanHoldingsTable extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <Input placeholder="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Input
+                        value={
+                          item.rate -
+                          (buyPriceData[token] && buyPriceData[token].price ? significantDigits(buyPriceData[token].price * config.etherPrice) : 0)
+                        }
+                      />
                     </Table.Cell>
                   </Table.Row>
                 ))}
