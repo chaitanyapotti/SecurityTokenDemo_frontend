@@ -34,6 +34,7 @@ class Navbar extends PureComponent {
           ) : (
             <div />
           )}
+          <div className="push--left">v0.8</div>
         </div>
       </nav>
     );
