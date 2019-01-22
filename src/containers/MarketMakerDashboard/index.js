@@ -12,7 +12,7 @@ import TokenChart from "../../components/common/TokenChart";
 import EtherScanHoldingsTable from "./EtherScanHoldingsTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import { formatMoney, getEtherScanAddressLink, calculateInversePercentChange } from "../../helpers/numberHelpers";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 import AlertModal from "../../components/common/AlertModal";
@@ -50,6 +50,10 @@ class MarketMakerDashboard extends Component {
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
 
   
+  handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
+
+  handleModifyRatesModalClose = () =>
+    this.setState({ modifyRatesModalOpen: false, buyPercent: { RIV: "", LMD: "" }, sellPercent: { RIV: "", LMD: "" } });
 
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
@@ -72,9 +76,15 @@ class MarketMakerDashboard extends Component {
 
   onModifyClick = e => {
     const { setCompactData: modifyRatesAction } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
+    const { userLocalPublicAddress, buyPriceData, sellPriceData } = this.props || {};
     const { buyPercent, sellPercent } = this.state;
-    modifyRatesAction(Object.keys(buyPercent).map(i => buyPercent[i]), Object.keys(sellPercent).map(i => sellPercent[i]), userLocalPublicAddress);
+    console.log(Object.keys(config.tokens).map(i => calculateInversePercentChange(buyPercent[i], buyPriceData[i].price)), "buy");
+    console.log(Object.keys(config.tokens).map(i => calculateInversePercentChange(sellPercent[i], sellPriceData[i].price)), "sell");
+    modifyRatesAction(
+      Object.keys(config.tokens).map(i => calculateInversePercentChange(buyPercent[i], buyPriceData[i].price)),
+      Object.keys(config.tokens).map(i => calculateInversePercentChange(sellPercent[i], sellPriceData[i].price)),
+      userLocalPublicAddress
+    );
   };
 
   depositClick = e => {
@@ -219,8 +229,8 @@ class MarketMakerDashboard extends Component {
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Ask(%)</Table.HeaderCell>
-                    <Table.HeaderCell>Bid(%)</Table.HeaderCell>
+                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
+                    <Table.HeaderCell>Bid (%)</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -229,14 +239,14 @@ class MarketMakerDashboard extends Component {
                       <Table.Cell>{key}</Table.Cell>
                       <Table.Cell>
                         <Input
-                          placeholder="Enter Sell Percent"
+                          placeholder="Enter Sell % Change"
                           value={sellPercent[key]}
                           onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
                         />
                       </Table.Cell>
                       <Table.Cell>
                         <Input
-                          placeholder="Enter Buy Percent"
+                          placeholder="Enter Buy % Change"
                           value={buyPercent[key]}
                           onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
                         />
@@ -276,7 +286,7 @@ MarketMakerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData, marketMakerData, signinManagerData } = state;
+  const { userData, marketMakerData, signinManagerData, tradeData } = state;
   const { userBalance, tokenBalance } = userData || {};
   const {
     dropDownSelect,
@@ -287,6 +297,7 @@ const mapStateToProps = state => {
     modifyRatesTransactionHash,
     modifyRatesSuccess
   } = marketMakerData || {};
+  const { buyTradeData: buyPriceData, sellTradeData: sellPriceData } = tradeData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
     userBalance,
@@ -299,7 +310,9 @@ const mapStateToProps = state => {
     depositEtherSuccess,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash,
-    modifyRatesSuccess
+    modifyRatesSuccess,
+    buyPriceData,
+    sellPriceData
   };
 };
 

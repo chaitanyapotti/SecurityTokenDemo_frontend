@@ -130,7 +130,7 @@ class BuyHoldingsTable extends Component {
     if (!isFinite(sellPrice)) {
       sellPrice = "No trades available";
     } else {
-      sellPrice = `${sellPrice.toFixed(8)}tokens/ETH`;
+      sellPrice = `${sellPrice.toFixed(8)} tokens/ETH`;
     }
     const isOperator = userLocalPublicAddress === publicAddress;
     return (

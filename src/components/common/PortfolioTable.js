@@ -26,12 +26,12 @@ class PortfolioTable extends PureComponent {
             return (
               <Table.Row key={key}>
                 <Table.Cell>{config.tokens[key].name}</Table.Cell>
-                <Table.Cell>{formatCurrencyNumber(tokenCount, 0)}</Table.Cell>
-                <Table.Cell>{formatMoney(totalInvested, 0)}</Table.Cell>
-                <Table.Cell>{formatMoney(currentNetPrice, 0)}</Table.Cell>
-                <Table.Cell>{significantDigits(currentNetPrice / tokenCount)}</Table.Cell>
-                <Table.Cell>{`+${formatMoney(changeValue, 0)}(+${Math.round(changePercent, 2)}%)`}</Table.Cell>
-                <Table.Cell>{formatMoney(commission, 0)}</Table.Cell>
+                <Table.Cell>{formatCurrencyNumber(tokenCount || 0, 0)}</Table.Cell>
+                <Table.Cell>{formatMoney(totalInvested || 0, 0)}</Table.Cell>
+                <Table.Cell>{formatMoney(currentNetPrice || 0, 0)}</Table.Cell>
+                <Table.Cell>{significantDigits(currentNetPrice / tokenCount || 0)}</Table.Cell>
+                <Table.Cell>{`+${formatMoney(changeValue || 0, 0)}(+${Math.round(changePercent || 0, 2)}%)`}</Table.Cell>
+                <Table.Cell>{formatMoney(commission || 0, 0)}</Table.Cell>
                 <Table.Cell>
                   <span>
                     <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">

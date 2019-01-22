@@ -189,6 +189,11 @@ const bytesToHex = byteArray => {
 // eslint-disable-next-line
 const toHexString = byteArray => Array.from(byteArray, byte => `0${(byte & 0xff).toString(16)}`.slice(-2)).join("");
 
+const calculateInversePercentChange = (percent, price) => {
+  const newPrice = (1 + parseFloat(percent) / 100) * parseFloat(price);
+  return ((1 / newPrice - 1 / parseFloat(price)) / (1 / parseFloat(price))) * 100;
+};
+
 export {
   formatFromWei,
   formatMoney,
@@ -203,5 +208,6 @@ export {
   getEtherScanHashLink,
   getEtherScanAddressLink,
   formatRateToPrice,
-  bytesToHex
+  bytesToHex,
+  calculateInversePercentChange
 };
