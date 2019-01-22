@@ -1,7 +1,7 @@
 import axios from "axios";
 import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
-import { bytesToHex } from "../helpers/numberHelpers";
+import { bytesToHex, significantDigits } from "../helpers/numberHelpers";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
 import { getTokenBalance, getUserBalanceAction } from "./userActions";
@@ -73,6 +73,81 @@ export const depositEther = (amount, reserveAddress, userLocalPublicAddress) => 
     .catch(err => {
       console.error(err.message);
       dispatch(isDepositEtherButtonSpinning(false));
+    });
+};
+
+export const isWithdrawEtherButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.WITHDRAW_ETHER_BUTTON_SPINNING
+});
+
+export const withdrawEtherSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.WITHDRAW_ETHER_SUCCESS
+});
+
+export const withdrawEther = (amount, reserveAddress, userLocalPublicAddress) => async dispatch => {
+  dispatch(isWithdrawEtherButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=KyberReserve`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, reserveAddress, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .withdrawEther(web3.utils.toWei(amount), config.withdrawAddress)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isWithdrawEtherButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.WITHDRAW_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(withdrawEtherSuccess(true));
+                  dispatch(getUserBalanceAction(reserveAddress));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(withdrawSuccess(false));
+                  dispatch(isWithdrawEtherButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(withdrawSuccess(false));
+                  dispatch(isWithdrawEtherButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.WITHDRAW_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isWithdrawEtherButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(isWithdrawEtherButtonSpinning(false));
     });
 };
 
@@ -161,7 +236,7 @@ export const withdrawSuccess = receipt => ({
   type: actionTypes.WITHDRAW_SUCCESS
 });
 
-// withdraws both ether and token
+// withdraws token
 export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAddress) => dispatch => {
   dispatch(isWithdrawButtonSpinning(true));
   axios
@@ -172,11 +247,8 @@ export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAdd
         const { abi } = data || {};
         const instance = new web3.eth.Contract(abi, reserveAddress, { from: userLocalPublicAddress });
         const gasPrice = await web3.eth.getGasPrice();
-        const omg = (await axios.get(`${config.api}/api/contractdata?name=OmiseGo`)).data.data.abi;
-        const addr = token === "ETH" ? "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" : config.tokens[token].address;
-        const omgInstance = new web3.eth.Contract(omg, addr, { from: userLocalPublicAddress });
         instance.methods
-          .withdraw(omgInstance.options.address, web3.utils.toWei(amount), config.withdrawAddress)
+          .withdrawToken(config.tokens[token].address, web3.utils.toWei(amount), config.withdrawAddress)
           .send({
             from: userLocalPublicAddress,
             gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
@@ -243,10 +315,16 @@ export const compactDataSuccess = receipt => ({
 // order should be knc, riv, lmd - one pt is 0.1% change
 // refer https://developer.kyber.network/docs/ReservesGuide/
 // userlocalpublicaddress must be operator address
-export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dispatch => {
-  const compactBuyHex = [bytesToHex([0, ...buyData.map(item => parseFloat(item) * 10)])];
-  const compactSellHex = [bytesToHex([0, ...sellData.map(item => parseFloat(item) * 10)])];
-  console.log([0, ...buyData.map(item => parseFloat(item) * 10)], [0, ...sellData.map(item => parseFloat(item) * 10)], buyData, sellData);
+export const setCompactData = (token, baseBuy, baseSell, userLocalPublicAddress) => dispatch => {
+  // const compactBuyHex = [bytesToHex([0, ...buyData.map(item => parseFloat(item) * 10)])];
+  // const compactSellHex = [bytesToHex([0, ...sellData.map(item => parseFloat(item) * 10)])];
+  // console.log([0, ...buyData.map(item => parseFloat(item) * 10)], [0, ...sellData.map(item => parseFloat(item) * 10)], buyData, sellData);
+  const compactBuyHex = ["0x0000000000000000000000000000"];
+  const compactSellHex = ["0x0000000000000000000000000000"];
+  const updatedBaseBuy = [web3.utils.toWei(significantDigits(config.etherPrice / parseFloat(baseBuy)).toString())];
+  const updatedBaseSell = [web3.utils.toWei(significantDigits(parseFloat(baseSell) / config.etherPrice).toString())];
+  console.log(updatedBaseBuy, "buy");
+  console.log(updatedBaseSell, "sell");
   dispatch(isSetCompactDataButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
@@ -258,7 +336,7 @@ export const setCompactData = (buyData, sellData, userLocalPublicAddress) => dis
         const gasPrice = await web3.eth.getGasPrice();
         const blockNumber = await web3.eth.getBlockNumber();
         instance.methods
-          .setCompactData(compactBuyHex, compactSellHex, blockNumber, [0])
+          .setBaseRate([config.tokens[token].address], updatedBaseBuy, updatedBaseSell, compactBuyHex, compactSellHex, blockNumber, [0])
           .send({
             from: userLocalPublicAddress,
             gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
