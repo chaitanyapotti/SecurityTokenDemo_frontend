@@ -214,7 +214,8 @@ class BuyHoldingsTable extends Component {
                     <div> Token Price: {buyPrice}</div>
                     <div>
                       {" "}
-                      Receivable Tokens: {formatMoney(formatFromWei(parseFloat(buyTradeData[buyToken].rate) * parseFloat(buyInput), 3))} tokens
+                      Receivable Tokens: {formatCurrencyNumber(formatFromWei(parseFloat(buyTradeData[buyToken].rate) * parseFloat(buyInput), 3))}{" "}
+                      tokens
                     </div>
                   </Col>
                 </Row>
