@@ -262,9 +262,8 @@ class EtherScanHoldingsTable extends Component {
             <Table celled>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Price</Table.HeaderCell>
+                  <Table.HeaderCell>Quantity</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
-                  <Table.HeaderCell>Calculated Spread</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -277,13 +276,6 @@ class EtherScanHoldingsTable extends Component {
                     <Table.Cell>
                       <Input placeholder="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
                     </Table.Cell>
-                    <Table.Cell>
-                      <Input
-                        value={parseFloat(
-                          item.rate - (sellPriceData[token] && sellPriceData[token].price ? config.etherPrice / sellPriceData[token].price : 0)
-                        ).toFixed(4)}
-                      />
-                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>
@@ -292,9 +284,8 @@ class EtherScanHoldingsTable extends Component {
             <Table  celled>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Price</Table.HeaderCell>
+                  <Table.HeaderCell>Quantity</Table.HeaderCell>
                   <Table.HeaderCell>%</Table.HeaderCell>
-                  <Table.HeaderCell>Calculated Spread</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -306,13 +297,6 @@ class EtherScanHoldingsTable extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <Input placeholder="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input
-                        value={parseFloat(
-                          item.rate - (buyPriceData[token] && buyPriceData[token].price ? buyPriceData[token].price * config.etherPrice : 0)
-                        ).toFixed(4)}
-                      />
                     </Table.Cell>
                   </Table.Row>
                 ))}
