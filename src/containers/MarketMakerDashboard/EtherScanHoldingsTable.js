@@ -212,8 +212,8 @@ class EtherScanHoldingsTable extends Component {
               <Table.HeaderCell>Token Name</Table.HeaderCell>
               <Table.HeaderCell>Deposit</Table.HeaderCell>
               <Table.HeaderCell>Withdraw</Table.HeaderCell>
-              <Table.HeaderCell>Trade</Table.HeaderCell>
-              <Table.HeaderCell>Modify Prices</Table.HeaderCell>
+              <Table.HeaderCell>Modify Bid/Ask Prices</Table.HeaderCell>
+              <Table.HeaderCell>Modify Step Prices</Table.HeaderCell>
               <Table.HeaderCell>Modify Imbalance Prices</Table.HeaderCell>
               <Table.HeaderCell>Etherscan</Table.HeaderCell>
             </Table.Row>
@@ -252,11 +252,11 @@ class EtherScanHoldingsTable extends Component {
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
                       <LoadingButton
-                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
                         disabled={!isOperator}
-                        onClick={() => this.onTradeClick(key)}
+                        onClick={() => this.onModifyRatesClick(key)}
                       >
-                        Set Step Price
+                        Modify Prices
                       </LoadingButton>
                     </span>
                   </CustomToolTip>
@@ -265,11 +265,11 @@ class EtherScanHoldingsTable extends Component {
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
                       <LoadingButton
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
                         disabled={!isOperator}
-                        onClick={() => this.onModifyRatesClick(key)}
+                        onClick={() => this.onTradeClick(key)}
                       >
-                        Modify Prices
+                        Modify Step Price
                       </LoadingButton>
                     </span>
                   </CustomToolTip>
