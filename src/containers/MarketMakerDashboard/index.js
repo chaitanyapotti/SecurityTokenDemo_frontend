@@ -236,8 +236,8 @@ class MarketMakerDashboard extends Component {
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Buy(%)</Table.HeaderCell>
-                    <Table.HeaderCell>Sell(%)</Table.HeaderCell>
+                    <Table.HeaderCell>Ask(%)</Table.HeaderCell>
+                    <Table.HeaderCell>Bid(%)</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -246,16 +246,16 @@ class MarketMakerDashboard extends Component {
                       <Table.Cell>{key}</Table.Cell>
                       <Table.Cell>
                         <Input
-                          placeholder="Enter Buy Percent"
-                          value={buyPercent[key]}
-                          onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
+                          placeholder="Enter Sell Percent"
+                          value={sellPercent[key]}
+                          onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
                         />
                       </Table.Cell>
                       <Table.Cell>
                         <Input
-                          placeholder="Enter Sell Percent"
-                          value={sellPercent[key]}
-                          onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
+                          placeholder="Enter Buy Percent"
+                          value={buyPercent[key]}
+                          onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
                         />
                       </Table.Cell>
                     </Table.Row>

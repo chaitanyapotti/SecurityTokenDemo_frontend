@@ -17,7 +17,7 @@ class Navbar extends PureComponent {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-test mb-4 fixed-top">
         <div className="container">
-          <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="130" height="45" />
+          <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="105" height="45" />
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
             <span className="navbar-toggler-icon" />
           </button>

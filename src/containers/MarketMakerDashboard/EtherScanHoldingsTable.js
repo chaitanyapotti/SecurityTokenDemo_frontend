@@ -157,8 +157,8 @@ class EtherScanHoldingsTable extends Component {
                   <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">{sellDollarPrice.toFixed(3)}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</Table.Cell>
                   <Table.Cell verticalAlign="middle">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
@@ -289,7 +289,7 @@ class EtherScanHoldingsTable extends Component {
               </Table.Body>
             </Table>
             <Divider horizontal>Sell</Divider>
-            <Table celled>
+            <Table  celled>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Price</Table.HeaderCell>
