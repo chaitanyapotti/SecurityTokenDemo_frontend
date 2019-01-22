@@ -41,13 +41,17 @@ class MarketMakerDashboard extends Component {
 
   state = {
     depositEtherModalOpen: false,
+    withdrawEtherModalOpen: false,
     modifyRatesModalOpen: false,
     depositEtherInput: "",
+    withdrawEtherInput: "",
     buyPercent: { RIV: "", LMD: "" },
     sellPercent: { RIV: "", LMD: "" }
   };
 
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
+
+  handleWithdrawEtherModalOpen = () => this.setState({ withdrawEtherModalOpen: true });
 
   
   handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
@@ -56,6 +60,8 @@ class MarketMakerDashboard extends Component {
     this.setState({ modifyRatesModalOpen: false, buyPercent: { RIV: "", LMD: "" }, sellPercent: { RIV: "", LMD: "" } });
 
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
+
+  handleWithdrawEtherModalClose = () => this.setState({ withdrawEtherModalOpen: false, withdrawEtherInput: "" });
 
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
@@ -72,6 +78,9 @@ class MarketMakerDashboard extends Component {
     this.setState({ depositEtherModalOpen: true });
   };
 
+  onWithdrawEtherClick = e => {
+    this.setState({ withdrawEtherModalOpen: true });
+  };
   
 
   onModifyClick = e => {
@@ -92,6 +101,11 @@ class MarketMakerDashboard extends Component {
     const { userLocalPublicAddress } = this.props || {};
     const { depositEtherInput, reserveAddress } = this.state;
     deposit(depositEtherInput, reserveAddress, userLocalPublicAddress);
+  };
+
+  withdrawClick = e => {
+    const { userLocalPublicAddress } = this.props || {};
+    const { withdrawEtherInput, reserveAddress } = this.state;
   };
 
   render() {
@@ -118,7 +132,9 @@ class MarketMakerDashboard extends Component {
       publicAddress,
       etherScanLink,
       depositEtherInput,
+      withdrawEtherInput,
       depositEtherModalOpen,
+      withdrawEtherModalOpen,
       modifyRatesModalOpen,
       reserveAddress,
       buyPercent,
@@ -163,6 +179,19 @@ class MarketMakerDashboard extends Component {
                       onClick={this.onDepositEtherClick}
                     >
                       Deposit Ether
+                    </LoadingButton>
+                  </span>
+                </CustomToolTip>
+              </Col>
+              <Col lg={3}>
+                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                  <span>
+                    <LoadingButton
+                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                      disabled={!isOperator}
+                      onClick={this.onWithdrawEtherClick}
+                    >
+                      Withdraw Ether
                     </LoadingButton>
                   </span>
                 </CustomToolTip>
@@ -216,6 +245,29 @@ class MarketMakerDashboard extends Component {
                   <Transaction
                     onClick={this.depositClick}
                     buttonText="Deposit"
+                    txHash={depositEtherButtonTransactionHash}
+                    buttonSpinning={depositEtherButtonSpinning}
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </AlertModal>
+          <AlertModal open={withdrawEtherModalOpen} handleClose={this.handleWithdrawEtherModalClose}>
+            <Grid>
+              <Row className="push--bottom">
+                <Col lg={12}>
+                  <Input
+                    placeholder="Enter Ether Amount"
+                    value={withdrawEtherInput}
+                    onChange={e => this.setState({ withdrawEtherInput: e.target.value })}
+                  />
+                </Col>
+              </Row>
+              <Row className="push--bottom">
+                <Col lg={12}>
+                  <Transaction
+                    onClick={this.withdrawClick}
+                    buttonText="Withdraw"
                     txHash={depositEtherButtonTransactionHash}
                     buttonSpinning={depositEtherButtonSpinning}
                   />
