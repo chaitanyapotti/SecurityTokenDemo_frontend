@@ -284,8 +284,8 @@ class MarketMakerDashboard extends Component {
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
                     <Table.HeaderCell>Bid (%)</Table.HeaderCell>
+                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>

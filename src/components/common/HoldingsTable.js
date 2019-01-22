@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Table } from "semantic-ui-react";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits } from "../../helpers/numberHelpers";
 import config from "../../config";
 
 class HoldingsTable extends PureComponent {
@@ -25,7 +25,7 @@ class HoldingsTable extends PureComponent {
               <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-
+              <Table.Cell>{significantDigits(tokenBalance[key].dollarValue / tokenBalance[key].balance || 0)}</Table.Cell>
               <Table.Cell>
                 {`+${formatMoney(currentPortfolioValue[key] - tokenBalance[key].dollarValue, 0)}(+${Math.round(
                   ((currentPortfolioValue[key] - tokenBalance[key].dollarValue) * 100) / tokenBalance[key].dollarValue,
