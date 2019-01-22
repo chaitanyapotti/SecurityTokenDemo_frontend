@@ -49,9 +49,7 @@ class MarketMakerDashboard extends Component {
 
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
 
-  handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
-
-  handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, buyPercent: {}, sellPercent: {} });
+  
 
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
@@ -70,9 +68,7 @@ class MarketMakerDashboard extends Component {
     this.setState({ depositEtherModalOpen: true });
   };
 
-  onModifyRatesClick = e => {
-    this.setState({ modifyRatesModalOpen: true });
-  };
+  
 
   onModifyClick = e => {
     const { setCompactData: modifyRatesAction } = this.props;
@@ -157,19 +153,6 @@ class MarketMakerDashboard extends Component {
                       onClick={this.onDepositEtherClick}
                     >
                       Deposit Ether
-                    </LoadingButton>
-                  </span>
-                </CustomToolTip>
-              </Col>
-              <Col lg={2}>
-                <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                  <span>
-                    <LoadingButton
-                      className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                      disabled={!isOperator}
-                      onClick={this.onModifyRatesClick}
-                    >
-                      Modify Rates
                     </LoadingButton>
                   </span>
                 </CustomToolTip>
