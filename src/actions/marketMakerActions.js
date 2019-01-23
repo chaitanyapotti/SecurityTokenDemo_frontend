@@ -1,7 +1,7 @@
 import axios from "axios";
 import actionTypes from "../actionTypes";
 import web3 from "../helpers/web3";
-import { bytesToHex, significantDigits } from "../helpers/numberHelpers";
+import { significantDigits } from "../helpers/numberHelpers";
 import config from "../config";
 import { pollTxHash } from "./helperActions";
 import { getTokenBalance, getUserBalanceAction } from "./userActions";
