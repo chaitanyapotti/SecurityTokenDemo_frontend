@@ -122,12 +122,12 @@ class BuyHoldingsTable extends Component {
     const userTokenBalance = tokenBalance[dropDownSelect] || {};
     let buyPrice = buyTradeData && buyTradeData[buyToken] ? buyTradeData[buyToken].price * config.etherPrice : 0;
     let sellPrice = sellTradeData && sellTradeData[sellToken] ? config.etherPrice / sellTradeData[sellToken].price : 0;
-    if (!isFinite(buyPrice)) {
+    if (!isFinite(buyPrice) || buyPrice === 0) {
       buyPrice = "No trades available";
     } else {
       buyPrice = `${formatMoney(buyPrice)}`;
     }
-    if (!isFinite(sellPrice)) {
+    if (!isFinite(sellPrice) || sellPrice === 0) {
       sellPrice = "No trades available";
     } else {
       sellPrice = `${formatMoney(sellPrice)}`;

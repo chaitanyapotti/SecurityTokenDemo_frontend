@@ -3,12 +3,12 @@ import { Table, Input, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { depositToken, withdrawAction, setQtyStepFunction, setCompactData } from "../../actions/marketMakerActions";
+import { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
 
 class EtherScanHoldingsTable extends Component {
@@ -23,8 +23,8 @@ class EtherScanHoldingsTable extends Component {
     tradeModalOpen: false,
     modifyBuyPrice: "",
     modifySellPrice: "",
-    buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
-    sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+    buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+    sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
     imbalanceBuyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
     imbalanceSellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
   };
@@ -36,8 +36,8 @@ class EtherScanHoldingsTable extends Component {
   handleTradeModalClose = () =>
     this.setState({
       tradeModalOpen: false,
-      sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
-      buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
+      sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+      buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
     });
 
   handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
@@ -50,11 +50,27 @@ class EtherScanHoldingsTable extends Component {
 
   handleWithdrawTokenModalClose = () => this.setState({ withdrawTokenModalOpen: false, withdrawTokenInput: "" });
 
-  handleModifyImbalanceRatesModalClose = () => this.setState({ modifyImbalanceRatesModalOpen: false });
+  handleModifyImbalanceRatesModalClose = () =>
+    this.setState({
+      modifyImbalanceRatesModalOpen: false,
+      imbalanceBuyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
+      imbalanceSellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }]
+    });
 
   onModifyRatesClick = key => this.setState({ modifyRatesModalOpen: true, token: key });
 
-  onModifyImbalanceRatesClick = key => this.setState({ modifyImbalanceRatesModalOpen: true, token: key });
+  onTradeClick = key => {
+    this.setState({ tradeModalOpen: true, token: key });
+    let { buyTradeData, sellTradeData } = this.state;
+    const { buyPriceData, sellPriceData } = this.props || {};
+    buyTradeData = JSON.parse(JSON.stringify(buyTradeData));
+    sellTradeData = JSON.parse(JSON.stringify(sellTradeData));
+    buyTradeData[0].rate = buyPriceData[key] && buyPriceData[key].rate ? formatFromWei(buyPriceData[key].rate, 3) : 0;
+    buyTradeData[0].percent = "0";
+    sellTradeData[0].rate = sellPriceData[key] && sellPriceData[key].rate ? (Math.pow(10, 18) / sellPriceData[key].rate).toFixed(3) : 0;
+    sellTradeData[0].percent = "0";
+    this.setState({ buyTradeData, sellTradeData });
+  };
 
   onDepositClick = key => this.setState({ depositTokenModalOpen: true, token: key });
 
@@ -64,13 +80,10 @@ class EtherScanHoldingsTable extends Component {
     const { setCompactData: modifyRatesAction } = this.props;
     const { userLocalPublicAddress } = this.props || {};
     const { modifyBuyPrice, modifySellPrice, token } = this.state;
-    console.log(token);
     modifyRatesAction(token, modifyBuyPrice, modifySellPrice, userLocalPublicAddress);
   };
 
-  onTradeClick = key => {
-    this.setState({ tradeModalOpen: true, token: key });
-  };
+  onModifyImbalanceRatesClick = key => this.setState({ modifyImbalanceRatesModalOpen: true, token: key });
 
   depositTokenClick = e => {
     const { depositToken: doDepositToken } = this.props;
@@ -132,10 +145,24 @@ class EtherScanHoldingsTable extends Component {
     const { setQtyStepFunction: setQtySteps } = this.props;
     setQtySteps(
       token,
-      buyTradeData.map(x => significantDigits(1 / x.rate)),
-      buyTradeData.map(x => Math.round(x.percent * 100)),
-      sellTradeData.map(x => significantDigits(1 / x.rate)),
+      buyTradeData.map(x => significantDigits(x.rate)),
+      buyTradeData.map(x => -Math.round(x.percent * 100)),
+      sellTradeData.map(x => significantDigits(x.rate)),
       sellTradeData.map(x => Math.round(x.percent * 100)),
+      userLocalPublicAddress
+    );
+  };
+
+  setQtyImbalanceFunc = () => {
+    const { imbalanceBuyTradeData, imbalanceSellTradeData, token } = this.state;
+    const { userLocalPublicAddress } = this.props || {};
+    const { setImbalanceStepFunction: setQtySteps } = this.props;
+    setQtySteps(
+      token,
+      imbalanceBuyTradeData.map(x => significantDigits(x.rate)),
+      imbalanceBuyTradeData.map(x => -Math.round(x.percent * 100)),
+      [...imbalanceSellTradeData.map(x => -significantDigits(x.rate)), 0],
+      [...imbalanceSellTradeData.map(x => Math.round(x.percent * 100)), 0],
       userLocalPublicAddress
     );
   };
@@ -152,7 +179,8 @@ class EtherScanHoldingsTable extends Component {
       withdrawTokenButtonTransactionHash,
       // withdrawTokenSuccess,
       isOwner,
-      tradeSuccess,
+      imbalanceButtonSpinning,
+      imbalanceButtonTransactionHash,
       tradeButtonSpinning,
       tradeButtonTransactionHash,
       buyPriceData,
@@ -168,7 +196,6 @@ class EtherScanHoldingsTable extends Component {
       withdrawTokenModalOpen,
       withdrawTokenInput,
       tradeModalOpen,
-      token,
       modifyImbalanceRatesModalOpen,
       imbalanceSellTradeData,
       imbalanceBuyTradeData,
@@ -395,7 +422,6 @@ class EtherScanHoldingsTable extends Component {
                 <Transaction
                   onClick={this.setQtyStepFunc}
                   buttonText="Set Rate Steps"
-                  success={tradeSuccess}
                   txHash={tradeButtonTransactionHash}
                   buttonSpinning={tradeButtonSpinning}
                 />
@@ -427,7 +453,7 @@ class EtherScanHoldingsTable extends Component {
                 ))}
               </Table.Body>
             </Table>
-            <Divider horizontal>Sell</Divider>
+            <Divider horizontal>Sell (Hi to Lo)</Divider>
             <Table celled>
               <Table.Header>
                 <Table.Row>
@@ -456,11 +482,10 @@ class EtherScanHoldingsTable extends Component {
             <Row className="push--bottom">
               <Col lg={12}>
                 <Transaction
-                  onClick={this.setQtyStepFunc}
-                  buttonText="Set Imbalance Prices"
-                  success={tradeSuccess}
-                  txHash={tradeButtonTransactionHash}
-                  buttonSpinning={tradeButtonSpinning}
+                  onClick={this.setQtyImbalanceFunc}
+                  buttonText="Set Imbalance Steps"
+                  txHash={imbalanceButtonTransactionHash}
+                  buttonSpinning={imbalanceButtonSpinning}
                 />
               </Col>
             </Row>
@@ -519,6 +544,8 @@ const mapStateToProps = state => {
     tradeSuccess,
     tradeButtonSpinning,
     tradeButtonTransactionHash,
+    imbalanceButtonSpinning,
+    imbalanceButtonTransactionHash,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash
   } = marketMakerData || {};
@@ -540,7 +567,9 @@ const mapStateToProps = state => {
     buyPriceData,
     sellPriceData,
     modifyRatesButtonSpinning,
-    modifyRatesTransactionHash
+    modifyRatesTransactionHash,
+    imbalanceButtonSpinning,
+    imbalanceButtonTransactionHash
   };
 };
 
@@ -548,10 +577,11 @@ EtherScanHoldingsTable.propTypes = {
   depositToken: Proptypes.func.isRequired,
   withdrawAction: Proptypes.func.isRequired,
   setQtyStepFunction: Proptypes.func.isRequired,
+  setImbalanceStepFunction: Proptypes.func.isRequired,
   setCompactData: Proptypes.func.isRequired
 };
 
 export default connect(
   mapStateToProps,
-  { depositToken, withdrawAction, setQtyStepFunction, setCompactData }
+  { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction }
 )(EtherScanHoldingsTable);

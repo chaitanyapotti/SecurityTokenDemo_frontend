@@ -323,8 +323,6 @@ export const setCompactData = (token, baseBuy, baseSell, userLocalPublicAddress)
   const compactSellHex = ["0x0000000000000000000000000000"];
   const updatedBaseBuy = [web3.utils.toWei(significantDigits(config.etherPrice / parseFloat(baseBuy)).toString())];
   const updatedBaseSell = [web3.utils.toWei(significantDigits(parseFloat(baseSell) / config.etherPrice).toString())];
-  console.log(updatedBaseBuy, "buy");
-  console.log(updatedBaseSell, "sell");
   dispatch(isSetCompactDataButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
@@ -463,5 +461,83 @@ export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPub
     .catch(err => {
       console.log(err);
       dispatch(isSetQtyStepButtonSpinning(false));
+    });
+};
+
+export const isSetImbalanceStepButtonSpinning = receipt => ({
+  payload: { receipt },
+  type: actionTypes.IMBALANCE_STEP_BUTTON_SPINNING
+});
+
+export const imbalanceStepSuccess = receipt => ({
+  payload: { receipt },
+  type: actionTypes.IMBALANCE_STEP_SUCCESS
+});
+
+export const setImbalanceStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
+  console.log(token, xBuy, yBuy, xSell, ySell);
+  const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
+  const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
+  console.log(buyx, sellx);
+  dispatch(isSetImbalanceStepButtonSpinning(true));
+  axios
+    .get(`${config.api}/api/contractdata?name=ConversionRates`)
+    .then(async res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        const { abi } = data || {};
+        const instance = new web3.eth.Contract(abi, config.ConversionRates, { from: userLocalPublicAddress });
+        const gasPrice = await web3.eth.getGasPrice();
+        instance.methods
+          .setImbalanceStepFunction(config.tokens[token].address, buyx, yBuy, sellx, ySell)
+          .send({
+            from: userLocalPublicAddress,
+            gasPrice: (parseFloat(gasPrice) + 2000000000).toString()
+          })
+          .on("transactionHash", transactionHash => {
+            dispatch(isSetImbalanceStepButtonSpinning(false));
+            dispatch({
+              payload: { transactionHash },
+              type: actionTypes.IMBALANCE_STEP_TRANSACTION_HASH_RECEIVED
+            });
+            dispatch(
+              pollTxHash(
+                transactionHash,
+                () => {
+                  dispatch(imbalanceStepSuccess(true));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.IMBALANCE_STEP_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {
+                  dispatch(imbalanceStepSuccess(false));
+                  dispatch(isSetImbalanceStepButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.IMBALANCE_STEP_TRANSACTION_HASH_RECEIVED
+                  });
+                },
+                () => {},
+                () => {
+                  dispatch(imbalanceStepSuccess(false));
+                  dispatch(isSetImbalanceStepButtonSpinning(false));
+                  dispatch({
+                    payload: { transactionHash: "" },
+                    type: actionTypes.IMBALANCE_STEP_TRANSACTION_HASH_RECEIVED
+                  });
+                }
+              )
+            );
+          })
+          .catch(err => {
+            console.error(err.message);
+            dispatch(isSetImbalanceStepButtonSpinning(false));
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch(isSetImbalanceStepButtonSpinning(false));
     });
 };
