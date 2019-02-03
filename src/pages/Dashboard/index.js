@@ -1,13 +1,14 @@
-import React, { Component, Suspense } from "react";
+import React, { Component, lazy } from "react";
 import { Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { getPriceHistory } from "../../actions/priceHistoryActions";
+import ErrorBoundary from "../ErrorBoundary";
 
-const InvestorDashboard = React.lazy(() => import("../../containers/InvestorDashboard"));
-const MarketMakerDashboard = React.lazy(() => import("../../containers/MarketMakerDashboard"));
-const BrokerDealerDashboard = React.lazy(() => import("../../containers/BrokerDealerDashboard"));
+const InvestorDashboard = lazy(() => import("../../containers/InvestorDashboard"));
+const MarketMakerDashboard = lazy(() => import("../../containers/MarketMakerDashboard"));
+const BrokerDealerDashboard = lazy(() => import("../../containers/BrokerDealerDashboard"));
 
 class Dashboard extends Component {
   onLogoutClick = e => {
@@ -30,26 +31,30 @@ class Dashboard extends Component {
     const { role } = JSON.parse(localStorage.getItem("user_data")) || {};
     if (role === "INVESTOR") {
       return (
-        <Suspense fallback={<div />}>
+        <ErrorBoundary>
           <InvestorDashboard history={history} />
-        </Suspense>
+        </ErrorBoundary>
       );
     }
     if (role === "MARKET_MAKER") {
       return (
-        <Suspense fallback={<div />}>
+        <ErrorBoundary>
           <MarketMakerDashboard history={history} />
-        </Suspense>
+        </ErrorBoundary>
       );
     }
     if (role === "BROKER_DEALER") {
       return (
-        <Suspense fallback={<div />}>
+        <ErrorBoundary>
           <BrokerDealerDashboard history={history} />
-        </Suspense>
+        </ErrorBoundary>
       );
     }
-    return <Button onClick={this.onLogoutClick}>Logout</Button>;
+    return (
+      <ErrorBoundary>
+        <Button onClick={this.onLogoutClick}>Logout</Button>
+      </ErrorBoundary>
+    );
   }
 }
 
