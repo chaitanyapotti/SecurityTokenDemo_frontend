@@ -9,30 +9,30 @@ const BioTable = props => {
       <Table celled>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Phone</TableCell>
-            <TableCell>Account</TableCell>
-            <TableCell>Pro Status</TableCell>
-            <TableCell>Created At</TableCell>
-            <TableCell>Active</TableCell>
+            <TableCell className="txt-s">Name</TableCell>
+            <TableCell className="txt-s">Email</TableCell>
+            <TableCell className="txt-s">Phone</TableCell>
+            <TableCell className="txt-s">Account</TableCell>
+            <TableCell className="txt-s">Pro Status</TableCell>
+            <TableCell className="txt-s">Created At</TableCell>
+            <TableCell className="txt-s">Active</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>{first_name}</TableCell>
-            <TableCell>{email}</TableCell>
-            <TableCell>{phone}</TableCell>
-            <TableCell>{id}</TableCell>
+            <TableCell className="txt-s">{first_name}</TableCell>
+            <TableCell className="txt-s">{email}</TableCell>
+            <TableCell className="txt-s">{phone}</TableCell>
+            <TableCell className="txt-s">{id}</TableCell>
             {role === "INVESTOR" ? (
-              <TableCell>Pro-Investor</TableCell>
+              <TableCell className="txt-s">Pro-Investor</TableCell>
             ) : role === "BROKER_DEALER" ? (
-              <TableCell>Broker Dealer</TableCell>
+              <TableCell className="txt-s">Broker Dealer</TableCell>
             ) : (
-              <TableCell>Market Maker</TableCell>
+              <TableCell className="txt-s">Market Maker</TableCell>
             )}
-            <TableCell>{date.slice(0, 10)}</TableCell>
-            <TableCell>{status}</TableCell>
+            <TableCell className="txt-s">{date.slice(0, 10)}</TableCell>
+            <TableCell className="txt-s">{status}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

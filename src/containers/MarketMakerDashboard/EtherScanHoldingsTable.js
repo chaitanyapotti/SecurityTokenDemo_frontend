@@ -210,12 +210,12 @@ class EtherScanHoldingsTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Token Name</TableCell>
-                <TableCell>Token Count</TableCell>
-                <TableCell>Token Value($)</TableCell>
-                <TableCell>Token Price($)</TableCell>
-                <TableCell>Bid Price($)</TableCell>
-                <TableCell>Ask Price($)</TableCell>
+                <TableCell className="txt-s">Token Name</TableCell>
+                <TableCell className="txt-s">Token Count</TableCell>
+                <TableCell className="txt-s">Token Value($)</TableCell>
+                <TableCell className="txt-s">Token Price($)</TableCell>
+                <TableCell className="txt-s">Bid Price($)</TableCell>
+                <TableCell className="txt-s">Ask Price($)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -224,12 +224,12 @@ class EtherScanHoldingsTable extends Component {
                 const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
                 return (
                   <TableRow key={key}>
-                    <TableCell verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                    <TableCell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
-                    <TableCell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                    <TableCell verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</TableCell>
-                    <TableCell verticalAlign="middle">{sellDollarPrice.toFixed(3)}</TableCell>
-                    <TableCell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{sellDollarPrice.toFixed(3)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{buyDollarPrice.toFixed(3)}</TableCell>
                   </TableRow>
                 );
               })}
@@ -240,20 +240,20 @@ class EtherScanHoldingsTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Token Name</TableCell>
-                <TableCell>Deposit</TableCell>
-                <TableCell>Withdraw</TableCell>
-                <TableCell>Modify Bid/Ask Prices</TableCell>
-                <TableCell>Modify Step Prices</TableCell>
-                <TableCell>Modify Imbalance Prices</TableCell>
-                <TableCell>Etherscan</TableCell>
+                <TableCell className="txt-s">Token Name</TableCell>
+                <TableCell className="txt-s">Deposit</TableCell>
+                <TableCell className="txt-s">Withdraw</TableCell>
+                <TableCell className="txt-s">Modify Bid/Ask Prices</TableCell>
+                <TableCell className="txt-s">Modify Step Prices</TableCell>
+                <TableCell className="txt-s">Modify Imbalance Prices</TableCell>
+                <TableCell className="txt-s">Etherscan</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                  <TableCell verticalAlign="middle">
+                  <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
                         <LoadingButton
@@ -266,7 +266,7 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell verticalAlign="middle">
+                  <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOwner} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -279,7 +279,7 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell verticalAlign="middle">
+                  <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -292,7 +292,7 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell verticalAlign="middle">
+                  <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -305,7 +305,7 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell verticalAlign="middle">
+                  <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -318,7 +318,7 @@ class EtherScanHoldingsTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="txt-s">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain
@@ -391,10 +391,10 @@ class EtherScanHoldingsTable extends Component {
                   {buyTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Buy Quantity" value={item.rate} onChange={e => this.updateBuyArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -415,10 +415,10 @@ class EtherScanHoldingsTable extends Component {
                   {sellTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Sell Quantity" value={item.rate} onChange={e => this.updateSellArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -445,18 +445,18 @@ class EtherScanHoldingsTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>%</TableCell>
+                    <TableCell className="txt-s">Quantity</TableCell>
+                    <TableCell className="txt-s">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {imbalanceBuyTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Buy Quantity" value={item.rate} onChange={e => this.updateImbalanceBuyArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateImbalanceBuyArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -469,18 +469,18 @@ class EtherScanHoldingsTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>%</TableCell>
+                    <TableCell className="txt-s">Quantity</TableCell>
+                    <TableCell className="txt-s">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {imbalanceSellTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField label="Enter Sell Quantity" value={item.rate} onChange={e => this.updateImbalanceSellArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="txt-s">
                         <TextField
                           label="Enter Sell Percent"
                           value={item.percent}
@@ -510,20 +510,20 @@ class EtherScanHoldingsTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Bid ($)</TableCell>
-                    <TableCell>Ask ($)</TableCell>
+                    <TableCell className="txt-s">Bid ($)</TableCell>
+                    <TableCell className="txt-s">Ask ($)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>
+                    <TableCell className="txt-s">
                       <TextField
                         label="Enter Sell Price"
                         value={modifySellPrice}
                         onChange={e => this.setState({ modifySellPrice: e.target.value })}
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="txt-s">
                       <TextField label="Enter Buy Price" value={modifyBuyPrice} onChange={e => this.setState({ modifyBuyPrice: e.target.value })} />
                     </TableCell>
                   </TableRow>

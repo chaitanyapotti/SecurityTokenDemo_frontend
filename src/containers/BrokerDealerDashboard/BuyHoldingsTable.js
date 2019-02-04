@@ -140,14 +140,14 @@ class BuyHoldingsTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Token Name</TableCell>
-                <TableCell>Token Count</TableCell>
-                <TableCell>Invested Value($)</TableCell>
-                <TableCell>Current Value($)</TableCell>
-                <TableCell>Token Price($)</TableCell>
-                <TableCell>Change</TableCell>
-                <TableCell>Buy</TableCell>
-                <TableCell>Sell</TableCell>
+                <TableCell className="txt-s">Token Name</TableCell>
+                <TableCell className="txt-s">Token Count</TableCell>
+                <TableCell className="txt-s">Invested Value($)</TableCell>
+                <TableCell className="txt-s">Current Value($)</TableCell>
+                <TableCell className="txt-s">Token Price($)</TableCell>
+                <TableCell className="txt-s">Change</TableCell>
+                <TableCell className="txt-s">Buy</TableCell>
+                <TableCell className="txt-s">Sell</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -155,18 +155,18 @@ class BuyHoldingsTable extends Component {
                 const { balance, dollarValue } = userTokenBalance[key] || {};
                 return (
                   <TableRow key={key}>
-                    <TableCell verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                    <TableCell verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</TableCell>
-                    <TableCell verticalAlign="middle">{formatMoney(dollarValue, 0)}</TableCell>
-                    <TableCell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                    <TableCell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
-                    <TableCell verticalAlign="middle">
+                    <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(dollarValue, 0)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
                       {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                         ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
                         2
                       )}%)`}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="txt-s">
                       <CustomToolTip disabled={!isOperator} title="You are not the operator">
                         <span>
                           <LoadingButton
@@ -179,7 +179,7 @@ class BuyHoldingsTable extends Component {
                         </span>
                       </CustomToolTip>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="txt-s">
                       <CustomToolTip disabled={!isOperator} title="You are not the operator">
                         <span>
                           <LoadingButton

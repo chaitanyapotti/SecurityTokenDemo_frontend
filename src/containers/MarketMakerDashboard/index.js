@@ -281,37 +281,37 @@ class MarketMakerDashboard extends Component {
           </AlertModal>
           <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
             <Grid>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Token</TableCell>
-                    <TableCell>Bid (%)</TableCell>
-                    <TableCell>Ask (%)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Object.keys(config.tokens).map(key => (
-                    <TableRow key={key}>
-                      <TableCell>{key}</TableCell>
-                      <TableCell>
-                        <TextField
-                          label="Enter Sell % Change"
-                          value={sellPercent[key]}
-                          onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          label="Enter Buy % Change"
-                          value={buyPercent[key]}
-                          onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
-                        />
-                      </TableCell>
+              <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className="txt-s">Token</TableCell>
+                      <TableCell className="txt-s">Bid (%)</TableCell>
+                      <TableCell className="txt-s">Ask (%)</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {Object.keys(config.tokens).map(key => (
+                      <TableRow key={key}>
+                        <TableCell className="txt-s">{key}</TableCell>
+                        <TableCell className="txt-s">
+                          <TextField
+                            label="Enter Sell % Change"
+                            value={sellPercent[key]}
+                            onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
+                          />
+                        </TableCell>
+                        <TableCell className="txt-s">
+                          <TextField
+                            label="Enter Buy % Change"
+                            value={buyPercent[key]}
+                            onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </Paper>
               <Row className="push--bottom">
                 <Col lgOffset={9} lg={3}>
