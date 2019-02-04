@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Table, Input } from "semantic-ui-react";
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, TextField } from "@material-ui/core";
+
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { formatCurrencyNumber, formatMoney, formatFromWei, significantDigits } from "../../helpers/numberHelpers";
@@ -135,71 +136,73 @@ class BuyHoldingsTable extends Component {
     const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Invested Value($)</Table.HeaderCell>
-              <Table.HeaderCell>Current Value($)</Table.HeaderCell>
-              <Table.HeaderCell>Token Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Change</Table.HeaderCell>
-              <Table.HeaderCell>Buy</Table.HeaderCell>
-              <Table.HeaderCell>Sell</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {Object.keys(userTokenBalance).map(key => {
-              const { balance, dollarValue } = userTokenBalance[key] || {};
-              return (
-                <Table.Row key={key}>
-                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatMoney(dollarValue, 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">
-                    {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
-                      ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
-                      2
-                    )}%)`}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onBuyClick(key)}
-                        >
-                          Buy
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onSellClick(key)}
-                        >
-                          Sell
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Token Name</TableCell>
+                <TableCell>Token Count</TableCell>
+                <TableCell>Invested Value($)</TableCell>
+                <TableCell>Current Value($)</TableCell>
+                <TableCell>Token Price($)</TableCell>
+                <TableCell>Change</TableCell>
+                <TableCell>Buy</TableCell>
+                <TableCell>Sell</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.keys(userTokenBalance).map(key => {
+                const { balance, dollarValue } = userTokenBalance[key] || {};
+                return (
+                  <TableRow key={key}>
+                    <TableCell verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                    <TableCell verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</TableCell>
+                    <TableCell verticalAlign="middle">{formatMoney(dollarValue, 0)}</TableCell>
+                    <TableCell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
+                    <TableCell verticalAlign="middle">
+                      {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
+                        ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
+                        2
+                      )}%)`}
+                    </TableCell>
+                    <TableCell>
+                      <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                        <span>
+                          <LoadingButton
+                            className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                            disabled={!isOperator}
+                            onClick={() => this.onBuyClick(key)}
+                          >
+                            Buy
+                          </LoadingButton>
+                        </span>
+                      </CustomToolTip>
+                    </TableCell>
+                    <TableCell>
+                      <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                        <span>
+                          <LoadingButton
+                            className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                            disabled={!isOperator}
+                            onClick={() => this.onSellClick(key)}
+                          >
+                            Sell
+                          </LoadingButton>
+                        </span>
+                      </CustomToolTip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
         <AlertModal open={buyModalOpen} handleClose={this.handleBuyModalClose}>
           <Grid>
             <Row className="push--bottom">
               <Col lg={12}>
-                <Input placeholder="Enter Ether Amount" value={buyInput} onChange={e => this.setState({ buyInput: e.target.value })} />
+                <TextField label="Enter Ether Amount" value={buyInput} onChange={e => this.setState({ buyInput: e.target.value })} />
               </Col>
             </Row>
             <Row className="push--bottom">
@@ -247,7 +250,7 @@ class BuyHoldingsTable extends Component {
           <Grid>
             <Row className="push--bottom">
               <Col lg={12}>
-                <Input placeholder="Enter Token Amount" value={sellInput} onChange={e => this.setState({ sellInput: e.target.value })} />
+                <TextField label="Enter Token Amount" value={sellInput} onChange={e => this.setState({ sellInput: e.target.value })} />
               </Col>
             </Row>
             <Row className="push--bottom">

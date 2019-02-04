@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Input, Table } from "semantic-ui-react";
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, TextField } from "@material-ui/core";
+
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
@@ -206,7 +207,7 @@ class MarketMakerDashboard extends Component {
             <Col lg={8}>
               <span className="txt-m text--primary push--bottom">
                 Select Token :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
+                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection label="Select Token" options={tokenOptions} />
               </span>
             </Col>
             <Col lg={4} />
@@ -236,8 +237,8 @@ class MarketMakerDashboard extends Component {
             <Grid>
               <Row className="push--bottom">
                 <Col lg={12}>
-                  <Input
-                    placeholder="Enter Ether Amount"
+                  <TextField
+                    label="Enter Ether Amount"
                     value={depositEtherInput}
                     onChange={e => this.setState({ depositEtherInput: e.target.value })}
                   />
@@ -259,8 +260,8 @@ class MarketMakerDashboard extends Component {
             <Grid>
               <Row className="push--bottom">
                 <Col lg={12}>
-                  <Input
-                    placeholder="Enter Ether Amount"
+                  <TextField
+                    label="Enter Ether Amount"
                     value={withdrawEtherInput}
                     onChange={e => this.setState({ withdrawEtherInput: e.target.value })}
                   />
@@ -280,36 +281,38 @@ class MarketMakerDashboard extends Component {
           </AlertModal>
           <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
             <Grid>
-              <Table celled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Bid (%)</Table.HeaderCell>
-                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
+            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Token</TableCell>
+                    <TableCell>Bid (%)</TableCell>
+                    <TableCell>Ask (%)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {Object.keys(config.tokens).map(key => (
-                    <Table.Row key={key}>
-                      <Table.Cell>{key}</Table.Cell>
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Sell % Change"
+                    <TableRow key={key}>
+                      <TableCell>{key}</TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Enter Sell % Change"
                           value={sellPercent[key]}
                           onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
                         />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Buy % Change"
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          label="Enter Buy % Change"
                           value={buyPercent[key]}
                           onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
                         />
-                      </Table.Cell>
-                    </Table.Row>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Body>
+                </TableBody>
               </Table>
+              </Paper>
               <Row className="push--bottom">
                 <Col lgOffset={9} lg={3}>
                   <Transaction
