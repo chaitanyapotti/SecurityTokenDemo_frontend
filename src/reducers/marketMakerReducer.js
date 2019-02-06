@@ -11,12 +11,18 @@ const INITIAL_STATE = {
   depositEtherButtonSpinning: false,
   depositEtherButtonTransactionHash: "",
   depositEtherSuccess: false,
+  withdrawEtherButtonSpinning: false,
+  withdrawEtherButtonTransactionHash: "",
+  withdrawEtherSuccess: false,
   modifyRatesButtonSpinning: false,
   modifyRatesTransactionHash: "",
   tradeButtonSpinning: false,
   tradeButtonTransactionHash: "",
   modifyRatesSuccess: false,
-  tradeSuccess: false
+  tradeSuccess: false,
+  imbalanceButtonSpinning: false,
+  imbalanceButtonTransactionHash: "",
+  imbalanceSuccess: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -39,6 +45,13 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         tradeButtonSpinning: receipt
+      };
+    }
+    case actionTypes.IMBALANCE_STEP_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        imbalanceButtonSpinning: receipt
       };
     }
     case actionTypes.TRANSFER_TOKEN_BUTTON_SPINNING: {
@@ -76,6 +89,13 @@ export default function(state = INITIAL_STATE, action) {
         tradeButtonTransactionHash: transactionHash
       };
     }
+    case actionTypes.IMBALANCE_STEP_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        imbalanceButtonTransactionHash: transactionHash
+      };
+    }
     case actionTypes.WITHDRAW_BUTTON_SPINNING: {
       const { receipt } = action.payload;
       return {
@@ -97,11 +117,18 @@ export default function(state = INITIAL_STATE, action) {
         modifyRatesSuccess: receipt
       };
     }
-    case actionTypes.tradeSuccess: {
+    case actionTypes.QTY_STEP_SUCCESS: {
       const { receipt } = action.payload;
       return {
         ...state,
         tradeSuccess: receipt
+      };
+    }
+    case actionTypes.IMBALANCE_STEP_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        imbalanceSuccess: receipt
       };
     }
     case actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED: {
@@ -130,6 +157,27 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         depositEtherButtonTransactionHash: transactionHash
+      };
+    }
+    case actionTypes.WITHDRAW_ETHER_BUTTON_SPINNING: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        withdrawEtherButtonSpinning: receipt
+      };
+    }
+    case actionTypes.WITHDRAW_ETHER_SUCCESS: {
+      const { receipt } = action.payload;
+      return {
+        ...state,
+        withdrawEtherSuccess: receipt
+      };
+    }
+    case actionTypes.WITHDRAW_ETHER_BUTTON_TRANSACTION_HASH_RECEIVED: {
+      const { transactionHash } = action.payload;
+      return {
+        ...state,
+        withdrawEtherButtonTransactionHash: transactionHash
       };
     }
     case actionTypes.ON_DROPDOWN_CHANGE:

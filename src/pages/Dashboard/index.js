@@ -1,12 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, lazy } from "react";
 import { Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
-import InvestorDashboard from "../../containers/InvestorDashboard";
-import MarketMakerDashboard from "../../containers/MarketMakerDashboard";
-import BrokerDealerDashboard from "../../containers/BrokerDealerDashboard";
 import { getPriceHistory } from "../../actions/priceHistoryActions";
+import ErrorBoundary from "../ErrorBoundary";
+
+const InvestorDashboard = lazy(() => import("../../containers/InvestorDashboard"));
+const MarketMakerDashboard = lazy(() => import("../../containers/MarketMakerDashboard"));
+const BrokerDealerDashboard = lazy(() => import("../../containers/BrokerDealerDashboard"));
 
 class Dashboard extends Component {
   onLogoutClick = e => {
@@ -28,15 +30,31 @@ class Dashboard extends Component {
     const { history } = this.props || {};
     const { role } = JSON.parse(localStorage.getItem("user_data")) || {};
     if (role === "INVESTOR") {
-      return <InvestorDashboard history={history} />;
+      return (
+        <ErrorBoundary>
+          <InvestorDashboard history={history} />
+        </ErrorBoundary>
+      );
     }
     if (role === "MARKET_MAKER") {
-      return <MarketMakerDashboard history={history} />;
+      return (
+        <ErrorBoundary>
+          <MarketMakerDashboard history={history} />
+        </ErrorBoundary>
+      );
     }
     if (role === "BROKER_DEALER") {
-      return <BrokerDealerDashboard history={history} />;
+      return (
+        <ErrorBoundary>
+          <BrokerDealerDashboard history={history} />
+        </ErrorBoundary>
+      );
     }
-    return <Button onClick={this.onLogoutClick}>Logout</Button>;
+    return (
+      <ErrorBoundary>
+        <Button onClick={this.onLogoutClick}>Logout</Button>
+      </ErrorBoundary>
+    );
   }
 }
 

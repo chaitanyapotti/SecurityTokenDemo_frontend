@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
 import { logoutUserAction } from "../../actions/authActions";
-import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction } from "../../actions/marketMakerActions";
+import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction, withdrawEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -53,7 +53,6 @@ class MarketMakerDashboard extends Component {
 
   handleWithdrawEtherModalOpen = () => this.setState({ withdrawEtherModalOpen: true });
 
-  
   handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
 
   handleModifyRatesModalClose = () =>
@@ -81,7 +80,6 @@ class MarketMakerDashboard extends Component {
   onWithdrawEtherClick = e => {
     this.setState({ withdrawEtherModalOpen: true });
   };
-  
 
   onModifyClick = e => {
     const { setCompactData: modifyRatesAction } = this.props;
@@ -104,8 +102,10 @@ class MarketMakerDashboard extends Component {
   };
 
   withdrawClick = e => {
+    const { withdrawEther: withdraw } = this.props;
     const { userLocalPublicAddress } = this.props || {};
     const { withdrawEtherInput, reserveAddress } = this.state;
+    withdraw(withdrawEtherInput, reserveAddress, userLocalPublicAddress);
   };
 
   render() {
@@ -116,7 +116,10 @@ class MarketMakerDashboard extends Component {
       userLocalPublicAddress,
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
+      withdrawEtherButtonSpinning,
+      withdrawEtherButtonTransactionHash,
       // depositEtherSuccess,
+      // withdrawEtherSuccess,
       modifyRatesButtonSpinning,
       modifyRatesTransactionHash
       // modifyRatesSuccess
@@ -171,11 +174,11 @@ class MarketMakerDashboard extends Component {
             </Row>
             <Row>
               <Col lg={2}>
-                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                <CustomToolTip disabled={!isOwner} title="You are not the owner">
                   <span>
                     <LoadingButton
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                      disabled={!isOperator}
+                      disabled={!isOwner}
                       onClick={this.onDepositEtherClick}
                     >
                       Deposit Ether
@@ -184,11 +187,11 @@ class MarketMakerDashboard extends Component {
                 </CustomToolTip>
               </Col>
               <Col lg={3}>
-                <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                <CustomToolTip disabled={!isOwner} title="You are not the owner">
                   <span>
                     <LoadingButton
                       className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                      disabled={!isOperator}
+                      disabled={!isOwner}
                       onClick={this.onWithdrawEtherClick}
                     >
                       Withdraw Ether
@@ -268,8 +271,8 @@ class MarketMakerDashboard extends Component {
                   <Transaction
                     onClick={this.withdrawClick}
                     buttonText="Withdraw"
-                    txHash={depositEtherButtonTransactionHash}
-                    buttonSpinning={depositEtherButtonSpinning}
+                    txHash={withdrawEtherButtonTransactionHash}
+                    buttonSpinning={withdrawEtherButtonSpinning}
                   />
                 </Col>
               </Row>
@@ -281,8 +284,8 @@ class MarketMakerDashboard extends Component {
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
                     <Table.HeaderCell>Bid (%)</Table.HeaderCell>
+                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -332,6 +335,7 @@ MarketMakerDashboard.propTypes = {
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
   depositEther: Proptypes.func.isRequired,
+  withdrawEther: Proptypes.func.isRequired,
   setCompactData: Proptypes.func.isRequired,
   getBuyRate: Proptypes.func.isRequired,
   getSellRate: Proptypes.func.isRequired
@@ -345,6 +349,9 @@ const mapStateToProps = state => {
     depositEtherButtonSpinning,
     depositEtherButtonTransactionHash,
     depositEtherSuccess,
+    withdrawEtherButtonSpinning,
+    withdrawEtherButtonTransactionHash,
+    withdrawEtherSuccess,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash,
     modifyRatesSuccess
@@ -360,6 +367,9 @@ const mapStateToProps = state => {
     depositEtherButtonSpinning,
     depositEtherButtonTransactionHash,
     depositEtherSuccess,
+    withdrawEtherButtonSpinning,
+    withdrawEtherButtonTransactionHash,
+    withdrawEtherSuccess,
     modifyRatesButtonSpinning,
     modifyRatesTransactionHash,
     modifyRatesSuccess,
@@ -376,6 +386,7 @@ export default connect(
     getTokenBalance,
     getUserBalanceAction,
     depositEther,
+    withdrawEther,
     setCompactData,
     setQtyStepFunction,
     getBuyRate,
