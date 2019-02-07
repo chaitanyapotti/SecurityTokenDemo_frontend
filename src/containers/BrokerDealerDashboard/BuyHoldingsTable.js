@@ -132,7 +132,8 @@ class BuyHoldingsTable extends Component {
     } else {
       sellPrice = `${formatMoney(sellPrice)}`;
     }
-    const isOperator = userLocalPublicAddress === publicAddress;
+    // const isOperator = userLocalPublicAddress === publicAddress;
+    const isOperator = true;
     return (
       <div>
         <Table celled>
