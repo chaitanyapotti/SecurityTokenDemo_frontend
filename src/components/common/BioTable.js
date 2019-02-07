@@ -6,7 +6,7 @@ const BioTable = props => {
 
   return (
     <Paper style={{ marginBottom: "20px" }} className="card-brdr">
-      <Table celled>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell className="txt-s">Name</TableCell>

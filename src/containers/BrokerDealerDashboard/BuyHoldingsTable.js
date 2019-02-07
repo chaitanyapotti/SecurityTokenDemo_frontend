@@ -155,11 +155,21 @@ class BuyHoldingsTable extends Component {
                 const { balance, dollarValue } = userTokenBalance[key] || {};
                 return (
                   <TableRow key={key}>
-                    <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{formatCurrencyNumber(balance, 0)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(dollarValue, 0)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {config.tokens[key].name}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {formatCurrencyNumber(balance, 0)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {formatMoney(dollarValue, 0)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {formatMoney(currentPortfolioValue[key], 0)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {significantDigits(currentPortfolioValue[key] / balance)}
+                    </TableCell>
                     <TableCell className="txt-s" verticalAlign="middle">
                       {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                         ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,

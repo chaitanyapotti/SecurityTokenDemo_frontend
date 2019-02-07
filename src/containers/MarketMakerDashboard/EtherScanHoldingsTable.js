@@ -224,12 +224,24 @@ class EtherScanHoldingsTable extends Component {
                 const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
                 return (
                   <TableRow key={key}>
-                    <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{sellDollarPrice.toFixed(3)}</TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">{buyDollarPrice.toFixed(3)}</TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {config.tokens[key].name}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {formatCurrencyNumber(tokenBalance[key].balance, 0)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {formatMoney(currentPortfolioValue[key], 0)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {sellDollarPrice.toFixed(3)}
+                    </TableCell>
+                    <TableCell className="txt-s" verticalAlign="middle">
+                      {buyDollarPrice.toFixed(3)}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -252,7 +264,9 @@ class EtherScanHoldingsTable extends Component {
             <TableBody>
               {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell className="txt-s" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s" verticalAlign="middle">
+                    {config.tokens[key].name}
+                  </TableCell>
                   <TableCell className="txt-s" verticalAlign="middle">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
