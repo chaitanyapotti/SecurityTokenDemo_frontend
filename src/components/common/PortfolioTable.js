@@ -21,7 +21,7 @@ class PortfolioTable extends PureComponent {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.keys(config.tokens).map(key => {
+          {Object.keys(currentHoldings).map(key => {
             const { tokenCount, totalInvested, currentNetPrice, changePercent, changeValue, commission } = currentHoldings[key] || {};
             return (
               <Table.Row key={key}>
