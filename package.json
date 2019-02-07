@@ -21,7 +21,8 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "web3": "^1.0.0-beta.37"
+    "web3": "^1.0.0-beta.37",
+    "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,8 +51,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "prettier": "^1.15.3",
-    "webpack-bundle-analyzer": "^3.0.3",
-    "redux-devtools-extension": "^2.13.8"
+    "webpack-bundle-analyzer": "^3.0.3"
   },
   "engines": {
     "node": "10.x"

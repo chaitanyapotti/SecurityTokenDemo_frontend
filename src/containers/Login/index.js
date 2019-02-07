@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import {
+  Button,
+  Avatar,
+  CssBaseline,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  Input,
+  InputLabel,
+  Paper,
+  Typography,
+  withStyles
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import withStyles from "@material-ui/core/styles/withStyles";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 
 const styles = theme => ({
@@ -45,7 +46,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit
   },
   submit: {
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 3,
+    background: "#fa9220"
   }
 });
 
@@ -119,7 +121,7 @@ class Login extends Component {
                 {errors.password && <div>{errors.password}</div>}
               </FormControl>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Button onClick={this.onSubmitClick} fullWidth variant="contained" color="primary" className={classes.submit}>
+              <Button onClick={this.onSubmitClick} fullWidth variant="contained" color="#fa9220" className={classes.submit}>
                 Sign in
               </Button>
             </form>
