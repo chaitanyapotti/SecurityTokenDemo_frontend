@@ -16,7 +16,7 @@ class AutomatedReserveTable extends Component {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
-    modifyRatesModalOpen: false,
+    // modifyRatesModalOpen: false,
     depositTokenInput: "",
     withdrawTokenInput: "",
     token: "",
@@ -26,9 +26,9 @@ class AutomatedReserveTable extends Component {
 
   handleDepositTokenModalOpen = () => this.setState({ depositTokenModalOpen: true });
 
-  handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
+  // handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
 
-  handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, modifyBuyPrice: "", modifySellPrice: "" });
+  // handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, modifyBuyPrice: "", modifySellPrice: "" });
 
   handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false, depositTokenInput: "" });
 
@@ -36,7 +36,7 @@ class AutomatedReserveTable extends Component {
 
   handleWithdrawTokenModalClose = () => this.setState({ withdrawTokenModalOpen: false, withdrawTokenInput: "" });
 
-  onModifyRatesClick = key => this.setState({ modifyRatesModalOpen: true, token: key });
+  // onModifyRatesClick = key => this.setState({ modifyRatesModalOpen: true, token: key });
 
   onDepositClick = key => this.setState({ depositTokenModalOpen: true, token: key });
 
