@@ -5,7 +5,7 @@ module.exports = {
   // api: "http://localhost:2020",
   tokens: {
     RIV: { address: "0xbc803eC37C23C49feca2a65eae88d674e8242F00", price: "10", name: "RIV-A", reserveType: "REGULAR" },
-    LMD: { address: "0x9fa1041e8E231D826ee31Ca0DB379dAbF835Ec61", price: "1", name: "LMD-B" },
+    LMD: { address: "0x9fa1041e8E231D826ee31Ca0DB379dAbF835Ec61", price: "1", name: "LMD-B", reserveType: "REGULAR" },
     MANA: { address: "0x0F8BBf584Ad0bF63a834A466025098926eA23608", price: "1", name: "LMD-C", reserveType: "AUTOMATED" },
     SNT: { address: "0x46F5dC92B06E7e928a25B635973a5558Dc2d22fA", price: "10", name: "SNT-A", reserveType: "LIT" }
   },

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Table } from "semantic-ui-react";
+import { Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
@@ -34,10 +34,12 @@ class MarketMakerDashboard extends Component {
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
     this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress, reserveType });
     fetchUserBalance(reserveAddress);
-    fetchTokenBalance(reserveAddress);
+    fetchTokenBalance(reserveAddress, reserveType);
     Object.keys(config.tokens).forEach(x => {
-      fetchBuyRate(x, 0.1);
-      fetchSellRate(x, 10);
+      if (config.tokens[x].reserveType === reserveType) {
+        fetchBuyRate(x, 0.1);
+        fetchSellRate(x, 10);
+      }
     });
   }
 
@@ -178,22 +180,6 @@ class MarketMakerDashboard extends Component {
               </Col>
             </Row>
           </CUICard>
-          {/* <CUICard>
-          <Row>
-            <Col lg={8}>
-              <span className="txt-m text--primary push--bottom">
-                Select Token :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Token" options={tokenOptions} />
-              </span>
-            </Col>
-            <Col lg={4} />
-          </Row>
-          {dropDownSelect ? (
-            <Row>
-              <Col />
-            </Row>
-          ) : null}
-        </CUICard> */}
 
           <EtherScanHoldingsTable
             tokenBalance={tokenBalance[reserveAddress]}
