@@ -18,23 +18,27 @@ class TransactionHistory extends PureComponent {
         </Table.Header>
         <Table.Body>
           {transactionHistory[dropDownSelect].map(item => {
-            const token_name = config.tokens[Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address)].name;
-            const { token_count, transaction_hash, transaction_type } = item || {};
-            const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
-            return (
-              <Table.Row key={transaction_hash}>
-                <Table.Cell>{token_name}</Table.Cell>
-                <Table.Cell>{transaction_type}</Table.Cell>
-                <Table.Cell>{significantDigits(token_count)}</Table.Cell>
-                <Table.Cell>
-                  <span>
-                    <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
-                      View on Blockchain
-                    </a>
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            );
+            const token = Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address);
+            if (token) {
+              const token_name = token ? config.tokens[token].name : "";
+              const { token_count, transaction_hash, transaction_type } = item || {};
+              const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
+              return (
+                <Table.Row key={transaction_hash}>
+                  <Table.Cell>{token_name}</Table.Cell>
+                  <Table.Cell>{transaction_type}</Table.Cell>
+                  <Table.Cell>{significantDigits(token_count)}</Table.Cell>
+                  <Table.Cell>
+                    <span>
+                      <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
+                        View on Blockchain
+                      </a>
+                    </span>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            }
+            return null;
           })}
         </Table.Body>
       </Table>

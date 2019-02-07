@@ -27,6 +27,7 @@ export const getTokenBalance = publicAddress => dispatch => {
         .then(res => {
           if (res.status === 200) {
             const { data } = res.data;
+            console.log(data);
             dispatch({
               type: actionTypes.GET_TOKEN_BALANCE,
               payload: { token, data, user: publicAddress }

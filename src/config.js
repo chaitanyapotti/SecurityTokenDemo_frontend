@@ -4,13 +4,12 @@ module.exports = {
   api: "https://api-securitytoken.herokuapp.com",
   // api: "http://localhost:2020",
   tokens: {
-    RIV: { address: "0x42692adF9155525815A2C3097424CBcf72bE14c5", price: "10", name: "RIV-A" },
-    LMD: { address: "0x4EB53d9F7D9061A15D0eCBeA42d85571E34689e0", price: "1", name: "LMD-B" }
+    RIV: { address: "0xbc803eC37C23C49feca2a65eae88d674e8242F00", price: "10", name: "RIV-A" },
+    LMD: { address: "0x9fa1041e8E231D826ee31Ca0DB379dAbF835Ec61", price: "1", name: "LMD-B" }
   },
-  KNC: "0xdea23beaEEcF968EB987ce9c318683DA5FD943bE",
   ETH: "0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-  KyberNetworkProxy: "0x6624d80FC06169FAbeaa8c534693cc6bcd7513cc",
+  KyberNetworkProxy: "0xd1C404ff23b0B76F9520ef7730a2d0A4Abd3767d",
   owner: "0x43CE12056AA1E8372ab4aBF0C0cC658D2d41077f",
-  ConversionRates: "0xCf1c95803997cc1512931138e57ad4aC7F02C246",
+  ConversionRates: "0x4D99dCa452b1babdfDAC055F484e0586783aC29C",
   withdrawAddress: "0xfEF8a9dB4a79A343A0b9728943C04e712D5C56Ed"
 };

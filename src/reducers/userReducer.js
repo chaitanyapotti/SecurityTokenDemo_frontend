@@ -40,6 +40,8 @@ export default function(state = INITIAL_STATE, action) {
     }
     case actionTypes.GET_TOKEN_BALANCE: {
       const { token, data, user } = action.payload || {};
+
+      console.log(token, data, user);
       const balance = formatFromWei(data, 3);
       const dollarValue = parseFloat(balance) * config.tokens[token].price;
       currentTokenBalances[user] = currentTokenBalances[user] ? currentTokenBalances[user] : {};

@@ -28,7 +28,7 @@ export const getPortfolioSelector = createSelector(
         }
       }
     }
-
+    console.log(portfolio);
     return portfolio;
   }
 );

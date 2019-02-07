@@ -15,6 +15,7 @@ class HoldingsTable extends PureComponent {
             <Table.HeaderCell>Invested Value($)</Table.HeaderCell>
             <Table.HeaderCell>Current Value($)</Table.HeaderCell>
             <Table.HeaderCell>Change</Table.HeaderCell>
+            <Table.HeaderCell>Price</Table.HeaderCell>
             <Table.HeaderCell>EtherScan</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -25,13 +26,13 @@ class HoldingsTable extends PureComponent {
               <Table.Cell>{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(tokenBalance[key].dollarValue, 0)}</Table.Cell>
               <Table.Cell>{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-              <Table.Cell>{significantDigits(tokenBalance[key].dollarValue / tokenBalance[key].balance || 0)}</Table.Cell>
               <Table.Cell>
                 {`+${formatMoney(currentPortfolioValue[key] - tokenBalance[key].dollarValue, 0)}(+${Math.round(
                   ((currentPortfolioValue[key] - tokenBalance[key].dollarValue) * 100) / tokenBalance[key].dollarValue,
                   2
                 )}%)`}
               </Table.Cell>
+              <Table.Cell>{formatMoney(currentPortfolioValue[key] / tokenBalance[key].balance || 0, 2)}</Table.Cell>
               <Table.Cell>
                 <span>
                   <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
