@@ -400,7 +400,6 @@ export const qtyStepSuccess = receipt => ({
 export const setQtyStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
   const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
   const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
-  console.log(buyx, sellx);
   dispatch(isSetQtyStepButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)
@@ -475,10 +474,8 @@ export const imbalanceStepSuccess = receipt => ({
 });
 
 export const setImbalanceStepFunction = (token, xBuy, yBuy, xSell, ySell, userLocalPublicAddress) => dispatch => {
-  console.log(token, xBuy, yBuy, xSell, ySell);
   const buyx = xBuy.map(item => web3.utils.toWei(item.toString()));
   const sellx = xSell.map(item => web3.utils.toWei(item.toString()));
-  console.log(buyx, sellx);
   dispatch(isSetImbalanceStepButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=ConversionRates`)

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Table } from "semantic-ui-react";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits } from "../../helpers/numberHelpers";
+import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import config from "../../config";
 
 class HoldingsTable extends PureComponent {

@@ -11,7 +11,6 @@ export const getBuyRate = (token, etherAmount) => dispatch => {
     .then(res => {
       if (res.status === 200) {
         const { data } = res.data;
-        console.log("buy", token, data);
         dispatch({
           type: actionTypes.FETCHED_BUY_RATE,
           payload: { token, data }
@@ -27,7 +26,6 @@ export const getSellRate = (token, tokenAmount) => dispatch => {
     .then(res => {
       if (res.status === 200) {
         const { data } = res.data;
-        console.log("sell", token, data);
         dispatch({
           type: actionTypes.FETCHED_SELL_RATE,
           payload: { token, data }
@@ -56,7 +54,6 @@ const postTransactionApi = (tokenAddress, transactionType, transactionHash, bdAd
     tokenCount: special ? web3.utils.fromWei(tokenCount.toString()) : tokenCount.toString(),
     investorAddress
   };
-  console.log("posting");
   axios
     .post(`${config.api}/api/transaction`, body)
     .then(response => dispatch(getTransactionHistory(bdAddress, investorAddress))) // maybe update backend to send response as this

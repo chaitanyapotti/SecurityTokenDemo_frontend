@@ -85,8 +85,6 @@ class MarketMakerDashboard extends Component {
     const { setCompactData: modifyRatesAction } = this.props;
     const { userLocalPublicAddress, buyPriceData, sellPriceData } = this.props || {};
     const { buyPercent, sellPercent } = this.state;
-    console.log(Object.keys(config.tokens).map(i => calculateInversePercentChange(buyPercent[i], buyPriceData[i].price)), "buy");
-    console.log(Object.keys(config.tokens).map(i => calculateInversePercentChange(sellPercent[i], sellPriceData[i].price)), "sell");
     modifyRatesAction(
       Object.keys(config.tokens).map(i => calculateInversePercentChange(buyPercent[i], buyPriceData[i].price)),
       Object.keys(config.tokens).map(i => calculateInversePercentChange(sellPercent[i], sellPriceData[i].price)),
