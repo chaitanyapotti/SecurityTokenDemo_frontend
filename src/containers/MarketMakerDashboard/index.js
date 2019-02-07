@@ -9,7 +9,7 @@ import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
-import EtherScanHoldingsTable from "./EtherScanHoldingsTable";
+import RegularReserveTable from "./RegularReserveTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
@@ -102,8 +102,7 @@ class MarketMakerDashboard extends Component {
       withdrawEtherButtonSpinning,
       withdrawEtherButtonTransactionHash
       // depositEtherSuccess,
-      // withdrawEtherSuccess,
-      // modifyRatesSuccess
+      // withdrawEtherSuccess
     } = this.props || {};
     const {
       first_name,
@@ -180,13 +179,14 @@ class MarketMakerDashboard extends Component {
               </Col>
             </Row>
           </CUICard>
-
-          <EtherScanHoldingsTable
-            tokenBalance={tokenBalance[reserveAddress]}
-            currentPortfolioValue={currentPortfolioValue[reserveAddress]}
-            isOperator={isOperator}
-            isOwner={isOwner}
-          />
+          {reserveType === "REGULAR" ? (
+            <RegularReserveTable
+              tokenBalance={tokenBalance[reserveAddress]}
+              currentPortfolioValue={currentPortfolioValue[reserveAddress]}
+              isOperator={isOperator}
+              isOwner={isOwner}
+            />
+          ) : null}
 
           <CUICard>
             <Row center="lg">

@@ -14,7 +14,7 @@ const BioTable = props => {
           <Table.HeaderCell>Account</Table.HeaderCell>
           <Table.HeaderCell>Pro Status</Table.HeaderCell>
           <Table.HeaderCell>Created At</Table.HeaderCell>
-          <Table.HeaderCell>Active</Table.HeaderCell>
+          <Table.HeaderCell>Status</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>

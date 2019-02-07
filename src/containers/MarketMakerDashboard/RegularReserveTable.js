@@ -11,7 +11,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
 
-class EtherScanHoldingsTable extends Component {
+class RegularReserveTable extends Component {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
@@ -573,7 +573,7 @@ const mapStateToProps = state => {
   };
 };
 
-EtherScanHoldingsTable.propTypes = {
+RegularReserveTable.propTypes = {
   depositToken: Proptypes.func.isRequired,
   withdrawAction: Proptypes.func.isRequired,
   setQtyStepFunction: Proptypes.func.isRequired,
@@ -584,4 +584,4 @@ EtherScanHoldingsTable.propTypes = {
 export default connect(
   mapStateToProps,
   { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction }
-)(EtherScanHoldingsTable);
+)(RegularReserveTable);
