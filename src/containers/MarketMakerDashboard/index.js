@@ -12,7 +12,7 @@ import TokenChart from "../../components/common/TokenChart";
 import EtherScanHoldingsTable from "./EtherScanHoldingsTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { formatMoney, getEtherScanAddressLink, calculateInversePercentChange } from "../../helpers/numberHelpers";
+import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import Navbar from "../Navbar";
 import BioTable from "../../components/common/BioTable";
 import AlertModal from "../../components/common/AlertModal";
@@ -28,9 +28,11 @@ class MarketMakerDashboard extends Component {
       getBuyRate: fetchBuyRate,
       getSellRate: fetchSellRate
     } = this.props;
-    const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress, reserveType } =
+      JSON.parse(localStorage.getItem("user_data")) || {};
+    console.log(reserveType);
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
-    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress });
+    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress, reserveType });
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress);
     Object.keys(config.tokens).forEach(x => {
@@ -42,21 +44,13 @@ class MarketMakerDashboard extends Component {
   state = {
     depositEtherModalOpen: false,
     withdrawEtherModalOpen: false,
-    modifyRatesModalOpen: false,
     depositEtherInput: "",
-    withdrawEtherInput: "",
-    buyPercent: { RIV: "", LMD: "" },
-    sellPercent: { RIV: "", LMD: "" }
+    withdrawEtherInput: ""
   };
 
   handleDepositEtherModalOpen = () => this.setState({ depositEtherModalOpen: true });
 
   handleWithdrawEtherModalOpen = () => this.setState({ withdrawEtherModalOpen: true });
-
-  handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
-
-  handleModifyRatesModalClose = () =>
-    this.setState({ modifyRatesModalOpen: false, buyPercent: { RIV: "", LMD: "" }, sellPercent: { RIV: "", LMD: "" } });
 
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
@@ -79,17 +73,6 @@ class MarketMakerDashboard extends Component {
 
   onWithdrawEtherClick = e => {
     this.setState({ withdrawEtherModalOpen: true });
-  };
-
-  onModifyClick = e => {
-    const { setCompactData: modifyRatesAction } = this.props;
-    const { userLocalPublicAddress, buyPriceData, sellPriceData } = this.props || {};
-    const { buyPercent, sellPercent } = this.state;
-    modifyRatesAction(
-      Object.keys(config.tokens).map(i => calculateInversePercentChange(buyPercent[i], buyPriceData[i].price)),
-      Object.keys(config.tokens).map(i => calculateInversePercentChange(sellPercent[i], sellPriceData[i].price)),
-      userLocalPublicAddress
-    );
   };
 
   depositClick = e => {
@@ -115,11 +98,9 @@ class MarketMakerDashboard extends Component {
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
       withdrawEtherButtonSpinning,
-      withdrawEtherButtonTransactionHash,
+      withdrawEtherButtonTransactionHash
       // depositEtherSuccess,
       // withdrawEtherSuccess,
-      modifyRatesButtonSpinning,
-      modifyRatesTransactionHash
       // modifyRatesSuccess
     } = this.props || {};
     const {
@@ -136,10 +117,8 @@ class MarketMakerDashboard extends Component {
       withdrawEtherInput,
       depositEtherModalOpen,
       withdrawEtherModalOpen,
-      modifyRatesModalOpen,
       reserveAddress,
-      buyPercent,
-      sellPercent
+      reserveType
     } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     const isOwner = userLocalPublicAddress === config.owner;
@@ -276,50 +255,6 @@ class MarketMakerDashboard extends Component {
               </Row>
             </Grid>
           </AlertModal>
-          <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
-            <Grid>
-              <Table celled>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Token</Table.HeaderCell>
-                    <Table.HeaderCell>Bid (%)</Table.HeaderCell>
-                    <Table.HeaderCell>Ask (%)</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {Object.keys(config.tokens).map(key => (
-                    <Table.Row key={key}>
-                      <Table.Cell>{key}</Table.Cell>
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Sell % Change"
-                          value={sellPercent[key]}
-                          onChange={e => this.setState({ sellPercent: { ...sellPercent, [key]: e.target.value } })}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Buy % Change"
-                          value={buyPercent[key]}
-                          onChange={e => this.setState({ buyPercent: { ...buyPercent, [key]: e.target.value } })}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-              <Row className="push--bottom">
-                <Col lgOffset={9} lg={3}>
-                  <Transaction
-                    buttonText="Modify"
-                    onClick={this.onModifyClick}
-                    txHash={modifyRatesTransactionHash}
-                    buttonSpinning={modifyRatesButtonSpinning}
-                  />
-                </Col>
-              </Row>
-            </Grid>
-          </AlertModal>
         </Grid>
       );
     }
@@ -334,7 +269,6 @@ MarketMakerDashboard.propTypes = {
   getUserBalanceAction: Proptypes.func.isRequired,
   depositEther: Proptypes.func.isRequired,
   withdrawEther: Proptypes.func.isRequired,
-  setCompactData: Proptypes.func.isRequired,
   getBuyRate: Proptypes.func.isRequired,
   getSellRate: Proptypes.func.isRequired
 };
