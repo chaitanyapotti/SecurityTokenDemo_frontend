@@ -10,6 +10,7 @@ import { getBuyRate, getSellRate } from "../../actions/tradeActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import RegularReserveTable from "./RegularReserveTable";
+import AutomatedReserveTable from "./AutomatedReserveTable";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
@@ -185,6 +186,15 @@ class MarketMakerDashboard extends Component {
               currentPortfolioValue={currentPortfolioValue[reserveAddress]}
               isOperator={isOperator}
               isOwner={isOwner}
+              reserveType={reserveType}
+            />
+          ) : reserveType === "AUTOMATED" ? (
+            <AutomatedReserveTable
+              tokenBalance={tokenBalance[reserveAddress]}
+              currentPortfolioValue={currentPortfolioValue[reserveAddress]}
+              isOperator={isOperator}
+              isOwner={isOwner}
+              reserveType={reserveType}
             />
           ) : null}
 

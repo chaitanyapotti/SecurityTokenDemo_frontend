@@ -161,7 +161,7 @@ export const transferTokenSuccess = receipt => ({
   type: actionTypes.TRANSFER_TOKEN_SUCCESS
 });
 
-export const depositToken = (quantity, token, reserveAddress, userLocalPublicAddress) => async dispatch => {
+export const depositToken = (quantity, token, reserveAddress, userLocalPublicAddress, reserveType) => async dispatch => {
   dispatch(isTransferTokenButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=OmiseGo`)
@@ -188,7 +188,7 @@ export const depositToken = (quantity, token, reserveAddress, userLocalPublicAdd
                 transactionHash,
                 () => {
                   dispatch(transferTokenSuccess(true));
-                  dispatch(getTokenBalance(reserveAddress));
+                  dispatch(getTokenBalance(reserveAddress, reserveType));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.TRANSFER_TOKEN_TRANSACTION_HASH_RECEIVED
@@ -237,7 +237,7 @@ export const withdrawSuccess = receipt => ({
 });
 
 // withdraws token
-export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAddress) => dispatch => {
+export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAddress, reserveType) => dispatch => {
   dispatch(isWithdrawButtonSpinning(true));
   axios
     .get(`${config.api}/api/contractdata?name=KyberReserve`)
@@ -264,7 +264,7 @@ export const withdrawAction = (token, amount, userLocalPublicAddress, reserveAdd
                 transactionHash,
                 () => {
                   dispatch(withdrawSuccess(true));
-                  dispatch(getTokenBalance(reserveAddress));
+                  dispatch(getTokenBalance(reserveAddress, reserveType));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.WITHDRAW_BUTTON_TRANSACTION_HASH_RECEIVED

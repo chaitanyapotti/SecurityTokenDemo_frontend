@@ -3,13 +3,14 @@ import { Table, Input, Divider } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
+import { getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
+import TokenPriceTable from "../../components/common/TokenPriceTable";
 
 class RegularReserveTable extends Component {
   state = {
@@ -87,20 +88,20 @@ class RegularReserveTable extends Component {
 
   depositTokenClick = e => {
     const { depositToken: doDepositToken } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
+    const { userLocalPublicAddress, reserveType } = this.props || {};
     const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { token, depositTokenInput } = this.state;
 
-    doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress);
+    doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress, reserveType);
   };
 
   withdrawTokenClick = e => {
     const { withdrawAction: withdrawToken } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
+    const { userLocalPublicAddress, reserveType } = this.props || {};
     const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { token, withdrawTokenInput } = this.state;
 
-    withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress);
+    withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress, reserveType);
   };
 
   updateBuyArray = (e, i, obj) => {
@@ -205,34 +206,12 @@ class RegularReserveTable extends Component {
     } = this.state;
     return (
       <div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Value($)</Table.HeaderCell>
-              <Table.HeaderCell>Token Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Bid Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Ask Price($)</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {Object.keys(tokenBalance).map(key => {
-              const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
-              const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
-              return (
-                <Table.Row key={key}>
-                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{sellDollarPrice.toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+        <TokenPriceTable
+          buyPriceData={buyPriceData}
+          sellPriceData={sellPriceData}
+          currentPortfolioValue={currentPortfolioValue}
+          tokenBalance={tokenBalance}
+        />
         <Table celled>
           <Table.Header>
             <Table.Row>
