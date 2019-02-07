@@ -22,7 +22,7 @@
     "reselect": "^4.0.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.85.0",
-    "web3": "^1.0.0-beta.37",
+    "web3": "1.0.0-beta.37",
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
