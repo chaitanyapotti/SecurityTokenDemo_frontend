@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.9.1",
+    "@material-ui/core": "^3.9.2",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "echarts": "^4.2.0-rc.2",
@@ -11,8 +11,8 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "react-flexbox-grid": "^2.1.2",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
@@ -21,8 +21,9 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.84.0",
-    "web3": "^1.0.0-beta.37"
+    "semantic-ui-react": "^0.85.0",
+    "web3": "^1.0.0-beta.37",
+    "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,21 +39,20 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-react-app": "^3.0.6",
-    "eslint-plugin-flowtype": "^3.2.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-flowtype": "^3.2.1",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.2",
-    "eslint-plugin-mocha": "^5.2.0",
-    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-mocha": "^5.2.1",
+    "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "prettier": "^1.15.3",
-    "webpack-bundle-analyzer": "^3.0.3",
-    "redux-devtools-extension": "^2.13.8"
+    "prettier": "^1.16.4",
+    "webpack-bundle-analyzer": "^3.0.3"
   },
   "engines": {
     "node": "10.x"
