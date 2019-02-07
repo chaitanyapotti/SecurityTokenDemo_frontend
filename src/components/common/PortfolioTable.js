@@ -11,14 +11,14 @@ class PortfolioTable extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Token Name</TableCell>
-              <TableCell>Token Count</TableCell>
-              <TableCell>Invested Value($)</TableCell>
-              <TableCell>Current Value($)</TableCell>
-              <TableCell>Token Price($)</TableCell>
-              <TableCell>Change</TableCell>
-              <TableCell>Commission</TableCell>
-              <TableCell>EtherScan</TableCell>
+              <TableCell className="txt-s">Token Name</TableCell>
+              <TableCell className="txt-s">Token Count</TableCell>
+              <TableCell className="txt-s">Invested Value($)</TableCell>
+              <TableCell className="txt-s">Current Value($)</TableCell>
+              <TableCell className="txt-s">Token Price($)</TableCell>
+              <TableCell className="txt-s">Change</TableCell>
+              <TableCell className="txt-s">Commission</TableCell>
+              <TableCell className="txt-s">EtherScan</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -26,14 +26,14 @@ class PortfolioTable extends PureComponent {
               const { tokenCount, totalInvested, currentNetPrice, changePercent, changeValue, commission } = currentHoldings[key] || {};
               return (
                 <TableRow key={key}>
-                  <TableCell>{config.tokens[key].name}</TableCell>
-                  <TableCell>{formatCurrencyNumber(tokenCount || 0, 0)}</TableCell>
-                  <TableCell>{formatMoney(totalInvested || 0, 0)}</TableCell>
-                  <TableCell>{formatMoney(currentNetPrice || 0, 0)}</TableCell>
-                  <TableCell>{significantDigits(currentNetPrice / tokenCount || 0)}</TableCell>
-                  <TableCell>{`+${formatMoney(changeValue || 0, 0)}(+${Math.round(changePercent || 0, 2)}%)`}</TableCell>
-                  <TableCell>{formatMoney(commission || 0, 0)}</TableCell>
-                  <TableCell>
+                  <TableCell className="txt-s">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s">{formatCurrencyNumber(tokenCount || 0, 0)}</TableCell>
+                  <TableCell className="txt-s">{formatMoney(totalInvested || 0, 0)}</TableCell>
+                  <TableCell className="txt-s">{formatMoney(currentNetPrice || 0, 0)}</TableCell>
+                  <TableCell className="txt-s">{significantDigits(currentNetPrice / tokenCount || 0)}</TableCell>
+                  <TableCell className="txt-s">{`+${formatMoney(changeValue || 0, 0)}(+${Math.round(changePercent || 0, 2)}%)`}</TableCell>
+                  <TableCell className="txt-s">{formatMoney(commission || 0, 0)}</TableCell>
+                  <TableCell className="txt-s">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain

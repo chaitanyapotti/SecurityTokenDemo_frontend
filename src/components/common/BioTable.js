@@ -1,40 +1,42 @@
 import React from "react";
-import { Table } from "semantic-ui-react";
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@material-ui/core";
 
 const BioTable = props => {
   const { first_name, email, phone, id, role, date, status } = props || {};
 
   return (
-    <Table celled>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Email</Table.HeaderCell>
-          <Table.HeaderCell>Phone</Table.HeaderCell>
-          <Table.HeaderCell>Account</Table.HeaderCell>
-          <Table.HeaderCell>Pro Status</Table.HeaderCell>
-          <Table.HeaderCell>Created At</Table.HeaderCell>
-          <Table.HeaderCell>Active</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        <Table.Row>
-          <Table.Cell>{first_name}</Table.Cell>
-          <Table.Cell>{email}</Table.Cell>
-          <Table.Cell>{phone}</Table.Cell>
-          <Table.Cell>{id}</Table.Cell>
-          {role === "INVESTOR" ? (
-            <Table.Cell>Pro-Investor</Table.Cell>
-          ) : role === "BROKER_DEALER" ? (
-            <Table.Cell>Broker Dealer</Table.Cell>
-          ) : (
-            <Table.Cell>Market Maker</Table.Cell>
-          )}
-          <Table.Cell>{date.slice(0, 10)}</Table.Cell>
-          <Table.Cell>{status}</Table.Cell>
-        </Table.Row>
-      </Table.Body>
-    </Table>
+    <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell className="txt-s">Name</TableCell>
+            <TableCell className="txt-s">Email</TableCell>
+            <TableCell className="txt-s">Phone</TableCell>
+            <TableCell className="txt-s">Account</TableCell>
+            <TableCell className="txt-s">Pro Status</TableCell>
+            <TableCell className="txt-s">Created At</TableCell>
+            <TableCell className="txt-s">Active</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell className="txt-s">{first_name}</TableCell>
+            <TableCell className="txt-s">{email}</TableCell>
+            <TableCell className="txt-s">{phone}</TableCell>
+            <TableCell className="txt-s">{id}</TableCell>
+            {role === "INVESTOR" ? (
+              <TableCell className="txt-s">Pro-Investor</TableCell>
+            ) : role === "BROKER_DEALER" ? (
+              <TableCell className="txt-s">Broker Dealer</TableCell>
+            ) : (
+              <TableCell className="txt-s">Market Maker</TableCell>
+            )}
+            <TableCell className="txt-s">{date.slice(0, 10)}</TableCell>
+            <TableCell className="txt-s">{status}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Paper>
   );
 };
 

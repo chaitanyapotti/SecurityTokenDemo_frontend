@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
@@ -15,6 +14,7 @@ import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector, getTokenPortfolioSelector } from "../../selectors";
 import PortfolioTable from "../../components/common/PortfolioTable";
 import TransactionHistory from "../../components/common/TransactionHistory";
+import DropdownComponent from "../../components/common/DropdownComponent";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
@@ -36,12 +36,14 @@ class BrokerDealerDashboard extends Component {
   }
 
   onDropdownChange = (e, d) => {
+    console.log("ondropdown change", e.target.value, d);
     const { onDropdownChange: dropDownChange } = this.props;
-    dropDownChange(d.value);
+    dropDownChange(e.target.value);
   };
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
+    console.log("props in broker dealer", this.props);
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
@@ -55,10 +57,10 @@ class BrokerDealerDashboard extends Component {
         <PortfolioTable currentHoldings={currentHoldings} />
         <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
           <Row>
-            <Col lg={8}>
+            <Col lg={6}>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
+                <DropdownComponent onChange={this.onDropdownChange} value={dropDownSelect} label="Select Investor" data={tokenOptions} />
               </div>
               {dropDownSelect ? (
                 <div>
