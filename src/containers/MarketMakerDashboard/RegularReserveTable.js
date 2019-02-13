@@ -4,15 +4,16 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Divider, TextF
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
-import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
+import { getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
+import TokenPriceTable from "../../components/common/TokenPriceTable";
 
-class EtherScanHoldingsTable extends Component {
+class RegularReserveTable extends Component {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
@@ -88,20 +89,20 @@ class EtherScanHoldingsTable extends Component {
 
   depositTokenClick = e => {
     const { depositToken: doDepositToken } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
+    const { userLocalPublicAddress, reserveType } = this.props || {};
     const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { token, depositTokenInput } = this.state;
 
-    doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress);
+    doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress, reserveType);
   };
 
   withdrawTokenClick = e => {
     const { withdrawAction: withdrawToken } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
+    const { userLocalPublicAddress, reserveType } = this.props || {};
     const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { token, withdrawTokenInput } = this.state;
 
-    withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress);
+    withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress, reserveType);
   };
 
   updateBuyArray = (e, i, obj) => {
@@ -206,138 +207,50 @@ class EtherScanHoldingsTable extends Component {
     } = this.state;
     return (
       <div>
+        <TokenPriceTable
+          buyPriceData={buyPriceData}
+          sellPriceData={sellPriceData}
+          currentPortfolioValue={currentPortfolioValue}
+          tokenBalance={tokenBalance}
+        />
         <Paper style={{ marginBottom: "20px" }} className="card-brdr">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Value($)</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Price($)</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Bid Price($)</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Ask Price($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.keys(tokenBalance).map(key => {
-                const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
-                const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
-                return (
-                  <TableRow key={key}>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {config.tokens[key].name}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {formatCurrencyNumber(tokenBalance[key].balance, 0)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {formatMoney(currentPortfolioValue[key], 0)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {sellDollarPrice.toFixed(3)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {buyDollarPrice.toFixed(3)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
-        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.keys(tokenBalance).map(key => (
-                <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {config.tokens[key].name}
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    <CustomToolTip disabled={!isOwner} title="You are not the owner">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOwner}
-                          onClick={() => this.onDepositClick(key)}
-                        >
-                          Deposit
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    <CustomToolTip disabled={!isOwner} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOwner}
-                          onClick={() => this.onWithdrawClick(key)}
-                        >
-                          Withdraw
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onModifyRatesClick(key)}
-                        >
-                          Modify Prices
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onTradeClick(key)}
-                        >
-                          Modify Step Price
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onModifyImbalanceRatesClick(key)}
-                        >
-                          Modify Imbalance Prices
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.keys(tokenBalance).map(key => (
+              <TableRow key={key}>
+                <TableCell className="txt-s table-text-pad" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
+                    <span>
+                      <LoadingButton
+                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                        disabled={!isOwner}
+                        onClick={() => this.onDepositClick(key)}
+                      >
+                        Deposit
+                      </LoadingButton>
+                    </span>
+                  </CustomToolTip>
+                </TableCell>
+                <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <CustomToolTip disabled={!isOwner} title="You are not the operator">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain
                       </a>
                     </span>
+                    </CustomToolTip>
                   </TableCell>
                 </TableRow>
               ))}
@@ -602,7 +515,7 @@ const mapStateToProps = state => {
   };
 };
 
-EtherScanHoldingsTable.propTypes = {
+RegularReserveTable.propTypes = {
   depositToken: Proptypes.func.isRequired,
   withdrawAction: Proptypes.func.isRequired,
   setQtyStepFunction: Proptypes.func.isRequired,
@@ -613,4 +526,4 @@ EtherScanHoldingsTable.propTypes = {
 export default connect(
   mapStateToProps,
   { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction }
-)(EtherScanHoldingsTable);
+)(RegularReserveTable);

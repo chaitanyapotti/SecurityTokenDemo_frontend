@@ -13,23 +13,21 @@ class Transaction extends PureComponent {
           <div className="hli">
             <CustomToolTip title="Trade not relevant now" id="btn-disabled" disabled>
               <span>
-                <LoadingButton style={{ padding: "0 40px" }} disabled>
-                  {buttonText}
-                </LoadingButton>
+                <LoadingButton disabled>{buttonText}</LoadingButton>
               </span>
             </CustomToolTip>
           </div>
         ) : txHash !== "" ? (
           <div className="hli">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <LoadingButton type="pending" style={{ padding: "0 40px" }} onClick={() => console.log("Sent to etherscan")}>
+              <LoadingButton type="pending" onClick={() => console.log("Sent to etherscan")}>
                 Status
               </LoadingButton>
             </a>
           </div>
         ) : (
           <span className="hli">
-            <LoadingButton style={{ padding: "0 40px" }} onClick={onClick} loading={buttonSpinning}>
+            <LoadingButton onClick={onClick} loading={buttonSpinning}>
               {buttonText}
             </LoadingButton>
           </span>

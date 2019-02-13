@@ -19,23 +19,27 @@ class TransactionHistory extends PureComponent {
           </TableHead>
           <TableBody>
             {transactionHistory[dropDownSelect].map(item => {
-              const token_name = config.tokens[Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address)].name;
-              const { token_count, transaction_hash, transaction_type } = item || {};
-              const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
-              return (
-                <TableRow key={transaction_hash}>
-                  <TableCell className="txt-s table-text-pad">{token_name}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{transaction_type}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{significantDigits(token_count)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">
-                    <span>
-                      <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
-                        View on Blockchain
-                      </a>
-                    </span>
-                  </TableCell>
-                </TableRow>
-              );
+              const token = Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address);
+              if (token) {
+                const token_name = token ? config.tokens[token].name : "";
+                const { token_count, transaction_hash, transaction_type } = item || {};
+                const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
+                return (
+                  <TableRow key={transaction_hash}>
+                    <TableCell className="txt-s table-text-pad">{token_name}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{transaction_type}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{significantDigits(token_count)}</TableCell>
+                    <TableCell className="txt-s table-text-pad">
+                      <span>
+                        <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
+                          View on Blockchain
+                        </a>
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              }
+              return null;
             })}
           </TableBody>
         </Table>

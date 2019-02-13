@@ -126,7 +126,7 @@ class Login extends Component {
                 />
                 {errors.password && <div>{errors.password}</div>}
               </FormControl>
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+              {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
               <Button style={{ backgroundColor: '#ED8C0E'}} onClick={this.onSubmitClick} fullWidth variant="contained" color="primary" className={classes.submit}>
                 Sign in
               </Button>
