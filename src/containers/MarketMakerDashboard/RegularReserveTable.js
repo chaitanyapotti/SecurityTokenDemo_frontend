@@ -228,29 +228,79 @@ class RegularReserveTable extends Component {
           </TableHead>
           <TableBody>
             {Object.keys(tokenBalance).map(key => (
-              <TableRow key={key}>
-                <TableCell className="txt-s table-text-pad" verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOwner}
-                        onClick={() => this.onDepositClick(key)}
-                      >
-                        Deposit
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </TableCell>
-                <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the operator">
-                    <span>
-                      <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
-                        View on Blockchain
-                      </a>
-                    </span>
+                <TableRow key={key}>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <CustomToolTip disabled={!isOwner} title="You are not the owner">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOwner}
+                          onClick={() => this.onDepositClick(key)}
+                        >
+                          Deposit
+                        </LoadingButton>
+                      </span>
                     </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <CustomToolTip disabled={!isOwner} title="You are not the operator">
+                      <span>
+                      <LoadingButton
+                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOwner}
+                          onClick={() => this.onWithdrawClick(key)}
+                        >
+                          Withdraw
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onModifyRatesClick(key)}
+                        >
+                          Modify Prices
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onTradeClick(key)}
+                        >
+                          Modify Step Price
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onModifyImbalanceRatesClick(key)}
+                        >
+                          Modify Imbalance Prices
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
+                    <span>
+                        <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
+                          View on Blockchain
+                        </a>
+                      </span>
                   </TableCell>
                 </TableRow>
               ))}
