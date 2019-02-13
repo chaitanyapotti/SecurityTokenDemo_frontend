@@ -15,6 +15,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
+import { CUIModal, CUIModalActions, CUIModalContent } from "../../helpers/material-ui";
 
 const styles = theme => ({
   main: {
@@ -50,6 +51,10 @@ const styles = theme => ({
 });
 
 class Login extends Component {
+  // state = {
+  //   modalOpen: false
+  // };
+
   onUsernameOrEmailChange = e => {
     const { setUsernameOrEmailAction: setUsernameOrEmail } = this.props;
     setUsernameOrEmail(e.target.value);
@@ -80,6 +85,7 @@ class Login extends Component {
 
   render() {
     const { errors, usernameOrEmail, password, classes } = this.props || {};
+    const { modalOpen } = this.state || {};
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -119,12 +125,32 @@ class Login extends Component {
                 {errors.password && <div>{errors.password}</div>}
               </FormControl>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Button onClick={this.onSubmitClick} fullWidth variant="contained" color="primary" className={classes.submit}>
+              <Button style={{ backgroundColor: '#ED8C0E'}} onClick={this.onSubmitClick} fullWidth variant="contained" color="primary" className={classes.submit}>
                 Sign in
               </Button>
+              {/* <div className="text-center push--top">
+                Don't have an acccount? <a onClick={() => this.setState({ modalOpen: true })}>Sign Up</a>
+              </div> */}
             </form>
           </Paper>
         </main>
+        {/* <CUIModal open={modalOpen}>
+          <CUIModalContent>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Email</InputLabel>
+              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="email" type="email" id="email" />
+              {errors.password && <div>{errors.password}</div>}
+            </FormControl>
+          </CUIModalContent>
+          <CUIModalActions>
+            <Button variant="contained" color="primary">
+              Submit
+            </Button>
+            <Button onClick={() => this.setState({ modalOpen: false })} variant="contained" color="primary">
+              Cancel
+            </Button>
+          </CUIModalActions>
+        </CUIModal> */}
       </div>
     );
   }

@@ -11,10 +11,10 @@ class TransactionHistory extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="txt-s">Token Name</TableCell>
-              <TableCell className="txt-s">Transaction Type</TableCell>
-              <TableCell className="txt-s">Token Count</TableCell>
-              <TableCell className="txt-s">EtherScan</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Transaction Type</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
+              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">EtherScan</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -24,10 +24,10 @@ class TransactionHistory extends PureComponent {
               const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
               return (
                 <TableRow key={transaction_hash}>
-                  <TableCell className="txt-s">{token_name}</TableCell>
-                  <TableCell className="txt-s">{transaction_type}</TableCell>
-                  <TableCell className="txt-s">{significantDigits(token_count)}</TableCell>
-                  <TableCell className="txt-s">
+                  <TableCell className="txt-s table-text-pad">{token_name}</TableCell>
+                  <TableCell className="txt-s table-text-pad">{transaction_type}</TableCell>
+                  <TableCell className="txt-s table-text-pad">{significantDigits(token_count)}</TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <span>
                       <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
                         View on Blockchain

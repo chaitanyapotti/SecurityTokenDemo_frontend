@@ -140,14 +140,14 @@ class BuyHoldingsTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className="txt-s">Token Name</TableCell>
-                <TableCell className="txt-s">Token Count</TableCell>
-                <TableCell className="txt-s">Invested Value($)</TableCell>
-                <TableCell className="txt-s">Current Value($)</TableCell>
-                <TableCell className="txt-s">Token Price($)</TableCell>
-                <TableCell className="txt-s">Change</TableCell>
-                <TableCell className="txt-s">Buy</TableCell>
-                <TableCell className="txt-s">Sell</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Invested Value($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Current Value($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Price($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Change</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Buy</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Sell</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -155,28 +155,28 @@ class BuyHoldingsTable extends Component {
                 const { balance, dollarValue } = userTokenBalance[key] || {};
                 return (
                   <TableRow key={key}>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {config.tokens[key].name}
                     </TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {formatCurrencyNumber(balance, 0)}
                     </TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {formatMoney(dollarValue, 0)}
                     </TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {formatMoney(currentPortfolioValue[key], 0)}
                     </TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {significantDigits(currentPortfolioValue[key] / balance)}
                     </TableCell>
-                    <TableCell className="txt-s" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
                       {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                         ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
                         2
                       )}%)`}
                     </TableCell>
-                    <TableCell className="txt-s">
+                    <TableCell className="txt-s table-text-pad">
                       <CustomToolTip disabled={!isOperator} title="You are not the operator">
                         <span>
                           <LoadingButton
@@ -189,7 +189,7 @@ class BuyHoldingsTable extends Component {
                         </span>
                       </CustomToolTip>
                     </TableCell>
-                    <TableCell className="txt-s">
+                    <TableCell className="txt-s table-text-pad">
                       <CustomToolTip disabled={!isOperator} title="You are not the operator">
                         <span>
                           <LoadingButton

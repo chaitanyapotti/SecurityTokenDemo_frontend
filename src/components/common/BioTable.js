@@ -9,30 +9,30 @@ const BioTable = props => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell className="txt-s">Name</TableCell>
-            <TableCell className="txt-s">Email</TableCell>
-            <TableCell className="txt-s">Phone</TableCell>
-            <TableCell className="txt-s">Account</TableCell>
-            <TableCell className="txt-s">Pro Status</TableCell>
-            <TableCell className="txt-s">Created At</TableCell>
-            <TableCell className="txt-s">Active</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Name</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Email</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Phone</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Account</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Pro Status</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Created At</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Active</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell className="txt-s">{first_name}</TableCell>
-            <TableCell className="txt-s">{email}</TableCell>
-            <TableCell className="txt-s">{phone}</TableCell>
-            <TableCell className="txt-s">{id}</TableCell>
+            <TableCell className="txt-s table-text-pad">{first_name}</TableCell>
+            <TableCell className="txt-s table-text-pad">{email}</TableCell>
+            <TableCell className="txt-s table-text-pad">{phone}</TableCell>
+            <TableCell className="txt-s table-text-pad">{id}</TableCell>
             {role === "INVESTOR" ? (
-              <TableCell className="txt-s">Pro-Investor</TableCell>
+              <TableCell className="txt-s table-text-pad">Pro-Investor</TableCell>
             ) : role === "BROKER_DEALER" ? (
-              <TableCell className="txt-s">Broker Dealer</TableCell>
+              <TableCell className="txt-s table-text-pad">Broker Dealer</TableCell>
             ) : (
-              <TableCell className="txt-s">Market Maker</TableCell>
+              <TableCell className="txt-s table-text-pad">Market Maker</TableCell>
             )}
-            <TableCell className="txt-s">{date.slice(0, 10)}</TableCell>
-            <TableCell className="txt-s">{status}</TableCell>
+            <TableCell className="txt-s table-text-pad">{date.slice(0, 10)}</TableCell>
+            <TableCell className="txt-s table-text-pad">{status}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
