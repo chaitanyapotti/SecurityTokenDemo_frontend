@@ -265,7 +265,7 @@ button:focus {
 }
 
 .txt-s {
-  font-size: 14px !important;
+  font-size: 16px !important;
   line-height: 18px;
 }
 
@@ -312,6 +312,9 @@ button:focus {
 /* Text Colors */
 /* -------------------------------------------------- */
 
+.table-head-clr {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
 .text--white {
   color: #ffffff !important;
 }
@@ -393,7 +396,7 @@ button:focus {
 }
 
 .txt-dddbld {
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 
 .txt-bold {
@@ -865,4 +868,8 @@ input[type="file"] {
 
 .lnktags:hover {
   color: #4ca9fc !important;
+}
+
+.table-text-pad {
+  padding: 0 20px !important;
 }
