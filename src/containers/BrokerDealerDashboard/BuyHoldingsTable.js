@@ -155,22 +155,12 @@ class BuyHoldingsTable extends Component {
                 const { balance, dollarValue } = userTokenBalance[key] || {};
                 return (
                   <TableRow key={key}>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {config.tokens[key].name}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {formatCurrencyNumber(balance, 0)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {formatMoney(dollarValue, 0)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {formatMoney(currentPortfolioValue[key], 0)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                      {significantDigits(currentPortfolioValue[key] / balance)}
-                    </TableCell>
-                    <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                    <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{formatCurrencyNumber(balance, 0)}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{formatMoney(dollarValue, 0)}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell className="txt-s table-text-pad">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
+                    <TableCell className="txt-s table-text-pad">
                       {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                         ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,
                         2

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Divider, TextField } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Paper } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
@@ -101,47 +101,48 @@ class AutomatedReserveTable extends Component {
           currentPortfolioValue={currentPortfolioValue}
           tokenBalance={tokenBalance}
         />
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Token Name</TableCell>
-              <TableCell>Deposit</TableCell>
-              <TableCell>Withdraw</TableCell>
-              {/* <Table.HeaderCell>Modify Bid/Ask Prices</Table.HeaderCell> */}
-              <TableCell>Etherscan</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.keys(tokenBalance).map(key => (
-              <TableRow key={key}>
-                <TableCell verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                <TableCell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the owner">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOwner}
-                        onClick={() => this.onDepositClick(key)}
-                      >
-                        Deposit
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </TableCell>
-                <TableCell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOwner} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOwner}
-                        onClick={() => this.onWithdrawClick(key)}
-                      >
-                        Withdraw
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </TableCell>
-                {/* <TableCell verticalAlign="middle">
+        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
+                {/* <Table.HeaderCell>Modify Bid/Ask Prices</Table.HeaderCell> */}
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.keys(tokenBalance).map(key => (
+                <TableRow key={key}>
+                  <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s table-text-pad">
+                    <CustomToolTip disabled={!isOwner} title="You are not the owner">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOwner}
+                          onClick={() => this.onDepositClick(key)}
+                        >
+                          Deposit
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
+                    <CustomToolTip disabled={!isOwner} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOwner}
+                          onClick={() => this.onWithdrawClick(key)}
+                        >
+                          Withdraw
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </TableCell>
+                  {/* <TableCell verticalAlign="middle">
                   <CustomToolTip disabled={!isOperator} title="You are not the operator">
                     <span>
                       <LoadingButton
@@ -154,17 +155,18 @@ class AutomatedReserveTable extends Component {
                     </span>
                   </CustomToolTip>
                 </TableCell> */}
-                <TableCell>
-                  <span>
-                    <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
-                      View on Blockchain
-                    </a>
-                  </span>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                  <TableCell className="txt-s table-text-pad">
+                    <span>
+                      <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
+                        View on Blockchain
+                      </a>
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
         <AlertModal open={depositTokenModalOpen} handleClose={this.handleDepositTokenModalClose}>
           <Grid>
             <Row className="push--bottom">

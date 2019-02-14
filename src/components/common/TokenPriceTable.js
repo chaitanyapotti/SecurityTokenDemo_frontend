@@ -25,24 +25,14 @@ class TokenPriceTable extends PureComponent {
               const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
               return (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {config.tokens[key].name}
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {formatCurrencyNumber(tokenBalance[key].balance, 0)}
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {formatMoney(currentPortfolioValue[key], 0)}
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                  <TableCell className="txt-s table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {sellDollarPrice.toFixed(3)}
-                  </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
-                    {buyDollarPrice.toFixed(3)}
-                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
+                  <TableCell className="txt-s table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
                 </TableRow>
               );
             })}
