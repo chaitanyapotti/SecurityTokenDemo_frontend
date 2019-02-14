@@ -21,8 +21,8 @@ class EtherScanHoldingsTable extends Component {
     withdrawTokenInput: "",
     token: "",
     tradeModalOpen: false,
-    modifyRateBuyPercent : "",
-    modifyRateSellPercent : "",
+    modifyRateBuyPercent: "",
+    modifyRateSellPercent: "",
     buyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
     sellTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
     imbalanceBuyTradeData: [{ rate: "", percent: "" }, { rate: "", percent: "" }, { rate: "", percent: "" }],
@@ -42,7 +42,7 @@ class EtherScanHoldingsTable extends Component {
 
   handleModifyRatesModalOpen = () => this.setState({ modifyRatesModalOpen: true });
 
-  handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, modifyRateBuyPercent : "", modifyRateSellPercent : "", });
+  handleModifyRatesModalClose = () => this.setState({ modifyRatesModalOpen: false, modifyRateBuyPercent: "", modifyRateSellPercent: "" });
 
   handleDepositTokenModalClose = () => this.setState({ depositTokenModalOpen: false, depositTokenInput: "" });
 
@@ -254,56 +254,56 @@ class EtherScanHoldingsTable extends Component {
           <Table.Body>
             {Object.keys(tokenBalance).map(key => {
               return (
-              <Table.Row key={key}>
-              <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-              <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onTradeClick(key)}
-                      >
-                        Set Step Price
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
-                        onClick={() => this.onModifyRatesClick(key)}
-                      >
-                        Modify Rates
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell verticalAlign="middle">
-                  <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                    <span>
-                      <LoadingButton
-                        className="btn bg--pending txt-p-vault txt-dddbld text--white test"
-                        disabled={!isOperator}
+                <Table.Row key={key}>
+                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onTradeClick(key)}
+                        >
+                          Set Step Price
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
+                          onClick={() => this.onModifyRatesClick(key)}
+                        >
+                          Modify Rates
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell verticalAlign="middle">
+                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                      <span>
+                        <LoadingButton
+                          className="btn bg--pending txt-p-vault txt-dddbld text--white test"
+                          disabled={!isOperator}
                           onClick={() => this.onModifyImbalanceRatesClick(key)}
-                      >
-                        Modify Imbalance Rates
-                      </LoadingButton>
-                    </span>
-                  </CustomToolTip>
-                </Table.Cell>
-                <Table.Cell>
+                        >
+                          Modify Imbalance Rates
+                        </LoadingButton>
+                      </span>
+                    </CustomToolTip>
+                  </Table.Cell>
+                  <Table.Cell>
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain
                       </a>
                     </span>
                   </Table.Cell>
-              </Table.Row>
-            );
+                </Table.Row>
+              );
             })}
           </Table.Body>
         </Table>
@@ -452,7 +452,11 @@ class EtherScanHoldingsTable extends Component {
                       <Input placeholder="Enter Sell Price" value={item.rate} onChange={e => this.updateImbalanceSellArray(e, index, "rate")} />
                     </Table.Cell>
                     <Table.Cell>
-                      <Input placeholder="Enter Sell Percent" value={item.percent} onChange={e => this.updateImbalanceSellArray(e, index, "percent")} />
+                      <Input
+                        placeholder="Enter Sell Percent"
+                        value={item.percent}
+                        onChange={e => this.updateImbalanceSellArray(e, index, "percent")}
+                      />
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -479,38 +483,38 @@ class EtherScanHoldingsTable extends Component {
                   <Table.HeaderCell>Ask(%)</Table.HeaderCell>
                   <Table.HeaderCell>Bid(%)</Table.HeaderCell>
                 </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    <Table.Row >
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Sell Percent"
-                          value={modifyRateSellPercent}
-                          onChange={e => this.setState({ modifyRateSellPercent: e.target.value  })}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Input
-                          placeholder="Enter Buy Percent"
-                          value={modifyRateBuyPercent}
-                          onChange={e => this.setState({ modifyRateBuyPercent: e.target.value })}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                </Table.Body>
-              </Table>
-              <Row className="push--bottom">
-                <Col lgOffset={8} lg={4}>
-                  <Transaction
-                    buttonText="Modify"
-                    onClick={this.onModifyClick}
-                    txHash={modifyRatesTransactionHash}
-                    buttonSpinning={modifyRatesButtonSpinning}
-                  />
-                </Col>
-              </Row>
-            </Grid>
-          </AlertModal>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>
+                    <Input
+                      placeholder="Enter Sell Percent"
+                      value={modifyRateSellPercent}
+                      onChange={e => this.setState({ modifyRateSellPercent: e.target.value })}
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Input
+                      placeholder="Enter Buy Percent"
+                      value={modifyRateBuyPercent}
+                      onChange={e => this.setState({ modifyRateBuyPercent: e.target.value })}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+            <Row className="push--bottom">
+              <Col lgOffset={8} lg={4}>
+                <Transaction
+                  buttonText="Modify"
+                  onClick={this.onModifyClick}
+                  txHash={modifyRatesTransactionHash}
+                  buttonSpinning={modifyRatesButtonSpinning}
+                />
+              </Col>
+            </Row>
+          </Grid>
+        </AlertModal>
       </div>
     );
   }
