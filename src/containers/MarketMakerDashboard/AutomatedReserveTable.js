@@ -105,11 +105,11 @@ class AutomatedReserveTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Withdraw</TableCell>
                 {/* <Table.HeaderCell>Modify Bid/Ask Prices</Table.HeaderCell> */}
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Etherscan</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
