@@ -297,9 +297,9 @@ class RegularReserveTable extends Component {
                   </TableCell>
                   <TableCell className="txt-s table-text-pad">
                     <span>
-                        <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
+                      <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                           View on Blockchain
-                        </a>
+                      </a>
                       </span>
                   </TableCell>
                 </TableRow>

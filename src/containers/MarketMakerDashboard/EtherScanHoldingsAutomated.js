@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Input, Divider } from "semantic-ui-react";
+import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Paper, Divider } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CustomToolTip } from "../../components/common/FormComponents";
@@ -11,7 +11,7 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction, setQtyStepFunction, setCompactData } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";
 
-class EtherScanHoldingsTable extends Component {
+class EtherScanHoldingsTableAutomated extends Component {
   state = {
     depositTokenModalOpen: false,
     withdrawTokenModalOpen: false,
@@ -59,8 +59,8 @@ class EtherScanHoldingsTable extends Component {
   onModifyClick = e => {
     const { setCompactData: modifyRatesAction } = this.props;
     const { userLocalPublicAddress } = this.props || {};
-    const { modifyRateBuyPercent, modifyRateSellPercent } = this.state;
-    modifyRatesAction();
+    const { modifyRateBuyPercent, modifyRateSellPercent, token } = this.state;
+    modifyRatesAction(token, modifyRateBuyPercent, modifyRateSellPercent, userLocalPublicAddress);
   };
 
   onWithdrawClick = key => {
@@ -185,32 +185,33 @@ class EtherScanHoldingsTable extends Component {
     } = this.state;
     return (
       <div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Token Count</Table.HeaderCell>
-              <Table.HeaderCell>Token Value($)</Table.HeaderCell>
-              <Table.HeaderCell>Token Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Ask Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Bid Price($)</Table.HeaderCell>
-              <Table.HeaderCell>Deposit</Table.HeaderCell>
-              <Table.HeaderCell>Withdraw</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+        <Table>
+          <TableHead>
+            <TableRow>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Count</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Value($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Price($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Ask Price($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Bid Price($)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Withdraw</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {Object.keys(tokenBalance).map(key => {
               const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
               const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
               return (
-                <Table.Row key={key}>
-                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{formatMoney(currentPortfolioValue[key], 0)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{sellDollarPrice.toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">{buyDollarPrice.toFixed(3)}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">
+                <TableRow key={key}>
+                <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
+                <TableCell className="txt-s table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                <TableCell className="txt-s table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                <TableCell className="txt-s table-text-pad">{parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}</TableCell>
+                <TableCell className="txt-s table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
+                <TableCell className="txt-s table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
+                <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
                         <LoadingButton
@@ -222,8 +223,8 @@ class EtherScanHoldingsTable extends Component {
                         </LoadingButton>
                       </span>
                     </CustomToolTip>
-                  </Table.Cell>
-                  <Table.Cell verticalAlign="middle">
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -235,28 +236,30 @@ class EtherScanHoldingsTable extends Component {
                         </LoadingButton>
                       </span>
                     </CustomToolTip>
-                  </Table.Cell>
-                </Table.Row>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </Table.Body>
+          </TableBody>
         </Table>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Token Name</Table.HeaderCell>
-              <Table.HeaderCell>Trade</Table.HeaderCell>
-              <Table.HeaderCell>Modify Rates</Table.HeaderCell>
-              <Table.HeaderCell>Modify Imbalance Rates</Table.HeaderCell>
-              <Table.HeaderCell>Etherscan</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+        </Paper>
+        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+        <Table>
+          <TableHead>
+            <TableRow>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Name</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Trade</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Modify Rates</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Modify Imbalance Rates</TableCell>
+            <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Etherscan</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {Object.keys(tokenBalance).map(key => {
               return (
-                <Table.Row key={key}>
-                  <Table.Cell verticalAlign="middle">{config.tokens[key].name}</Table.Cell>
-                  <Table.Cell verticalAlign="middle">
+                <TableRow key={key}>
+                <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
+                <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -268,8 +271,8 @@ class EtherScanHoldingsTable extends Component {
                         </LoadingButton>
                       </span>
                     </CustomToolTip>
-                  </Table.Cell>
-                  <Table.Cell verticalAlign="middle">
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -281,8 +284,8 @@ class EtherScanHoldingsTable extends Component {
                         </LoadingButton>
                       </span>
                     </CustomToolTip>
-                  </Table.Cell>
-                  <Table.Cell verticalAlign="middle">
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -294,25 +297,26 @@ class EtherScanHoldingsTable extends Component {
                         </LoadingButton>
                       </span>
                     </CustomToolTip>
-                  </Table.Cell>
-                  <Table.Cell>
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain
                       </a>
                     </span>
-                  </Table.Cell>
-                </Table.Row>
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </Table.Body>
+            </TableBody>
         </Table>
+        </Paper>
         <AlertModal open={depositTokenModalOpen} handleClose={this.handleDepositTokenModalClose}>
           <Grid>
             <Row className="push--bottom">
               <Col lg={12}>
-                <Input
-                  placeholder="Enter No Of Tokens"
+                <TextField
+                  label="Enter No Of Tokens"
                   value={depositTokenInput}
                   onChange={e => this.setState({ depositTokenInput: e.target.value })}
                 />
@@ -334,8 +338,8 @@ class EtherScanHoldingsTable extends Component {
           <Grid>
             <Row className="push--bottom">
               <Col lg={12}>
-                <Input
-                  placeholder="Enter No Of Tokens"
+                <TextField
+                  label="Enter No Of Tokens"
                   value={withdrawTokenInput}
                   onChange={e => this.setState({ withdrawTokenInput: e.target.value })}
                 />
@@ -356,49 +360,53 @@ class EtherScanHoldingsTable extends Component {
         <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose}>
           <Grid>
             <Divider horizontal>Buy</Divider>
-            <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Quantity</Table.HeaderCell>
-                  <Table.HeaderCell>%</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
+            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Table>
+              <TableHead>
+                <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {buyTradeData.map((item, index) => (
                   // eslint-disable-next-line
-                  <Table.Row key={index}>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Price" value={item.rate} onChange={e => this.updateBuyArray(e, index, "rate")} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
-                    </Table.Cell>
-                  </Table.Row>
+                  <TableRow key={index}>
+                  <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Buy Price" value={item.rate} onChange={e => this.updateBuyArray(e, index, "rate")} />
+                    </TableCell>
+                    <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Body>
+              </TableBody>
             </Table>
+            </Paper>
             <Divider horizontal>Sell</Divider>
-            <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Quantity</Table.HeaderCell>
-                  <Table.HeaderCell>%</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
+            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Table>
+              <TableHead>
+                <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {sellTradeData.map((item, index) => (
                   // eslint-disable-next-line
-                  <Table.Row key={index}>
-                    <Table.Cell>
-                      <Input placeholder="Enter Sell Price" value={item.rate} onChange={e => this.updateSellArray(e, index, "rate")} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input placeholder="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
-                    </Table.Cell>
-                  </Table.Row>
+                  <TableRow key={index}>
+                  <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Sell Price" value={item.rate} onChange={e => this.updateSellArray(e, index, "rate")} />
+                    </TableCell>
+                    <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Body>
+              </TableBody>
             </Table>
+            </Paper>
             <Row className="push--bottom">
               <Col lg={12}>
                 <Transaction
@@ -415,53 +423,57 @@ class EtherScanHoldingsTable extends Component {
         <AlertModal open={modifyImbalanceRatesModalOpen} handleClose={this.handleModifyImbalanceRatesModalClose}>
           <Grid>
             <Divider horizontal>Buy</Divider>
-            <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Quantity</Table.HeaderCell>
-                  <Table.HeaderCell>%</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
+            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Table>
+              <TableHead>
+                <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {imbalanceBuyTradeData.map((item, index) => (
                   // eslint-disable-next-line
-                  <Table.Row key={index}>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Price" value={item.rate} onChange={e => this.updateImbalanceBuyArray(e, index, "rate")} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input placeholder="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
-                    </Table.Cell>
-                  </Table.Row>
+                  <TableRow key={index}>
+                  <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Buy Price" value={item.rate} onChange={e => this.updateImbalanceBuyArray(e, index, "rate")} />
+                    </TableCell>
+                    <TableCell className="txt-s table-text-pad">
+                      <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Body>
+              </TableBody>
             </Table>
+            </Paper>
             <Divider horizontal>Sell</Divider>
-            <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Quantity</Table.HeaderCell>
-                  <Table.HeaderCell>%</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
+            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Table>
+              <TableHead>
+                <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                  <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {imbalanceSellTradeData.map((item, index) => (
                   // eslint-disable-next-line
-                  <Table.Row key={index}>
-                    <Table.Cell>
-                      <Input placeholder="Enter Sell Price" value={item.rate} onChange={e => this.updateImbalanceSellArray(e, index, "rate")} />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Input
-                        placeholder="Enter Sell Percent"
+                  <TableRow key={index}>
+                  <TableCell className="txt-s table-text-pad">
+                      <TextField input="Enter Sell Price" value={item.rate} onChange={e => this.updateImbalanceSellArray(e, index, "rate")} />
+                    </TableCell>
+                    <TableCell className="txt-s table-text-pad">
+                      <TextField
+                        label="Enter Sell Percent"
                         value={item.percent}
                         onChange={e => this.updateImbalanceSellArray(e, index, "percent")}
                       />
-                    </Table.Cell>
-                  </Table.Row>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Body>
+              </TableBody>
             </Table>
+            </Paper>
             <Row className="push--bottom">
               <Col lg={12}>
                 <Transaction
@@ -477,32 +489,34 @@ class EtherScanHoldingsTable extends Component {
         </AlertModal>
         <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
           <Grid>
-            <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Ask(%)</Table.HeaderCell>
-                  <Table.HeaderCell>Bid(%)</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    <Input
-                      placeholder="Enter Sell Percent"
+          <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Table>
+              <TableHead>
+                <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Ask(%)</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Bid(%)</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                <TableCell className="txt-s table-text-pad">
+                    <TextField
+                      label="Enter Sell Percent"
                       value={modifyRateSellPercent}
                       onChange={e => this.setState({ modifyRateSellPercent: e.target.value })}
                     />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Input
-                      placeholder="Enter Buy Percent"
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
+                    <TextField
+                      label="Enter Buy Percent"
                       value={modifyRateBuyPercent}
                       onChange={e => this.setState({ modifyRateBuyPercent: e.target.value })}
                     />
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
+            </Paper>
             <Row className="push--bottom">
               <Col lgOffset={8} lg={4}>
                 <Transaction
@@ -557,7 +571,7 @@ const mapStateToProps = state => {
   };
 };
 
-EtherScanHoldingsTable.propTypes = {
+EtherScanHoldingsTableAutomated.propTypes = {
   depositToken: Proptypes.func.isRequired,
   withdrawAction: Proptypes.func.isRequired,
   setQtyStepFunction: Proptypes.func.isRequired,
@@ -567,4 +581,4 @@ EtherScanHoldingsTable.propTypes = {
 export default connect(
   mapStateToProps,
   { depositToken, withdrawAction, setQtyStepFunction, setCompactData }
-)(EtherScanHoldingsTable);
+)(EtherScanHoldingsTableAutomated);
