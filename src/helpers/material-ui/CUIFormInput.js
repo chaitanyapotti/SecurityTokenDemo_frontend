@@ -4,7 +4,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Radio from "@material-ui/core/Radio";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import { CUIButtonIcon, CUIMenu } from ".";
 import { getCUIPrefixSuffix, handleInputKeydown, selectIcon } from "./helpers";
 import { CS_COLORS, CUIInputColor, CUIInputMargin, CUIInputType } from "../../static/js/variables";
 import PropTypes from "../../PropTypes";
@@ -222,23 +221,6 @@ const CUIFormInput = props => {
             </MenuItem>
           ))}
         </TextField>
-      );
-    }
-
-    case CUIInputType.ICON_SELECT: {
-      const { items, onClick, onClose, iconElement, elementRef, open, listStyle } = props || {};
-      return (
-        <div>
-          <CUIButtonIcon onClick={onClick}>{iconElement}</CUIButtonIcon>
-
-          <CUIMenu PaperProps={{ style: listStyle }} anchorEl={elementRef} onClose={onClose} open={open}>
-            {items.map(option => (
-              <MenuItem key={option.value} onClick={option.onClick} style={{ padding: "5px 20px" }}>
-                {option.primaryText}
-              </MenuItem>
-            ))}
-          </CUIMenu>
-        </div>
       );
     }
 
