@@ -1,4 +1,4 @@
-import merge from "lodash/merge";
+import merge from "lodash.merge";
 import { CS_COLORS, CUIColor } from "./variables";
 import { isMobile } from "../../helpers/common/deviceDetect";
 
