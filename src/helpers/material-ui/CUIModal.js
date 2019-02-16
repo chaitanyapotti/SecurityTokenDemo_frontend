@@ -56,8 +56,20 @@ const getTransitionComponent = transitionDirection => {
 };
 
 const CUIModal = props => {
-  const { children, style, dialogFullScreen, dialogFullWidth, dialogMaxWidth, className, width, margin, close, transition, transitionDirection, open } =
-    props || {};
+  const {
+    children,
+    style,
+    dialogFullScreen,
+    dialogFullWidth,
+    dialogMaxWidth,
+    className,
+    width,
+    margin,
+    close,
+    transition,
+    transitionDirection,
+    open
+  } = props || {};
 
   const modalProps = {
     children,
@@ -67,7 +79,7 @@ const CUIModal = props => {
     fullWidth: dialogFullWidth,
     maxWidth: dialogMaxWidth,
     className,
-    onClose: close,
+    onClose: close
   };
 
   if (transition) {
@@ -91,7 +103,7 @@ CUIModal.defaultProps = {
   width: undefined,
   margin: undefined,
   className: "",
-  close: () => {},
+  close: () => {}
 };
 
 CUIModal.propTypes = {
@@ -105,25 +117,25 @@ CUIModal.propTypes = {
   className: PropTypes.string,
   width: PropTypes.string,
   margin: PropTypes.number,
-  close: PropTypes.func,
+  close: PropTypes.func
 };
 
 const CUIModalActions = props => <DialogActions {...props}>{props.children}</DialogActions>;
 
 CUIModalActions.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 const CUIModalTitle = props => <DialogTitle {...props}>{props.children}</DialogTitle>;
 
 CUIModalTitle.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 const CUIModalContent = props => <DialogContent {...props}>{props.children}</DialogContent>;
 
 CUIModalContent.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export { CUIModal, CUIModalActions, CUIModalTitle, CUIModalContent };

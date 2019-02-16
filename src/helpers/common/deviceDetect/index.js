@@ -28,7 +28,7 @@ const device = {
   },
   any() {
     return !!(device.Android() || device.BlackBerry() || device.iOS() || device.OperaMini() || device.Windows());
-  },
+  }
 };
 
 const isMobile = device.any();

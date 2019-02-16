@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -32,10 +31,6 @@ const CustomToolTip = props => {
       )}
     </div>
   );
-};
-
-CustomToolTip.propTypes = {
-  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(CustomToolTip);

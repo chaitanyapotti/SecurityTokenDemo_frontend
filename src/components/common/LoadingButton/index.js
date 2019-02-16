@@ -12,7 +12,7 @@ const styles = {
 const SpinnerAdornment = withStyles(styles)(props => <CircularProgress className={props.classes.root} size={20} color="primary" />);
 
 const LoadingButton = props => {
-  const { children, loading, label, ...rest } = props;
+  const { children, loading, label, ...rest } = props || {};
   return (
     <ButtonComponent {...rest}>
       {children}
