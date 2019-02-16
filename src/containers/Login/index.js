@@ -17,6 +17,7 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 import { CUIModal, CUIModalActions, CUIModalContent } from "../../helpers/material-ui";
+import DropdownComponent from "../../components/common/DropdownComponent";
 
 const styles = theme => ({
   main: {
@@ -53,9 +54,9 @@ const styles = theme => ({
 });
 
 class Login extends Component {
-  // state = {
-  //   modalOpen: false
-  // };
+  state = {
+    modalOpen: false
+  };
 
   onUsernameOrEmailChange = e => {
     const { setUsernameOrEmailAction: setUsernameOrEmail } = this.props;
@@ -85,9 +86,26 @@ class Login extends Component {
     }
   }
 
+  onDropdownChange = (e, d) => {
+    console.log("ondropdown change", e.target.value, d);
+  };
+
   render() {
     const { errors, usernameOrEmail, password, classes } = this.props || {};
     const { modalOpen } = this.state || {};
+    const roleData = [
+      {
+        value: "BROKER_DEALER",
+        text: 'Broker Dealer'
+      }, 
+      {
+        value: "MARKET_MAKER",
+        text: 'Market Maker'
+      },
+      {
+        value: "INVESTOR",
+        text: 'Investor'
+      }]
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -127,20 +145,51 @@ class Login extends Component {
                 {errors.password && <div>{errors.password}</div>}
               </FormControl>
               {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-              <Button style={{ backgroundColor: '#ED8C0E'}} onClick={this.onSubmitClick} fullWidth variant="contained" color="primary" className={classes.submit}>
+              <Button
+                style={{ backgroundColor: "#ED8C0E" }}
+                onClick={this.onSubmitClick}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
                 Sign in
               </Button>
-              {/* <div className="text-center push--top">
-                Don't have an acccount? <a onClick={() => this.setState({ modalOpen: true })}>Sign Up</a>
-              </div> */}
+              <div className="text-center push--top">
+                Don't have an acccount?{" "}
+                <a onClick={() => this.setState({ modalOpen: true })} className="lnk--p">
+                  Sign Up
+                </a>
+              </div>
             </form>
           </Paper>
         </main>
-        {/* <CUIModal open={modalOpen}>
+        <CUIModal open={modalOpen}>
           <CUIModalContent>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Email</InputLabel>
+              <InputLabel htmlFor="first">First Name</InputLabel>
+              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="first" type="first" id="first" />
+              {errors.password && <div>{errors.password}</div>}
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="last">Last Name</InputLabel>
+              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="last" type="last" id="last" />
+              {errors.password && <div>{errors.password}</div>}
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="username">Username</InputLabel>
+              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="username" type="username" id="username" />
+              {errors.password && <div>{errors.password}</div>}
+            </FormControl>
+            <DropdownComponent onChange={this.onDropdownChange} value="" label="Select Role" data={roleData} />
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="email">Email</InputLabel>
               <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="email" type="email" id="email" />
+              {errors.password && <div>{errors.password}</div>}
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="password" type="password" id="password" />
               {errors.password && <div>{errors.password}</div>}
             </FormControl>
           </CUIModalContent>
@@ -152,7 +201,7 @@ class Login extends Component {
               Cancel
             </Button>
           </CUIModalActions>
-        </CUIModal> */}
+        </CUIModal>
       </div>
     );
   }

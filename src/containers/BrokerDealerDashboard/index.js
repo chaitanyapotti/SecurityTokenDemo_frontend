@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
+
 import CUICard from "../../components/CustomMUI/CUICard";
 import { onDropdownChange } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction, getTransactionHistory } from "../../actions/userActions";
@@ -15,6 +16,7 @@ import { getPortfolioSelector, getTokenPortfolioSelector } from "../../selectors
 import PortfolioTable from "../../components/common/PortfolioTable";
 import TransactionHistory from "../../components/common/TransactionHistory";
 import DropdownComponent from "../../components/common/DropdownComponent";
+import AddInvestorModal from "../../components/common/AddInvestorModal";
 
 class BrokerDealerDashboard extends Component {
   componentWillMount() {
@@ -35,21 +37,27 @@ class BrokerDealerDashboard extends Component {
     }
   }
 
+  state = {
+    modalOpen: false
+  };
+
   onDropdownChange = (e, d) => {
     console.log("ondropdown change", e.target.value, d);
     const { onDropdownChange: dropDownChange } = this.props;
     dropDownChange(e.target.value);
   };
 
+  modalOpen = () => this.setState({ modalOpen: true });
+
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
-    console.log("props in broker dealer", this.props);
+    // console.log("props in broker dealer", this.props);
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
     return (
       <Grid container="true">
-        <Navbar />
+        <Navbar add="true" modalOpen={this.modalOpen} modalClose={this.modalClose} />
         <div style={{ marginTop: "100px" }}>
           <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
         </div>
@@ -88,6 +96,7 @@ class BrokerDealerDashboard extends Component {
             </CUICard>
           </div>
         ) : null}
+        <AddInvestorModal modalOpen={this.state.modalOpen} close={() => this.setState({ modalOpen: false })} />
       </Grid>
     );
   }
