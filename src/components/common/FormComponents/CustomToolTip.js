@@ -22,7 +22,7 @@ const CustomToolTip = props => {
     <div>
       {disabled === true ? (
         <div>
-          <Tooltip title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
+          <Tooltip className="fnt-ps" title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
             {children}
           </Tooltip>
         </div>

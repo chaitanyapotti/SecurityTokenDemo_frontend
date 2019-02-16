@@ -28,7 +28,7 @@ class DropdownComponent extends PureComponent {
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel style={{ fontSize: "14px" }} htmlFor="age-simple">
+          <InputLabel className="fnt-ps" style={{ fontSize: "14px" }} htmlFor="age-simple">
             {label}
           </InputLabel>
           <Select
@@ -40,7 +40,7 @@ class DropdownComponent extends PureComponent {
             style={{ fontSize: "14px" }}
           >
             {data.map((item, index) => (
-              <MenuItem key={item.value} value={item.value} style={{ fontSize: "14px" }}>
+              <MenuItem className="fnt-ps" key={item.value} value={item.value} style={{ fontSize: "14px" }}>
                 {item.text}
               </MenuItem>
             ))}

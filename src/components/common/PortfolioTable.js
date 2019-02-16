@@ -11,14 +11,14 @@ class PortfolioTable extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Token Name</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Token Count</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Invested Value($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Current Value($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Token Price($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Change</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">Commission</TableCell>
-              <TableCell className="txt-s txt-dddbld table-head-clr">EtherScan</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Token Name</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Token Count</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Invested Value($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Current Value($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Token Price($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Change</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Commission</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">EtherScan</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -26,17 +26,17 @@ class PortfolioTable extends PureComponent {
               const { tokenCount, totalInvested, currentNetPrice, changePercent, changeValue, commission } = currentHoldings[key] || {};
               return (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatCurrencyNumber(tokenCount || 0, 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatMoney(totalInvested || 0, 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatMoney(currentNetPrice || 0, 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{significantDigits(currentNetPrice / tokenCount || 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{`+${formatMoney(changeValue || 0, 0)}(+${Math.round(
+                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenCount || 0, 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(totalInvested || 0, 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentNetPrice || 0, 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(currentNetPrice / tokenCount || 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{`+${formatMoney(changeValue || 0, 0)}(+${Math.round(
                     changePercent || 0,
                     2
                   )}%)`}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatMoney(commission || 0, 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(commission || 0, 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain

@@ -217,22 +217,22 @@ class RegularReserveTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     {config.tokens[key].name}
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
                         <LoadingButton
@@ -245,7 +245,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -258,7 +258,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -271,7 +271,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -284,7 +284,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -297,7 +297,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain
@@ -364,18 +364,18 @@ class RegularReserveTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {buyTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Buy Quantity" value={item.rate} onChange={e => this.updateBuyArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateBuyArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -390,18 +390,18 @@ class RegularReserveTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {sellTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Sell Quantity" value={item.rate} onChange={e => this.updateSellArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Sell Percent" value={item.percent} onChange={e => this.updateSellArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -430,18 +430,18 @@ class RegularReserveTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {imbalanceBuyTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Buy Quantity" value={item.rate} onChange={e => this.updateImbalanceBuyArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Buy Percent" value={item.percent} onChange={e => this.updateImbalanceBuyArray(e, index, "percent")} />
                       </TableCell>
                     </TableRow>
@@ -456,18 +456,18 @@ class RegularReserveTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {imbalanceSellTradeData.map((item, index) => (
                     // eslint-disable-next-line
                     <TableRow key={index}>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField label="Enter Sell Quantity" value={item.rate} onChange={e => this.updateImbalanceSellArray(e, index, "rate")} />
                       </TableCell>
-                      <TableCell className="txt-s table-text-pad">
+                      <TableCell className="txt-s fnt-ps table-text-pad">
                         <TextField
                           label="Enter Sell Percent"
                           value={item.percent}
@@ -497,20 +497,20 @@ class RegularReserveTable extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Bid ($)</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Ask ($)</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Bid ($)</TableCell>
+                    <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Ask ($)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="txt-s table-text-pad">
+                    <TableCell className="txt-s fnt-ps table-text-pad">
                       <TextField
                         label="Enter Sell Price"
                         value={modifySellPrice}
                         onChange={e => this.setState({ modifySellPrice: e.target.value })}
                       />
                     </TableCell>
-                    <TableCell className="txt-s table-text-pad">
+                    <TableCell className="txt-s fnt-ps table-text-pad">
                       <TextField label="Enter Buy Price" value={modifyBuyPrice} onChange={e => this.setState({ modifyBuyPrice: e.target.value })} />
                     </TableCell>
                   </TableRow>
