@@ -5,10 +5,13 @@ import { customTheme } from "../../static/js/theme";
 
 const theme = createMuiTheme(customTheme);
 
-const CUIWrapper = props => <MuiThemeProvider theme={theme}>{props.children}</MuiThemeProvider>;
+const CUIWrapper = props => {
+  const { children } = props;
+  return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
+};
 
 CUIWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export default CUIWrapper;

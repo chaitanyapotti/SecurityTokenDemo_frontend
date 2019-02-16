@@ -20,7 +20,10 @@ import PropTypes from "../../PropTypes";
  * @Material-FormControlLabel@API https://material-ui.com/api/form-control-label/#formcontrollabel
  */
 
-const CUIFormInputLabel = props => <FormControlLabel control={props.control} label={props.label} />;
+const CUIFormInputLabel = props => {
+  const { control, label } = props;
+  return <FormControlLabel control={control} label={label} />;
+};
 
 CUIFormInputLabel.propTypes = {
   control: PropTypes.element.isRequired,

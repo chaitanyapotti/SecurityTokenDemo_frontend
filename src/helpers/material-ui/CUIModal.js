@@ -120,19 +120,28 @@ CUIModal.propTypes = {
   close: PropTypes.func
 };
 
-const CUIModalActions = props => <DialogActions {...props}>{props.children}</DialogActions>;
+const CUIModalActions = props => {
+  const { children, ...other } = props || {};
+  return <DialogActions {...other}>{children}</DialogActions>;
+};
 
 CUIModalActions.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-const CUIModalTitle = props => <DialogTitle {...props}>{props.children}</DialogTitle>;
+const CUIModalTitle = props => {
+  const { children, ...other } = props || {};
+  return <DialogTitle {...other}>{children}</DialogTitle>;
+};
 
 CUIModalTitle.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-const CUIModalContent = props => <DialogContent {...props}>{props.children}</DialogContent>;
+const CUIModalContent = props => {
+  const { children, ...other } = props || {};
+  return <DialogContent {...other}>{children}</DialogContent>;
+};
 
 CUIModalContent.propTypes = {
   children: PropTypes.node.isRequired

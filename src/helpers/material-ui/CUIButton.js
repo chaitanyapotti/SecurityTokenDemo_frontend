@@ -37,7 +37,7 @@ import PropTypes from "../../PropTypes";
  */
 
 const CUIButton = props => {
-  const { style, type, buttonColor, disabled, className, id, size, full, tabIndex, href, isLink } = props || {};
+  const { style, type, buttonColor, disabled, className, id, size, full, tabIndex, href, isLink, labelStyle, children, label } = props || {};
   const btnProps = {
     style,
     variant: type,
@@ -61,7 +61,7 @@ const CUIButton = props => {
 
   return (
     <Button {...btnProps}>
-      <div style={props.labelStyle}>{props.children || props.label}</div>
+      <div style={labelStyle}>{children || label}</div>
     </Button>
   );
 };
