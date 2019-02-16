@@ -36,14 +36,12 @@ class BrokerDealerDashboard extends Component {
   }
 
   onDropdownChange = (e, d) => {
-    console.log("ondropdown change", e.target.value, d);
     const { onDropdownChange: dropDownChange } = this.props;
     dropDownChange(e.target.value);
   };
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
-    console.log("props in broker dealer", this.props);
     const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};

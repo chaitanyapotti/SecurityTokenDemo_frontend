@@ -7,7 +7,7 @@ class TransactionHistory extends PureComponent {
   render() {
     const { transactionHistory, dropDownSelect } = this.props || {};
     return (
-      <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+      <Paper className="card-brdr push--ends">
         <Table>
           <TableHead>
             <TableRow>

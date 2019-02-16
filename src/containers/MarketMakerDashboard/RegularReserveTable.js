@@ -213,24 +213,26 @@ class RegularReserveTable extends Component {
           currentPortfolioValue={currentPortfolioValue}
           tokenBalance={tokenBalance}
         />
-        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.keys(tokenBalance).map(key => (
+        <Paper className="card-brdr push--ends">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Withdraw</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Bid/Ask Prices</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Step Prices</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Modify Imbalance Prices</TableCell>
+                <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Etherscan</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">
+                    {config.tokens[key].name}
+                  </TableCell>
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
                         <LoadingButton
@@ -243,10 +245,10 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the operator">
                       <span>
-                      <LoadingButton
+                        <LoadingButton
                           className="btn bg--danger txt-p-vault txt-dddbld text--white test"
                           disabled={!isOwner}
                           onClick={() => this.onWithdrawClick(key)}
@@ -256,7 +258,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -269,7 +271,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -282,7 +284,7 @@ class RegularReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad" verticalAlign="middle">
+                  <TableCell className="txt-s table-text-pad">
                     <CustomToolTip disabled={!isOperator} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -298,9 +300,9 @@ class RegularReserveTable extends Component {
                   <TableCell className="txt-s table-text-pad">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
-                          View on Blockchain
+                        View on Blockchain
                       </a>
-                      </span>
+                    </span>
                   </TableCell>
                 </TableRow>
               ))}
@@ -355,13 +357,15 @@ class RegularReserveTable extends Component {
         </AlertModal>
         <AlertModal open={tradeModalOpen} handleClose={this.handleTradeModalClose}>
           <Grid>
-            <Divider>Buy</Divider>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Divider variant="middle" />
+            <div className="text-align">Buy</div>
+            <Divider variant="middle" className="push--bottom" />
+            <Paper className="card-brdr push--ends">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableHead className="txt-s txt-dddbld table-text-pad  table-head-clr">Quantity</TableHead>
-                    <TableHead className="txt-s txt-dddbld table-text-pad  table-head-clr">%</TableHead>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -379,13 +383,15 @@ class RegularReserveTable extends Component {
                 </TableBody>
               </Table>
             </Paper>
-            <Divider>Sell</Divider>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Divider variant="middle" />
+            <div className="text-align">Sell</div>
+            <Divider variant="middle" className="push--bottom" />
+            <Paper className="card-brdr push--ends">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableHead className="txt-s txt-dddbld table-text-pad  table-head-clr">Quantity</TableHead>
-                    <TableHead className="txt-s txt-dddbld table-text-pad  table-head-clr">%</TableHead>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -417,13 +423,15 @@ class RegularReserveTable extends Component {
         </AlertModal>
         <AlertModal open={modifyImbalanceRatesModalOpen} handleClose={this.handleModifyImbalanceRatesModalClose}>
           <Grid>
-            <Divider>Buy</Divider>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Divider variant="middle" />
+            <div className="text-align">Buy</div>
+            <Divider variant="middle" className="push--bottom" />
+            <Paper className="card-brdr push--ends">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">%</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -441,13 +449,15 @@ class RegularReserveTable extends Component {
                 </TableBody>
               </Table>
             </Paper>
-            <Divider>Sell (Hi to Lo)</Divider>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Divider variant="middle" />
+            <div className="text-align">Sell (Hi to Lo)</div>
+            <Divider variant="middle" className="push--bottom" />
+            <Paper className="card-brdr push--ends">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Quantity</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">%</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Quantity</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">%</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -483,12 +493,12 @@ class RegularReserveTable extends Component {
         </AlertModal>
         <AlertModal open={modifyRatesModalOpen} handleClose={this.handleModifyRatesModalClose}>
           <Grid>
-            <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+            <Paper className="card-brdr push--ends">
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Bid ($)</TableCell>
-                    <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Ask ($)</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Bid ($)</TableCell>
+                    <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Ask ($)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

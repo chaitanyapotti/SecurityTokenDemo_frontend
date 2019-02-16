@@ -5,7 +5,7 @@ const BioTable = props => {
   const { first_name, email, phone, id, role, date, status } = props || {};
 
   return (
-    <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+    <Paper className="card-brdr push--ends">
       <Table>
         <TableHead>
           <TableRow>

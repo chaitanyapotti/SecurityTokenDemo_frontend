@@ -136,7 +136,7 @@ class BuyHoldingsTable extends Component {
     const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
-        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+        <Paper className="card-brdr push--ends">
           <Table>
             <TableHead>
               <TableRow>

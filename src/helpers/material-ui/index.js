@@ -4,7 +4,6 @@ import CUIBadge from "./CUIBadge";
 import CUIButton from "./CUIButton";
 import CUIButtonIcon from "./CUIButtonIcon";
 import { CUICard, CUICardActions, CUICardHeader, CUICardMedia, CUICardText } from "./CUICard";
-import CUIDivider from "./CUIDivider";
 import CUIFormInput from "./CUIFormInput";
 import CUIFormInputLabel from "./CUIFormInputLabel";
 import CUIFontIcon from "./CUIFontIcon";
@@ -31,7 +30,6 @@ export {
   CUICardText,
   CUICardMedia,
   CUICardActions,
-  CUIDivider,
   CUIFontIcon,
   CUIFormInput,
   CUIFormInputLabel,

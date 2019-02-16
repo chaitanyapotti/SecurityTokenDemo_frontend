@@ -14,7 +14,6 @@ export const loginUserAction = (userData, history) => dispatch => {
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
-      console.log("action then", token);
       history.push("/dashboard");
       dispatch({
         type: actionTypes.GET_ERRORS,

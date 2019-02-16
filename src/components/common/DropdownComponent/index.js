@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -22,9 +21,9 @@ const selectInputStyle = {
   }
 };
 
-class DropdownComponent extends React.Component {
+class DropdownComponent extends PureComponent {
   render() {
-    const { classes, data, label, value, onChange } = this.props;
+    const { classes, data, label, value, onChange } = this.props || {};
 
     return (
       <form className={classes.root} autoComplete="off">
@@ -41,7 +40,7 @@ class DropdownComponent extends React.Component {
             style={{ fontSize: "14px" }}
           >
             {data.map((item, index) => (
-              <MenuItem key={index} value={item.value} style={{ fontSize: "14px" }}>
+              <MenuItem key={item.value} value={item.value} style={{ fontSize: "14px" }}>
                 {item.text}
               </MenuItem>
             ))}
@@ -51,9 +50,5 @@ class DropdownComponent extends React.Component {
     );
   }
 }
-
-DropdownComponent.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withStyles(selectInputStyle)(DropdownComponent);

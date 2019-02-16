@@ -7,7 +7,7 @@ class TokenPriceTable extends PureComponent {
   render() {
     const { buyPriceData, sellPriceData, currentPortfolioValue, tokenBalance } = this.props || {};
     return (
-      <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+      <Paper className="card-brdr push--ends">
         <Table>
           <TableHead>
             <TableRow>

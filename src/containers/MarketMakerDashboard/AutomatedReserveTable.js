@@ -101,7 +101,7 @@ class AutomatedReserveTable extends Component {
           currentPortfolioValue={currentPortfolioValue}
           tokenBalance={tokenBalance}
         />
-        <Paper style={{ marginBottom: "20px" }} className="card-brdr">
+        <Paper className="card-brdr push--ends">
           <Table>
             <TableHead>
               <TableRow>

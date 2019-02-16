@@ -12,8 +12,6 @@ import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import TokenChart from "../../components/common/TokenChart";
 import RegularReserveTable from "./RegularReserveTable";
 import AutomatedReserveTable from "./AutomatedReserveTable";
-import EtherScanHoldingsTableRegular from "./EtherScanHoldingsTableRegular";
-import EtherScanHoldingsAutomated from "./EtherScanHoldingsAutomated";
 import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
@@ -34,7 +32,6 @@ class MarketMakerDashboard extends Component {
     } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress, reserveType } =
       JSON.parse(localStorage.getItem("user_data")) || {};
-    console.log(reserveType);
     const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
     this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress, reserveType });
     fetchUserBalance(reserveAddress);
