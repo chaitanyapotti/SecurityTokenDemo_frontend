@@ -84,7 +84,7 @@ textarea {
 /* -------------------------------------------------- */
 
 .fnt-ps {
-  font-family: "Montserrat";
+  font-family: "Montserrat" !important;
 }
 
 /* End */
@@ -103,6 +103,10 @@ body {
   color: #3d3d3d !important;
   height: 100%;
   position: relative;
+}
+
+.MuiTable-root-225 {
+  font-family: "Montserrat" !important;
 }
 
 * {
@@ -265,7 +269,7 @@ button:focus {
 }
 
 .txt-s {
-  font-size: 16px !important;
+  font-size: 15px !important;
   line-height: 18px;
 }
 

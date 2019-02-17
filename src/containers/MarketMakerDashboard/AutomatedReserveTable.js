@@ -105,18 +105,18 @@ class AutomatedReserveTable extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Token Name</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Deposit</TableCell>
-                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Withdraw</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Token Name</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Deposit</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Withdraw</TableCell>
                 {/* <Table.HeaderCell>Modify Bid/Ask Prices</Table.HeaderCell> */}
-                <TableCell className="txt-s txt-dddbld table-text-pad table-head-clr">Etherscan</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad table-head-clr">Etherscan</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
                         <LoadingButton
@@ -129,7 +129,7 @@ class AutomatedReserveTable extends Component {
                       </span>
                     </CustomToolTip>
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the operator">
                       <span>
                         <LoadingButton
@@ -155,7 +155,7 @@ class AutomatedReserveTable extends Component {
                     </span>
                   </CustomToolTip>
                 </TableCell> */}
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     <span>
                       <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
                         View on Blockchain

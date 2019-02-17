@@ -11,12 +11,12 @@ class TokenPriceTable extends PureComponent {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Value($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Token Price($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Bid Price($)</TableCell>
-              <TableCell className="txt-s txt-dddbld table-text-pad  table-head-clr">Ask Price($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Value($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Price($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Bid Price($)</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Ask Price($)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -25,14 +25,14 @@ class TokenPriceTable extends PureComponent {
               const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
               return (
                 <TableRow key={key}>
-                  <TableCell className="txt-s table-text-pad">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">
+                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">
                     {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
                   </TableCell>
-                  <TableCell className="txt-s table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
-                  <TableCell className="txt-s table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
                 </TableRow>
               );
             })}
