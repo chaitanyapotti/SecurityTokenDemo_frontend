@@ -21,7 +21,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "web3": "^1.0.0-beta.37",
+    "web3": "1.0.0-beta.37",
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
