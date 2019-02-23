@@ -22,7 +22,7 @@
 
 .landing {
   position: relative;
-  background: url("./img/HeaderCondensed.png") no-repeat;
+  background: url("./assets/HeaderCondensed.png") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
