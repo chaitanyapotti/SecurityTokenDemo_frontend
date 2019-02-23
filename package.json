@@ -34,7 +34,8 @@
     "fix": "eslint --fix src",
     "q": "eslint --quiet --fix src/index.js $(git diff --cached --name-only --diff-filter=d HEAD | grep .js$)",
     "size:why": "node tools/stats.js",
-    "size": "size-limit"
+    "size": "size-limit",
+    "heroku-postbuild": "echo Skip build on Heroku"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",
@@ -61,5 +62,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "heroku-run-build-script": true
 }
