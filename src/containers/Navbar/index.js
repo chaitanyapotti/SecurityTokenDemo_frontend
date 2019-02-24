@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import { withRouter } from "react-router-dom";
 import { logoutUserAction } from "../../actions/authActions";
 
@@ -13,7 +13,7 @@ class Navbar extends PureComponent {
   };
 
   render() {
-    const { isAuthenticated } = this.props || {};
+    const { isAuthenticated, handleOpen, role } = this.props || {};
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-test mb-4 fixed-top">
         <div className="container">
@@ -29,6 +29,15 @@ class Navbar extends PureComponent {
                     Logout
                   </Button>
                 </li>
+                {role === "broker_dealer" ? (
+                  <li style={{ marginLeft: "20px" }} className="nav-item">
+                    <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={handleOpen}>
+                      Add Investor
+                    </Button>
+                  </li>
+                ) : (
+                  <div />
+                )}
               </ul>
             </div>
           ) : (

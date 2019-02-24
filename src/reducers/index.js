@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { reducer as formReducer } from "redux-form";
 import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import userReducer from "./userReducer";
@@ -14,5 +15,6 @@ export default combineReducers({
   marketMakerData: marketMakerReducer,
   signinManagerData: signinManagerReducer,
   tradeData: tradeReducer,
-  priceHistoryData: priceHistoryReducer
+  priceHistoryData: priceHistoryReducer,
+  form: formReducer
 });

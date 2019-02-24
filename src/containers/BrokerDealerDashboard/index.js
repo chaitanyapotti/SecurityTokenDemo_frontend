@@ -15,8 +15,13 @@ import { getPortfolioSelector, getTokenPortfolioSelector } from "../../selectors
 import PortfolioTable from "../../components/common/PortfolioTable";
 import TransactionHistory from "../../components/common/TransactionHistory";
 import DropdownComponent from "../../components/common/DropdownComponent";
+import AddInvestorModal from "../../components/AddInvestorModal";
 
 class BrokerDealerDashboard extends Component {
+  state = {
+    modalOpen: false
+  };
+
   componentWillMount() {
     const { first_name, email, phone, id, role, date, status, publicAddress, investors } = JSON.parse(localStorage.getItem("user_data")) || {};
     const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
@@ -42,12 +47,12 @@ class BrokerDealerDashboard extends Component {
 
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
+    const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions, modalOpen } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
     return (
       <Grid container="true">
-        <Navbar />
+        <Navbar role="broker_dealer" handleOpen={() => this.setState({ modalOpen: true })} />
         <div style={{ marginTop: "100px" }}>
           <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
         </div>
@@ -86,6 +91,7 @@ class BrokerDealerDashboard extends Component {
             </CUICard>
           </div>
         ) : null}
+        <AddInvestorModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
       </Grid>
     );
   }

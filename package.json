@@ -11,6 +11,7 @@
     "echarts-for-react": "^2.0.15-beta.0",
     "jwt-decode": "^2.2.0",
     "lodash.merge": "^4.6.1",
+    "onfido-sdk-ui": "^3.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
@@ -19,10 +20,11 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-form": "^8.1.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "web3": "1.0.0-beta.37",
-    "redux-devtools-extension": "^2.13.8"
+    "web3": "1.0.0-beta.37"
   },
   "scripts": {
     "start": "react-scripts start",

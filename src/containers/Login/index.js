@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, Avatar, CssBaseline, FormControl, Input, InputLabel, Paper, Typography, withStyles } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
+import SignUpModal from "../../components/SignUpModal";
 
 const styles = theme => ({
   main: {
@@ -40,9 +41,9 @@ const styles = theme => ({
 });
 
 class Login extends Component {
-  // state = {
-  //   modalOpen: false
-  // };
+  state = {
+    modalOpen: false
+  };
 
   onUsernameOrEmailChange = e => {
     const { setUsernameOrEmailAction: setUsernameOrEmail } = this.props;
@@ -74,6 +75,7 @@ class Login extends Component {
 
   render() {
     const { errors, usernameOrEmail, password, classes } = this.props || {};
+    const { modalOpen } = this.state || {};
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -123,29 +125,13 @@ class Login extends Component {
               >
                 Sign in
               </Button>
-              {/* <div className="text-center push--top">
+              <div className="text-center push--top">
                 Don't have an acccount? <a onClick={() => this.setState({ modalOpen: true })}>Sign Up</a>
-              </div> */}
+              </div>
             </form>
           </Paper>
         </main>
-        {/* <CUIModal open={modalOpen}>
-          <CUIModalContent>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Email</InputLabel>
-              <Input error={!!errors.password} value={password} onChange={this.onPasswordChange} name="email" type="email" id="email" />
-              {errors.password && <div>{errors.password}</div>}
-            </FormControl>
-          </CUIModalContent>
-          <CUIModalActions>
-            <Button variant="contained" color="primary">
-              Submit
-            </Button>
-            <Button onClick={() => this.setState({ modalOpen: false })} variant="contained" color="primary">
-              Cancel
-            </Button>
-          </CUIModalActions>
-        </CUIModal> */}
+        <SignUpModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
       </div>
     );
   }
