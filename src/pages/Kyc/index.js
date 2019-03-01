@@ -3,15 +3,19 @@ import Onfido from "onfido-sdk-ui";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { kycAuth, kycSdkToken } from "../../actions/kycAuth";
+import { amlComplyCheck } from "../../actions/amlActions";
 import Navbar from "../../containers/Navbar";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import CUICard from "../../components/CustomMUI/CUICard";
+import AmlModal from "../../components/AmlModal";
 
 let onfido = {};
 class Kyc extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modalOpen: false
+    };
   }
 
   componentDidMount() {
@@ -46,7 +50,8 @@ class Kyc extends React.PureComponent {
   };
 
   render() {
-    const { id, sdkToken } = this.props || {};
+    const { id, sdkToken, matchStatus } = this.props || {};
+    const { modalOpen } = this.state || {};
     return (
       <div>
         <Navbar />
@@ -63,9 +68,28 @@ class Kyc extends React.PureComponent {
                 </div>
               </CUICard>
             </Col>
+            <Col xs={6}>
+              <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
+                {matchStatus === "no_match" ? (
+                  <div>You Passed the AML check</div>
+                ) : (
+                  <div>
+                    <div>Do Anti Money Laundering Check (AML) </div>
+                    <Button
+                      style={{ marginTop: "20px" }}
+                      className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                      onClick={() => this.setState({ modalOpen: true })}
+                    >
+                      Proceed for AML
+                    </Button>
+                  </div>
+                )}
+              </CUICard>
+            </Col>
           </Row>
         </Grid>
 
+        <AmlModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
         <div id="onfido-mount" />
       </div>
     );
@@ -74,13 +98,15 @@ class Kyc extends React.PureComponent {
 
 const mapStateToProps = state => {
   const { id, sdkToken } = state.kycAuth || {};
+  const { matchStatus } = state.amlCheck || {};
   return {
     id,
-    sdkToken
+    sdkToken,
+    matchStatus
   };
 };
 
 export default connect(
   mapStateToProps,
-  { kycAuth, kycSdkToken }
+  { kycAuth, kycSdkToken, amlComplyCheck }
 )(Kyc);

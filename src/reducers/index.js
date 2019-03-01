@@ -8,6 +8,7 @@ import signinManagerReducer from "./signinManagerReducer";
 import tradeReducer from "./tradeReducer";
 import priceHistoryReducer from "./priceHistoryReducer";
 import kycAuthReducer from "./kycAuthReducer";
+import amlReducer from "./amlReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   tradeData: tradeReducer,
   priceHistoryData: priceHistoryReducer,
   form: formReducer,
-  kycAuth: kycAuthReducer
+  kycAuth: kycAuthReducer,
+  amlCheck: amlReducer
 });
