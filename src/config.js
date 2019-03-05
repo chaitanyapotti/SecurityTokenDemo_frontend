@@ -1,7 +1,8 @@
 module.exports = {
   network: "rinkeby",
   etherPrice: 150,
-  api: "https://api-securitytoken.herokuapp.com",
+  // api: "https://api-securitytoken.herokuapp.com",
+  api: "https://api.securitytoken.two12.co",
   // api: "http://localhost:2020",
   tokens: {
     RIV: { address: "0xbc803eC37C23C49feca2a65eae88d674e8242F00", price: "10", name: "RIV-A", reserveType: "REGULAR" },

@@ -222,7 +222,11 @@ class MarketMakerDashboard extends Component {
         </Grid>
       );
     }
-    return <CircularProgress />;
+    return (
+      <div className="vertical-center">
+        <CircularProgress />
+      </div>
+    );
   }
 }
 
