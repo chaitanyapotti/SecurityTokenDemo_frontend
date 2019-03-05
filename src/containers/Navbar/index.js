@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { AppBar, IconButton, Menu, MenuItem, Toolbar } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { logoutUserAction } from "../../actions/authActions";
 
 class Navbar extends PureComponent {
@@ -52,7 +52,9 @@ class Navbar extends PureComponent {
       <div style={{ flexGrow: 1 }}>
         <AppBar className="bg-test">
           <Toolbar>
-            <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="105" height="45" />
+            <Link to="/dashboard">
+              <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="105" height="45" />
+            </Link>
             <div style={{ flexGrow: 1 }} />
             {isAuthenticated && (
               <div>
