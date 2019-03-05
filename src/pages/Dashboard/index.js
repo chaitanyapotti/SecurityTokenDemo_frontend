@@ -1,5 +1,5 @@
 import React, { Component, lazy } from "react";
-import Button from '@material-ui/core/Button';
+import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
