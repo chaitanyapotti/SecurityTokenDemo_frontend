@@ -4,7 +4,6 @@ import { TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
-import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction, withdrawEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
@@ -58,12 +57,6 @@ class MarketMakerDashboard extends Component {
   handleDepositEtherModalClose = () => this.setState({ depositEtherModalOpen: false, depositEtherInput: "" });
 
   handleWithdrawEtherModalClose = () => this.setState({ withdrawEtherModalOpen: false, withdrawEtherInput: "" });
-
-  onLogoutClick = e => {
-    const { logoutUserAction: logoutUser } = this.props;
-    const { history } = this.props || {};
-    logoutUser(history);
-  };
 
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange } = this.props;
@@ -143,9 +136,6 @@ class MarketMakerDashboard extends Component {
                 </div>
               </Col>
               <Col lg={2} xsOffset={2}>
-                {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
-                Logout
-              </Button> */}
                 <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
                   View Reserve on Blockchain
                 </a>
@@ -259,7 +249,6 @@ class MarketMakerDashboard extends Component {
 }
 
 MarketMakerDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired,
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
@@ -309,7 +298,6 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    logoutUserAction,
     onDropdownChange,
     getTokenBalance,
     getUserBalanceAction,

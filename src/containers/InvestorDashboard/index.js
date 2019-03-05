@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { logoutUserAction } from "../../actions/authActions";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
@@ -13,12 +12,6 @@ import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector } from "../../selectors";
 
 class InvestorDashboard extends Component {
-  onLogoutClick = e => {
-    const { logoutUserAction: logoutUser } = this.props;
-    const { history } = this.props || {};
-    logoutUser(history);
-  };
-
   componentWillMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
     const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
@@ -47,11 +40,6 @@ class InvestorDashboard extends Component {
                   Portfolio Value : <span className="txt-m text--secondary">{formatMoney(currentPortfolioValue[publicAddress].total, 0)}</span>
                 </div>
               </Col>
-              {/* <Col lg={2} xsOffset={2}>
-              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
-                Logout
-              </Button>
-            </Col> */}
             </Row>
           </CUICard>
           <HoldingsTable tokenBalance={tokenBalance[publicAddress]} currentPortfolioValue={currentPortfolioValue[publicAddress]} />
@@ -70,7 +58,6 @@ class InvestorDashboard extends Component {
 }
 
 InvestorDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired
 };
@@ -87,5 +74,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, getUserBalanceAction, getTokenBalance }
+  { getUserBalanceAction, getTokenBalance }
 )(InvestorDashboard);
