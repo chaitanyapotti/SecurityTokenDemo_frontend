@@ -16,7 +16,7 @@ class Navbar extends PureComponent {
   render() {
     const { isAuthenticated } = this.props || {};
     return (
-      <AppBar className="bg-test App-header">
+      <AppBar className="bg-test">
         <Grid>
           <Row>
             <Col lg={10} sm={6}>
