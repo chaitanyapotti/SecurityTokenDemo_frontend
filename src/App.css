@@ -873,3 +873,10 @@ input[type="file"] {
 .table-text-pad {
   padding: 10px 20px !important;
 }
+
+.vertical-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

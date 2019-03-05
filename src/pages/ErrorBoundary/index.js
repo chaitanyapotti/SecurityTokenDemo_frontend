@@ -27,7 +27,17 @@ class ErrorBoundary extends Component {
       return <h1>Error Occured. Please contact admin</h1>;
     }
     // Maybe a loader in suspense
-    return <Suspense fallback={<CircularProgress />}>{children}</Suspense>;
+    return (
+      <Suspense
+        fallback={
+          <div className="vertical-center">
+            <CircularProgress />
+          </div>
+        }
+      >
+        {children}
+      </Suspense>
+    );
   }
 }
 

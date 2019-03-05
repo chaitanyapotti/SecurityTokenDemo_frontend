@@ -61,7 +61,7 @@ class Navbar extends PureComponent {
                 <Button onClick={this.handleOpen} color="inherit" aria-owns={menuOpen ? "menu-appbar" : undefined} aria-haspopup="true">
                   <div>
                     <AccountCircle />
-                    <span className="push-half--left txt-m text-align">{first_name}</span>
+                    <span style={{position: 'relative', top: '-5px'}} className="push-half--left txt-m text-align">{first_name}</span>
                   </div>
                 </Button>
                 <Menu
