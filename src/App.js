@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
