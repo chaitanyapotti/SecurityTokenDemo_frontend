@@ -1,4 +1,5 @@
 import React, { Component, Suspense } from "react";
+import { CircularProgress } from "@material-ui/core";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class ErrorBoundary extends Component {
       return <h1>Error Occured. Please contact admin</h1>;
     }
     // Maybe a loader in suspense
-    return <Suspense fallback={<div />}>{children}</Suspense>;
+    return <Suspense fallback={<CircularProgress />}>{children}</Suspense>;
   }
 }
 

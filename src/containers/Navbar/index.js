@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { AppBar, IconButton, Menu, MenuItem, Toolbar } from "@material-ui/core";
+import { AppBar, Button, Menu, MenuItem, Toolbar } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
 import { withRouter, Link } from "react-router-dom";
 import { logoutUserAction } from "../../actions/authActions";
@@ -46,7 +46,7 @@ class Navbar extends PureComponent {
   };
 
   render() {
-    const { isAuthenticated } = this.props || {};
+    const { isAuthenticated, first_name } = this.props || {};
     const { menuOpen, anchorEl } = this.state;
     return (
       <div style={{ flexGrow: 1 }}>
@@ -58,9 +58,12 @@ class Navbar extends PureComponent {
             <div style={{ flexGrow: 1 }} />
             {isAuthenticated && (
               <div>
-                <IconButton onClick={this.handleOpen} color="inherit" aria-owns={menuOpen ? "menu-appbar" : undefined} aria-haspopup="true">
-                  <AccountCircle />
-                </IconButton>
+                <Button onClick={this.handleOpen} color="inherit" aria-owns={menuOpen ? "menu-appbar" : undefined} aria-haspopup="true">
+                  <div>
+                    <AccountCircle />
+                    <span className="push-half--left txt-m text-align">{first_name}</span>
+                  </div>
+                </Button>
                 <Menu
                   id="menu-appbar"
                   anchorEl={anchorEl}
@@ -80,7 +83,7 @@ class Navbar extends PureComponent {
                   </MenuItem>
                   <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
                 </Menu>
-                <span className="push--left">v0.9</span>
+                <span className="push--left txt-m">v0.9</span>
               </div>
             )}
           </Toolbar>
@@ -96,8 +99,12 @@ Navbar.propTypes = {
 
 const mapStateToProps = state => {
   const { auth } = state;
-  const { isAuthenticated } = auth;
+  const {
+    isAuthenticated,
+    userData: { first_name }
+  } = auth;
   return {
+    first_name,
     isAuthenticated
   };
 };

@@ -66,3 +66,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+TODO:
+
+1. center circular progress wherever present
+2. Align contents of button inside Navbar class (with michelle text - don't capitalize text of michelle)
+3. Remove unused css - to be done at the end

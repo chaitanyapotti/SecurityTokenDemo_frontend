@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
+import { CircularProgress } from "@material-ui/core";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
@@ -48,7 +49,7 @@ class InvestorDashboard extends Component {
         </Grid>
       );
     }
-    return <div />;
+    return <CircularProgress />;
   }
 }
 

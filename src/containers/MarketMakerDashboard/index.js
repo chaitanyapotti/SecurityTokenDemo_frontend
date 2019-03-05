@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { TextField } from "@material-ui/core";
-
+import { TextField, CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
@@ -223,7 +222,7 @@ class MarketMakerDashboard extends Component {
         </Grid>
       );
     }
-    return <div />;
+    return <CircularProgress />;
   }
 }
 
