@@ -37,6 +37,7 @@
     "heroku-postbuild": "echo Skip build on Heroku"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.0.0",
     "eslint-config-standard": "^12.0.0",
