@@ -9,11 +9,13 @@ export const loginUserAction = (userData, history) => dispatch => {
     .post(`${config.api}/api/users/login`, userData)
     .then(res => {
       const { token } = res.data;
-      localStorage.setItem("user_data", JSON.stringify(res.data));
+      const stringified = JSON.stringify(res.data);
+      localStorage.setItem("user_data", stringified);
       localStorage.setItem("jwtToken", token);
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
+      dispatch(setUserData(stringified));
       history.push("/dashboard");
       dispatch({
         type: actionTypes.GET_ERRORS,
@@ -33,11 +35,17 @@ export const setCurrentUser = decoded => ({
   payload: decoded
 });
 
+export const setUserData = userData => ({
+  type: actionTypes.SET_USER_DATA,
+  payload: userData
+});
+
 export const logoutUserAction = history => dispatch => {
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("user_data");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
+  dispatch(setUserData(""));
   history.push("/");
   dispatch({
     type: actionTypes.SET_USERNAME_OR_EMAIL,

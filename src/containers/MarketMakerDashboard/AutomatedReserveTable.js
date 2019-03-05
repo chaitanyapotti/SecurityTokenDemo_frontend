@@ -51,8 +51,7 @@ class AutomatedReserveTable extends Component {
 
   depositTokenClick = e => {
     const { depositToken: doDepositToken } = this.props;
-    const { userLocalPublicAddress, reserveType } = this.props || {};
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { userLocalPublicAddress, reserveType, reserveAddress } = this.props || {};
     const { token, depositTokenInput } = this.state;
 
     doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress, reserveType);
@@ -60,8 +59,7 @@ class AutomatedReserveTable extends Component {
 
   withdrawTokenClick = e => {
     const { withdrawAction: withdrawToken } = this.props;
-    const { userLocalPublicAddress, reserveType } = this.props || {};
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { userLocalPublicAddress, reserveType, reserveAddress } = this.props || {};
     const { token, withdrawTokenInput } = this.state;
 
     withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress, reserveType);
@@ -255,7 +253,10 @@ class AutomatedReserveTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const { marketMakerData, signinManagerData, tradeData } = state;
+  const { marketMakerData, signinManagerData, tradeData, auth } = state;
+  const {
+    userData: { reserveAddress, reserveType }
+  } = auth || {};
   const {
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
@@ -276,6 +277,8 @@ const mapStateToProps = state => {
 
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
+    reserveAddress,
+    reserveType,
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
     transferTokenSuccess,

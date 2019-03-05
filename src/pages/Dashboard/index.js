@@ -27,8 +27,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { history } = this.props || {};
-    const { role } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { history, role } = this.props || {};
     if (role === "INVESTOR") {
       return (
         <ErrorBoundary>
@@ -64,9 +63,13 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { isAuthenticated } = state.auth || {};
+  const {
+    isAuthenticated,
+    userData: { role }
+  } = state.auth || {};
   return {
-    isAuthenticated
+    isAuthenticated,
+    role
   };
 };
 

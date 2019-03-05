@@ -1,16 +1,12 @@
 import React, { PureComponent } from "react";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { connect } from "react-redux";
+import { Grid } from "../../helpers/react-flexbox-grid";
 import BioTable from "../../components/common/BioTable";
 import Navbar from "../../containers/Navbar";
 
 class Profile extends PureComponent {
-  componentWillMount() {
-    const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
-  }
-
   render() {
-    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
+    const { first_name, email, phone, id, role, date, status } = this.props || {};
     return (
       <Grid container="true">
         <Navbar />
@@ -22,4 +18,22 @@ class Profile extends PureComponent {
   }
 }
 
-export default Profile;
+const mapStatesToProps = state => {
+  const {
+    userData: { first_name, email, phone, id, role, date, status }
+  } = state.auth || {};
+  return {
+    first_name,
+    email,
+    phone,
+    id,
+    role,
+    date,
+    status
+  };
+};
+
+export default connect(
+  mapStatesToProps,
+  {}
+)(Profile);

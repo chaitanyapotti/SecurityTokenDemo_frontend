@@ -8,29 +8,24 @@ import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import HoldingsTable from "../../components/common/HoldingsTable";
 import Navbar from "../Navbar";
-import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector } from "../../selectors";
 
 class InvestorDashboard extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
+    const { publicAddress } = this.props || {};
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
   }
 
   render() {
     const { userBalance, tokenBalance, currentPortfolioValue } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
+    const { publicAddress } = this.props || {};
     if (tokenBalance[publicAddress] && currentPortfolioValue[publicAddress]) {
       return (
         <Grid container="true">
           <Navbar />
-          <div style={{ marginTop: "100px" }}>
-            <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-          </div>
-          <CUICard style={{ marginTop: "10px" }}>
+          <CUICard style={{ marginTop: "100px" }}>
             <Row>
               <Col lg={8}>
                 <div className="txt-m text--primary push-half--bottom push-top--35">
@@ -63,9 +58,13 @@ InvestorDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData } = state;
+  const { userData, auth } = state;
   const { userBalance, tokenBalance } = userData || {};
+  const {
+    userData: { publicAddress }
+  } = auth || {};
   return {
+    publicAddress,
     userBalance,
     tokenBalance,
     currentPortfolioValue: getPortfolioSelector(state)
