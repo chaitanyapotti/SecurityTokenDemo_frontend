@@ -7,10 +7,17 @@ import { withRouter } from "react-router-dom";
 import { logoutUserAction } from "../../actions/authActions";
 
 class Navbar extends PureComponent {
-  state = {
-    menuOpen: false,
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    const {
+      location: { pathname }
+    } = this.props || {};
+    this.state = {
+      menuOpen: false,
+      anchorEl: null,
+      pathname
+    };
+  }
 
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
@@ -30,7 +37,12 @@ class Navbar extends PureComponent {
   onProfileClicked = e => {
     const { history } = this.props || {};
     this.handleClose();
-    history.push("/profile");
+    history.push(this.getMenuRoute());
+  };
+
+  getMenuRoute = () => {
+    const { pathname } = this.state;
+    return pathname === "/dashboard" ? "/profile" : "/dashboard";
   };
 
   render() {
@@ -61,7 +73,9 @@ class Navbar extends PureComponent {
                   open={menuOpen}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.onProfileClicked}>Profile</MenuItem>
+                  <MenuItem className="txt-capitalize" onClick={this.onProfileClicked}>
+                    {this.getMenuRoute().replace("/", "")}
+                  </MenuItem>
                   <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
                 </Menu>
                 <span className="push--left">v0.9</span>
