@@ -6,6 +6,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
+import constants from "../../helpers/constants";
 
 const validate = values => {
   const errors = {};
@@ -72,9 +73,9 @@ const SignUpForm = props => {
       <div style={{ marginTop: "20px" }}>
         <Field classes={classes} name="favoriteColor" component={renderSelectField} label="Favorite Color">
           <option value="" />
-          <option value="BROKER_DEALER">Broker Dealer</option>
-          <option value="MARKET_MAKER">Market Maker</option>
-          <option value="INVESTOR">Investor</option>
+          <option value={constants.BROKER_DEALER}>Broker Dealer</option>
+          <option value={constants.MARKET_MAKER}>Market Maker</option>
+          <option value={constants.INVESTOR}>Investor</option>
         </Field>
       </div>
       <div style={{ marginTop: "20px" }}>
