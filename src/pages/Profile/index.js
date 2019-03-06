@@ -23,6 +23,13 @@ class Profile extends PureComponent {
     onfidoLoading: false
   };
 
+  componentDidMount() {
+    const { isAuthenticated, history } = this.props || {};
+    if (!isAuthenticated) {
+      history.push("/");
+    }
+  }
+
   componentWillUnmount() {
     if (onfido) onfido.tearDown();
   }
@@ -125,7 +132,7 @@ class Profile extends PureComponent {
                         <div className="txt-l txt-dbld">Account</div>
                         <div>{status}</div>
                         <div className="push--top txt-l txt-dbld">Active Since</div>
-                        <div>{date.slice(0, 10)}</div>
+                        <div>{date && date.slice(0, 10)}</div>
                       </div>
                     </Col>
                     <Col lg={3} sm={12} className="soft">
@@ -253,7 +260,8 @@ class Profile extends PureComponent {
 
 const mapStatesToProps = state => {
   const {
-    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus }
+    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus },
+    isAuthenticated
   } = state.auth || {};
   return {
     first_name,
@@ -266,7 +274,8 @@ const mapStatesToProps = state => {
     status,
     kycStatus,
     amlStatus,
-    accreditationStatus
+    accreditationStatus,
+    isAuthenticated
   };
 };
 

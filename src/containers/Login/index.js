@@ -5,6 +5,7 @@ import { Button, Avatar, CssBaseline, FormControl, Input, InputLabel, Paper, Typ
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
 import SignUpModal from "../../components/SignUpModal";
+import constants from "../../helpers/constants";
 
 const styles = theme => ({
   main: {
@@ -66,16 +67,17 @@ class Login extends Component {
   };
 
   componentDidMount() {
-    const { isAuthenticated, history } = this.props || {};
-
-    if (isAuthenticated) {
+    const { isAuthenticated, history, status } = this.props || {};
+    if (isAuthenticated && status !== constants.APPROVED) {
+      history.push("/profile");
+    } else if (isAuthenticated) {
       history.push("/dashboard");
     }
   }
 
   render() {
     const { errors, usernameOrEmail, password, classes } = this.props || {};
-    const { modalOpen } = this.state || {};
+    const { modalOpen } = this.state;
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -138,10 +140,17 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isAuthenticated, user, usernameOrEmail, password } = state.auth || {};
+  const {
+    isAuthenticated,
+    user,
+    usernameOrEmail,
+    password,
+    userData: { status }
+  } = state.auth || {};
   const { errors } = state || {};
 
   return {
+    status,
     isAuthenticated,
     user,
     usernameOrEmail,

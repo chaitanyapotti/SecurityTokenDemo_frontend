@@ -3,12 +3,13 @@ import jwt_decode from "jwt-decode";
 import actionTypes from "../actionTypes";
 import setAuthToken from "../utils/setAuthToken";
 import config from "../config";
+import constants from "../helpers/constants";
 
 export const loginUserAction = (userData, history) => dispatch => {
   axios
     .post(`${config.api}/api/users/login`, userData)
     .then(res => {
-      const { token } = res.data;
+      const { token, status } = res.data;
       const stringified = JSON.stringify(res.data);
       localStorage.setItem("user_data", stringified);
       localStorage.setItem("jwtToken", token);
@@ -16,7 +17,9 @@ export const loginUserAction = (userData, history) => dispatch => {
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
       dispatch(setUserData(stringified));
-      history.push("/dashboard");
+      if (status !== constants.APPROVED) {
+        history.push("/profile");
+      } else history.push("/dashboard");
       dispatch({
         type: actionTypes.GET_ERRORS,
         payload: {}
