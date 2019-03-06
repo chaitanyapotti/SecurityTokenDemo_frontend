@@ -66,9 +66,9 @@ class Profile extends PureComponent {
               </Row>
             </Grid>
           </Paper>
-          <Paper className="card-brdr push--ends">
+          <Paper className="card-brdr push--ends soft">
             <div>Hello, {first_name}!</div>
-            <div>
+            <div className="push--top">
               {/* Check for final kyc/aml/accreditation status and enable or disable below content */}
               You still need to do some checks
             </div>
