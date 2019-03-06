@@ -18,17 +18,6 @@ class Kyc extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    // this.props.kycAuth();
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   console.log("compoeenenewilll", nextProps, this.props);
-  //   if (nextProps.id !== this.props.id) {
-  //     this.props.kycSdkToken(nextProps.id);
-  //   }
-  // }
-
   componentWillUnmount() {
     onfido.tearDown();
   }
