@@ -186,18 +186,20 @@ class Profile extends PureComponent {
         </Grid>
         <AmlModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
         <div id="onfido-mount" />
-        <iframe
-          style={{ border: "0px #ffffff none" }}
-          id="InvestReadyiFrame"
-          name="InvestReady"
-          scrolling="false"
-          frameBorder="0"
-          marginHeight="0px"
-          marginWidth="0px"
-          height="550px"
-          width="100%"
-          allowFullScreen
-        />
+        <div className="push-top--50">
+          <iframe
+            style={{ border: "0px #ffffff none" }}
+            id="InvestReadyiFrame"
+            name="InvestReady"
+            scrolling="false"
+            frameBorder="0"
+            marginHeight="0px"
+            marginWidth="0px"
+            height="100vh"
+            width="100%"
+            allowFullScreen
+          />
+        </div>
       </div>
     );
   }
