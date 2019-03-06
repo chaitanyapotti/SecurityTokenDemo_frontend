@@ -39,7 +39,7 @@ const renderPicker = ({ label, input, meta: { touched, invalid, error }, ...cust
 );
 
 const AmlForm = props => {
-  const { handleSubmit, pristine, reset, submitting, classes, handleClose } = props;
+  const { handleSubmit, pristine, reset, submitting, handleClose } = props || {};
   return (
     <form onSubmit={handleSubmit}>
       <div>

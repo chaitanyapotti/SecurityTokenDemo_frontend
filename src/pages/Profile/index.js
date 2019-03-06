@@ -19,8 +19,19 @@ class Profile extends PureComponent {
     irFrame: false
   };
 
+  componentDidMount() {
+    // this.props.kycAuth();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // console.log("compoeenenewilll", nextProps, this.props);
+    // if (nextProps.id !== this.props.id) {
+    //   this.props.kycSdkToken(nextProps.id);
+    // }
+  }
+
   componentWillUnmount() {
-    onfido.tearDown();
+    // onfido.tearDown();
   }
 
   triggerIR = () => {
@@ -48,7 +59,8 @@ class Profile extends PureComponent {
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
 
   render() {
-    const { first_name, email, phone, id, role, date, status, last_name, sdkToken, kycStatus, amlStatus, accreditationStatus } = this.props || {};
+    const { first_name, email, phone, id, role, date, status, last_name, sdkToken, kycStatus, amlStatus, accreditationStatus, matchStatus } =
+      this.props || {};
     const { modalOpen, irFrame } = this.state;
 
     return (
