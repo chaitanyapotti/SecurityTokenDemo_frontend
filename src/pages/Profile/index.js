@@ -12,7 +12,6 @@ import AmlModal from "../../components/AmlModal";
 
 let onfido = {};
 let investReady = {};
-
 class Profile extends PureComponent {
   state = {
     modalOpen: false,
@@ -20,18 +19,21 @@ class Profile extends PureComponent {
   };
 
   componentDidMount() {
+    // window.onload = function(e) {
+    // window.IR.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
+    // };
     // this.props.kycAuth();
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log("compoeenenewilll", nextProps, this.props);
-    // if (nextProps.id !== this.props.id) {
-    //   this.props.kycSdkToken(nextProps.id);
-    // }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("compoeenenewilll", nextProps, this.props);
+  //   if (nextProps.id !== this.props.id) {
+  //     this.props.kycSdkToken(nextProps.id);
+  //   }
+  // }
 
   componentWillUnmount() {
-    // onfido.tearDown();
+    onfido.tearDown();
   }
 
   triggerIR = () => {
@@ -50,7 +52,6 @@ class Profile extends PureComponent {
       token: sdkToken,
       onComplete(data) {
         // callback for when everything is complete
-        // call patch api
         console.log("everything is complete", data);
       }
     });
@@ -59,9 +60,8 @@ class Profile extends PureComponent {
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
 
   render() {
-    const { first_name, email, phone, id, role, date, status, last_name, sdkToken, kycStatus, amlStatus, accreditationStatus, matchStatus } =
-      this.props || {};
-    const { modalOpen, irFrame } = this.state;
+    const { first_name, email, phone, id, role, date, status, last_name, sdkToken, matchStatus } = this.props || {};
+    const { modalOpen, irFrame } = this.state || {};
 
     return (
       <div>
@@ -125,7 +125,7 @@ class Profile extends PureComponent {
                 <div>Hello, {first_name}!</div>
                 <div className="push--top">
                   {/* Check for final kyc/aml/accreditation status and enable or disable below content */}
-                  {status === constants.APPROVED ? "All checks are done" : "You still need to do some checks"}
+                  You still need to do some checks
                 </div>
               </Paper>
               <Paper className="card-brdr push--ends">
@@ -141,48 +141,42 @@ class Profile extends PureComponent {
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
                       {/* If check complete, show completed; else, show button which opens modal */}
-                      <TableCell className="txt-s fnt-ps table-text-pad">{kycStatus}</TableCell>
-                      {kycStatus !== constants.APPROVED && (
-                        <TableCell className="txt-s fnt-ps table-text-pad">
-                          <Button
-                            style={{ marginTop: "20px" }}
-                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                            onClick={() => this.triggerOnfido(sdkToken)}
-                          >
-                            Proceed for KYC
-                          </Button>
-                        </TableCell>
-                      )}
+                      <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">
+                        <Button
+                          style={{ marginTop: "20px" }}
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                          onClick={() => this.triggerOnfido(sdkToken)}
+                        >
+                          Proceed for KYC
+                        </Button>
+                      </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">{amlStatus}</TableCell>
-                      {amlStatus !== constants.APPROVED && (
-                        <TableCell className="txt-s fnt-ps table-text-pad">
-                          <Button
-                            style={{ marginTop: "20px" }}
-                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                            onClick={() => this.setState({ modalOpen: true })}
-                          >
-                            Proceed for AML
-                          </Button>
-                        </TableCell>
-                      )}
+                      <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">
+                        <Button
+                          style={{ marginTop: "20px" }}
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                          onClick={() => this.setState({ modalOpen: true })}
+                        >
+                          Proceed for AML
+                        </Button>
+                      </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">{accreditationStatus}</TableCell>
-                      {accreditationStatus !== constants.APPROVED && (
-                        <TableCell className="txt-s fnt-ps table-text-pad">
-                          <Button
-                            style={{ marginTop: "20px" }}
-                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                            onClick={() => this.triggerIR()}
-                          >
-                            Proceed for Accredition
-                          </Button>
-                        </TableCell>
-                      )}
+                      <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">
+                        <Button
+                          style={{ marginTop: "20px" }}
+                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                          onClick={() => this.triggerIR()}
+                        >
+                          Proceed for Accredition
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -194,7 +188,6 @@ class Profile extends PureComponent {
         <div id="onfido-mount" />
         <div className="push-top--50">
           <iframe
-            title="investReadyFrame"
             style={{ border: "0px #ffffff none" }}
             id="InvestReadyiFrame"
             name="InvestReady"
@@ -214,7 +207,7 @@ class Profile extends PureComponent {
 
 const mapStatesToProps = state => {
   const {
-    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus }
+    userData: { first_name, email, phone, id, role, date, status, last_name }
   } = state.auth || {};
   return {
     first_name,
@@ -224,10 +217,7 @@ const mapStatesToProps = state => {
     id,
     role,
     date,
-    status,
-    kycStatus,
-    amlStatus,
-    accreditationStatus
+    status
   };
 };
 
