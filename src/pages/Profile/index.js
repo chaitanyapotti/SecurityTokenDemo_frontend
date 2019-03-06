@@ -6,6 +6,7 @@ import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@materi
 import LoadingButton from "../../components/common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { amlComplyCheck } from "../../actions/amlActions";
+import { setUserData } from "../../actions/authActions";
 import Navbar from "../../containers/Navbar";
 import constants from "../../helpers/constants";
 import AmlModal from "../../components/AmlModal";
@@ -79,10 +80,7 @@ class Profile extends PureComponent {
                 .then(kycResponse => {
                   const stringified = JSON.stringify(kycResponse.data);
                   localStorage.setItem("user_data", stringified);
-                  store.dispatch({
-                    type: actionTypes.SET_USER_DATA,
-                    payload: stringified
-                  });
+                  store.dispatch(setUserData(stringified));
                 })
                 .catch(err => console.log(err));
             }

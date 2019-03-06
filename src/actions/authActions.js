@@ -20,10 +20,6 @@ export const loginUserAction = (userData, history) => dispatch => {
       if (status !== constants.APPROVED) {
         history.push("/profile");
       } else history.push("/dashboard");
-      dispatch({
-        type: actionTypes.GET_ERRORS,
-        payload: {}
-      });
     })
     .catch(err =>
       dispatch({
@@ -49,7 +45,6 @@ export const logoutUserAction = history => dispatch => {
   setAuthToken(false);
   dispatch(setCurrentUser({}));
   dispatch(setUserData(""));
-  history.push("/");
   dispatch({
     type: actionTypes.SET_USERNAME_OR_EMAIL,
     payload: ""
@@ -62,6 +57,7 @@ export const logoutUserAction = history => dispatch => {
     type: actionTypes.CLEAR_STORE,
     payload: ""
   });
+  history.push("/");
 };
 
 export const setUsernameOrEmailAction = input => dispatch => {
