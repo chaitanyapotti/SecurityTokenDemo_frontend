@@ -24,7 +24,7 @@ class Profile extends PureComponent {
   componentDidMount() {
     const { isAuthenticated, history } = this.props || {};
     if (!isAuthenticated) {
-      history.push("/")
+      history.push("/");
     }
   }
 
