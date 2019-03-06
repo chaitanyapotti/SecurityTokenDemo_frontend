@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 const IR = {
   domain: "https://www.sandbox.investready.com",
   iFrame: null,
@@ -33,13 +34,13 @@ const IR = {
       "message",
       function(event) {
         try {
-          if (event.data != undefined) {
+          if (event.data !== undefined) {
             IR.response = JSON.parse(event.data);
           }
-          if (IR.response.height != undefined) {
+          if (IR.response.height !== undefined) {
             IR.resize(IR.response.height);
           }
-          if (IR.response.data.success != undefined && IR.response.data.success == 1) {
+          if (IR.response.data.success !== undefined && IR.response.data.success === 1) {
             IR.complete(event.data);
           }
         } catch (e) {
@@ -59,7 +60,7 @@ const IR = {
     }
   },
   resize(changeHeightTo) {
-    if (IR.previousHeight != changeHeightTo) {
+    if (IR.previousHeight !== changeHeightTo) {
       IR.previousHeight = changeHeightTo;
       if (window.innerWidth < 750) {
         IR.iFrame.height = `${changeHeightTo + 400}px`;
