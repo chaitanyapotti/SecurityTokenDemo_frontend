@@ -17,18 +17,18 @@ const selectInputStyle = {
     flexWrap: "wrap"
   },
   font: {
-    fontSize: "14px"
+    fontSize: "16px"
   }
 };
 
 class DropdownComponent extends PureComponent {
   render() {
     const { classes, data, label, value, onChange } = this.props || {};
-
+    const fontClass = `fnt-ps ${classes.font}`;
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel className="fnt-ps" style={{ fontSize: "14px" }} htmlFor="age-simple">
+          <InputLabel className={fontClass} htmlFor="age-simple">
             {label}
           </InputLabel>
           <Select
@@ -37,10 +37,10 @@ class DropdownComponent extends PureComponent {
             inputProps={{
               id: { label }
             }}
-            style={{ fontSize: "14px" }}
+            className={fontClass}
           >
             {data.map((item, index) => (
-              <MenuItem className="fnt-ps" key={item.value} value={item.value} style={{ fontSize: "14px" }}>
+              <MenuItem className={fontClass} key={item.value} value={item.value}>
                 {item.text}
               </MenuItem>
             ))}

@@ -1,51 +1,96 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import Button from "@material-ui/core/Button";
-import { withRouter } from "react-router-dom";
+import { AppBar, Button, Menu, MenuItem, Toolbar } from "@material-ui/core";
+import { AccountCircle } from "@material-ui/icons";
+import { withRouter, Link } from "react-router-dom";
 import { logoutUserAction } from "../../actions/authActions";
 
 class Navbar extends PureComponent {
+  constructor(props) {
+    super(props);
+    const {
+      location: { pathname }
+    } = this.props || {};
+    this.state = {
+      menuOpen: false,
+      anchorEl: null,
+      pathname
+    };
+  }
+
   onLogoutClick = e => {
     const { logoutUserAction: logoutUser } = this.props;
     const { history } = this.props || {};
+    this.handleClose();
     logoutUser(history);
   };
 
+  handleClose = () => {
+    this.setState({ menuOpen: false });
+  };
+
+  handleOpen = event => {
+    this.setState({ menuOpen: true, anchorEl: event.currentTarget });
+  };
+
+  onProfileClicked = e => {
+    const { history } = this.props || {};
+    this.handleClose();
+    history.push(this.getMenuRoute());
+  };
+
+  getMenuRoute = () => {
+    const { pathname } = this.state;
+    return pathname === "/dashboard" ? "/profile" : "/dashboard";
+  };
+
   render() {
-    const { isAuthenticated, handleOpen, role } = this.props || {};
+    const { isAuthenticated, first_name } = this.props || {};
+    const { menuOpen, anchorEl } = this.state;
     return (
-      <nav className="navbar navbar-expand-sm navbar-light bg-test mb-4 fixed-top">
-        <div className="container">
-          <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="105" height="45" />
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
-            <span className="navbar-toggler-icon" />
-          </button>
-          {isAuthenticated ? (
-            <div className="collapse navbar-collapse" id="mobile-nav">
-              <ul className="nav nav-pills ml-auto">
-                <li className="nav-item">
-                  <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
-                    Logout
-                  </Button>
-                </li>
-                {role === "broker_dealer" ? (
-                  <li style={{ marginLeft: "20px" }} className="nav-item">
-                    <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={handleOpen}>
-                      Add Investor
-                    </Button>
-                  </li>
-                ) : (
-                  <div />
-                )}
-              </ul>
-            </div>
-          ) : (
-            <div />
-          )}
-          <div className="push--left">v0.9</div>
-        </div>
-      </nav>
+      <div style={{ flexGrow: 1 }}>
+        <AppBar className="bg-test">
+          <Toolbar>
+            <Link to="/dashboard">
+              <img src="/assets/TWO12BlkWht.png" alt="whitelist checked" width="105" height="45" />
+            </Link>
+            <div style={{ flexGrow: 1 }} />
+            {isAuthenticated && (
+              <div>
+                <Button onClick={this.handleOpen} color="inherit" aria-owns={menuOpen ? "menu-appbar" : undefined} aria-haspopup="true">
+                  <div>
+                    <AccountCircle />
+                    <span style={{ position: "relative", top: "-5px", textTransform: "capitalize" }} className="push-half--left txt-m text-align">
+                      {first_name}
+                    </span>
+                  </div>
+                </Button>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  open={menuOpen}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem className="txt-capitalize" onClick={this.onProfileClicked}>
+                    {this.getMenuRoute().replace("/", "")}
+                  </MenuItem>
+                  <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
+                </Menu>
+                <span className="push--left txt-m">v0.9</span>
+              </div>
+            )}
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }
@@ -56,8 +101,12 @@ Navbar.propTypes = {
 
 const mapStateToProps = state => {
   const { auth } = state;
-  const { isAuthenticated } = auth;
+  const {
+    isAuthenticated,
+    userData: { first_name }
+  } = auth;
   return {
+    first_name,
     isAuthenticated
   };
 };

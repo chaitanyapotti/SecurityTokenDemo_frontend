@@ -13,46 +13,6 @@
   cursor: pointer;
 }
 
-.metamask-card {
-  position: relative;
-  display: inline-block;
-  height: 255px;
-  width: 205px;
-  background: url(/assets/LoginScreen/metamask.svg) no-repeat 0 0;
-  background-size: 100%;
-  cursor: pointer;
-}
-
-.prvt-key-card {
-  position: relative;
-  display: inline-block;
-  height: 255px;
-  width: 205px;
-  background: url(/assets/LoginScreen/prvt_key.svg) no-repeat 0 0;
-  background-size: 100%;
-  cursor: pointer;
-}
-
-.sign-in-card {
-  position: relative;
-  display: inline-block;
-  height: 255px;
-  width: 205px;
-  background: url(/assets/LoginScreen/sign_in.svg) no-repeat 0 0;
-  background-size: 100%;
-  cursor: pointer;
-}
-
-.attach-json-card {
-  position: relative;
-  display: inline-block;
-  height: 255px;
-  width: 205px;
-  background: url(/assets/LoginScreen/attch_json.svg) no-repeat 0 0;
-  background-size: 100%;
-  cursor: pointer;
-}
-
 .crd-mrgn {
   margin: 0 25px;
 }

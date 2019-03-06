@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { TextField } from "@material-ui/core";
-
+import { TextField, CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import LoadingButton from "../../components/common/LoadingButton";
-import { logoutUserAction } from "../../actions/authActions";
 import { onDropdownChange, depositEther, setCompactData, setQtyStepFunction, withdrawEther } from "../../actions/marketMakerActions";
 import { getTokenBalance, getUserBalanceAction } from "../../actions/userActions";
 import { getBuyRate, getSellRate } from "../../actions/tradeActions";
@@ -16,24 +14,20 @@ import config from "../../config";
 import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import Navbar from "../Navbar";
-import BioTable from "../../components/common/BioTable";
 import AlertModal from "../../components/common/AlertModal";
 import Transaction from "../../components/common/FormComponents/Transaction";
 import { CustomToolTip } from "../../components/common/FormComponents";
 import { getPortfolioSelector } from "../../selectors";
 
 class MarketMakerDashboard extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const {
       getUserBalanceAction: fetchUserBalance,
       getTokenBalance: fetchTokenBalance,
       getBuyRate: fetchBuyRate,
       getSellRate: fetchSellRate
     } = this.props;
-    const { publicAddress, first_name, email, phone, id, role, date, status, reserveAddress, reserveType } =
-      JSON.parse(localStorage.getItem("user_data")) || {};
-    const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
-    this.setState({ first_name, email, phone, id, role, date, status, etherScanLink, publicAddress, reserveAddress, reserveType });
+    const { reserveAddress, reserveType } = this.props || {};
     fetchUserBalance(reserveAddress);
     fetchTokenBalance(reserveAddress, reserveType);
     Object.keys(config.tokens).forEach(x => {
@@ -59,12 +53,6 @@ class MarketMakerDashboard extends Component {
 
   handleWithdrawEtherModalClose = () => this.setState({ withdrawEtherModalOpen: false, withdrawEtherInput: "" });
 
-  onLogoutClick = e => {
-    const { logoutUserAction: logoutUser } = this.props;
-    const { history } = this.props || {};
-    logoutUser(history);
-  };
-
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange } = this.props;
     dropDownChange(d.value);
@@ -80,15 +68,15 @@ class MarketMakerDashboard extends Component {
 
   depositClick = e => {
     const { depositEther: deposit } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
-    const { depositEtherInput, reserveAddress } = this.state;
+    const { userLocalPublicAddress, reserveAddress } = this.props || {};
+    const { depositEtherInput } = this.state;
     deposit(depositEtherInput, reserveAddress, userLocalPublicAddress);
   };
 
   withdrawClick = e => {
     const { withdrawEther: withdraw } = this.props;
-    const { userLocalPublicAddress } = this.props || {};
-    const { withdrawEtherInput, reserveAddress } = this.state;
+    const { userLocalPublicAddress, reserveAddress } = this.props || {};
+    const { withdrawEtherInput } = this.state;
     withdraw(withdrawEtherInput, reserveAddress, userLocalPublicAddress);
   };
 
@@ -101,37 +89,22 @@ class MarketMakerDashboard extends Component {
       depositEtherButtonSpinning,
       depositEtherButtonTransactionHash,
       withdrawEtherButtonSpinning,
-      withdrawEtherButtonTransactionHash
+      withdrawEtherButtonTransactionHash,
+      reserveAddress,
+      reserveType,
+      publicAddress,
+      etherScanLink
       // depositEtherSuccess,
       // withdrawEtherSuccess
     } = this.props || {};
-    const {
-      first_name,
-      email,
-      phone,
-      id,
-      role,
-      date,
-      status,
-      publicAddress,
-      etherScanLink,
-      depositEtherInput,
-      withdrawEtherInput,
-      depositEtherModalOpen,
-      withdrawEtherModalOpen,
-      reserveAddress,
-      reserveType
-    } = this.state;
+    const { depositEtherInput, withdrawEtherInput, depositEtherModalOpen, withdrawEtherModalOpen } = this.state;
     const isOperator = userLocalPublicAddress === publicAddress;
     const isOwner = userLocalPublicAddress === config.owner;
     if (tokenBalance[reserveAddress] && currentPortfolioValue[reserveAddress]) {
       return (
         <Grid container="true">
           <Navbar />
-          <div style={{ marginTop: "100px" }}>
-            <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-          </div>
-          <CUICard style={{ marginTop: "10px" }}>
+          <CUICard style={{ marginTop: "100px" }}>
             <Row>
               <Col lg={8}>
                 <div className="txt-m text--primary push-half--bottom  push-top--35">
@@ -143,9 +116,6 @@ class MarketMakerDashboard extends Component {
                 </div>
               </Col>
               <Col lg={2} xsOffset={2}>
-                {/* <Button className="btn bg--danger txt-p-vault txt-dddbld text--white push--bottom" onClick={this.onLogoutClick}>
-                Logout
-              </Button> */}
                 <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
                   View Reserve on Blockchain
                 </a>
@@ -186,7 +156,6 @@ class MarketMakerDashboard extends Component {
               currentPortfolioValue={currentPortfolioValue[reserveAddress]}
               isOperator={isOperator}
               isOwner={isOwner}
-              reserveType={reserveType}
             />
           ) : reserveType === "AUTOMATED" ? (
             <AutomatedReserveTable
@@ -194,7 +163,6 @@ class MarketMakerDashboard extends Component {
               currentPortfolioValue={currentPortfolioValue[reserveAddress]}
               isOperator={isOperator}
               isOwner={isOwner}
-              reserveType={reserveType}
             />
           ) : null}
 
@@ -254,12 +222,15 @@ class MarketMakerDashboard extends Component {
         </Grid>
       );
     }
-    return <div />;
+    return (
+      <div className="vertical-center">
+        <CircularProgress />
+      </div>
+    );
   }
 }
 
 MarketMakerDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired,
   onDropdownChange: Proptypes.func.isRequired,
   getTokenBalance: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
@@ -270,7 +241,10 @@ MarketMakerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData, marketMakerData, signinManagerData, tradeData } = state;
+  const { userData, marketMakerData, signinManagerData, tradeData, auth } = state;
+  const {
+    userData: { publicAddress, reserveAddress, reserveType }
+  } = auth || {};
   const { userBalance, tokenBalance } = userData || {};
   const {
     dropDownSelect,
@@ -286,7 +260,12 @@ const mapStateToProps = state => {
   } = marketMakerData || {};
   const { buyTradeData: buyPriceData, sellTradeData: sellPriceData } = tradeData || {};
   const { userLocalPublicAddress } = signinManagerData || {};
+  const etherScanLink = getEtherScanAddressLink(reserveAddress, "rinkeby");
   return {
+    publicAddress,
+    etherScanLink,
+    reserveAddress,
+    reserveType,
     userBalance,
     tokenBalance,
     currentPortfolioValue: getPortfolioSelector(state),
@@ -309,7 +288,6 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    logoutUserAction,
     onDropdownChange,
     getTokenBalance,
     getUserBalanceAction,

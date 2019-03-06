@@ -89,8 +89,7 @@ class RegularReserveTable extends Component {
 
   depositTokenClick = e => {
     const { depositToken: doDepositToken } = this.props;
-    const { userLocalPublicAddress, reserveType } = this.props || {};
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { userLocalPublicAddress, reserveType, reserveAddress } = this.props || {};
     const { token, depositTokenInput } = this.state;
 
     doDepositToken(depositTokenInput, token, reserveAddress, userLocalPublicAddress, reserveType);
@@ -98,8 +97,7 @@ class RegularReserveTable extends Component {
 
   withdrawTokenClick = e => {
     const { withdrawAction: withdrawToken } = this.props;
-    const { userLocalPublicAddress, reserveType } = this.props || {};
-    const { reserveAddress } = JSON.parse(localStorage.getItem("user_data")) || {};
+    const { userLocalPublicAddress, reserveType, reserveAddress } = this.props || {};
     const { token, withdrawTokenInput } = this.state;
 
     withdrawToken(token, withdrawTokenInput, userLocalPublicAddress, reserveAddress, reserveType);
@@ -229,9 +227,7 @@ class RegularReserveTable extends Component {
             <TableBody>
               {Object.keys(tokenBalance).map(key => (
                 <TableRow key={key}>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    {config.tokens[key].name}
-                  </TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
                   <TableCell className="txt-s fnt-ps table-text-pad">
                     <CustomToolTip disabled={!isOwner} title="You are not the owner">
                       <span>
@@ -535,7 +531,10 @@ class RegularReserveTable extends Component {
 }
 
 const mapStateToProps = state => {
-  const { marketMakerData, signinManagerData, tradeData } = state;
+  const { marketMakerData, signinManagerData, tradeData, auth } = state;
+  const {
+    userData: { reserveAddress, reserveType }
+  } = auth || {};
   const {
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
@@ -556,6 +555,8 @@ const mapStateToProps = state => {
 
   const { userLocalPublicAddress } = signinManagerData || {};
   return {
+    reserveAddress,
+    reserveType,
     transferTokenButtonSpinning,
     transferTokenButtonTransactionHash,
     transferTokenSuccess,

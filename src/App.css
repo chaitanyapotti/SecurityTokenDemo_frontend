@@ -22,21 +22,17 @@
 
 .landing {
   position: relative;
-  background: url("/assets/HeaderCondensed.png") no-repeat;
+  background: url("/assets/HeaderCondensed.jpeg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -376,7 +372,7 @@ button:focus {
 /* -------------------------------------------------- */
 
 .txt-upper {
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 }
 
 .txt-capitalize {
@@ -876,4 +872,11 @@ input[type="file"] {
 
 .table-text-pad {
   padding: 10px 20px !important;
+}
+
+.vertical-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

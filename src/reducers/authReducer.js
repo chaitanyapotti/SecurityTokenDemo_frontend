@@ -4,12 +4,18 @@ import isEmpty from "../validation/is-Empty";
 const INITIAL_STATE = {
   isAuthenticated: false,
   user: {},
+  userData: {},
   usernameOrEmail: "",
   password: ""
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case actionTypes.SET_USER_DATA:
+      return {
+        ...state,
+        userData: !isEmpty(action.payload) ? JSON.parse(action.payload) : {}
+      };
     case actionTypes.SET_CURRENT_USER:
       return {
         ...state,
