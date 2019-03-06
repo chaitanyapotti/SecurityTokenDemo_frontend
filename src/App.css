@@ -880,3 +880,9 @@ input[type="file"] {
   align-items: center;
   height: 100vh;
 }
+
+.MuiDialog-container-116 {
+  background-color: rgba(0, 0, 0, 0.6);
+  -webkit-transition: opacity 200ms, z-index 0s 200ms !important;
+  transition: opacity 200ms, z-index 0s 200ms !important;
+}
