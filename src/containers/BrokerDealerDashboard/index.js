@@ -37,7 +37,8 @@ class BrokerDealerDashboard extends Component {
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory, publicAddress, tokenOptions } =
       this.props || {};
-    const { modalOpen } = this.state;
+    const { modalOpen } = this.state || {};
+    // modalOpen = true;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
     return (
