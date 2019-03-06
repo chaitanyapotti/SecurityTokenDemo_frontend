@@ -4,11 +4,10 @@ import { AccountCircle, Lock } from "@material-ui/icons";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../../containers/Navbar";
+import constants from "../../helpers/constants";
 
 class Profile extends PureComponent {
-  getProStatus = role => {
-    return role === "INVESTOR" ? "Pro-Investor" : role === "BROKER_DEALER" ? "Broker Dealer" : "Market Maker";
-  };
+  getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
 
   render() {
     const { first_name, email, phone, id, role, date, status, last_name } = this.props || {};
