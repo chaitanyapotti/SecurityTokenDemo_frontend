@@ -13,7 +13,6 @@ import configuration from "../../config";
 import store from "../../store";
 
 let onfido;
-let investReady = {};
 class Profile extends PureComponent {
   state = {
     modalOpen: false,
@@ -51,8 +50,25 @@ class Profile extends PureComponent {
   }
 
   triggerIR = () => {
+    const { id } = this.props || {};
     this.setState({ irFrame: true });
-    investReady = window.IR.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
+    import("../../helpers/IRiFrame")
+      .then(IR => {
+        IR.default.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
+        IR.default.complete = function IRComplete(data) {
+          axios
+            .patch(`${configuration.api}/api/users/status?id=${id}`, { status: constants.APPROVED, field: "accreditationStatus" })
+            .then(amlResponse => {
+              const stringified = JSON.stringify(amlResponse.data);
+              localStorage.setItem("user_data", stringified);
+              store.dispatch(setUserData(stringified));
+              this.setState({ irFrame: false });
+              delete document.getElementById("InvestReadyiFrame");
+            })
+            .catch(err => console.log(err));
+        }.bind(this);
+      })
+      .catch(err => console.log("couldn't load investready script"));
   };
 
   triggerOnfido = async () => {
@@ -124,7 +140,21 @@ class Profile extends PureComponent {
         <Grid container="true">
           <Navbar />
           {irFrame ? (
-            <div />
+            <div className="push-top--50">
+              <iframe
+                title="investReadyFrame"
+                style={{ border: "0px #ffffff none" }}
+                id="InvestReadyiFrame"
+                name="InvestReady"
+                scrolling="false"
+                frameBorder="0"
+                marginHeight="0px"
+                marginWidth="0px"
+                height="100vh"
+                width="100%"
+                allowFullScreen
+              />
+            </div>
           ) : (
             <div style={{ marginTop: "100px" }}>
               <Paper className="card-brdr push--ends">
@@ -255,21 +285,6 @@ class Profile extends PureComponent {
         </Grid>
         <AmlModal modalOpen={modalOpen} handleClose={this.handleModalClose} />
         <div id="onfido-mount" />
-        <div className="push-top--50">
-          <iframe
-            title="investReadyFrame"
-            style={{ border: "0px #ffffff none" }}
-            id="InvestReadyiFrame"
-            name="InvestReady"
-            scrolling="false"
-            frameBorder="0"
-            marginHeight="0px"
-            marginWidth="0px"
-            height="100vh"
-            width="100%"
-            allowFullScreen
-          />
-        </div>
       </div>
     );
   }
