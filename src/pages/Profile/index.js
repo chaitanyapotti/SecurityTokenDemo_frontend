@@ -5,14 +5,15 @@ import axios from "axios";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import LoadingButton from "../../components/common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { kycAuth, kycSdkToken } from "../../actions/kycAuth";
 import { amlComplyCheck } from "../../actions/amlActions";
 import Navbar from "../../containers/Navbar";
 import constants from "../../helpers/constants";
 import AmlModal from "../../components/AmlModal";
 import configuration from "../../config";
+import actionTypes from "../../actionTypes";
+import store from "../../store";
 
-let onfido = {};
+let onfido;
 let investReady = {};
 
 class Profile extends PureComponent {
@@ -22,19 +23,8 @@ class Profile extends PureComponent {
     onfidoLoading: false
   };
 
-  componentDidMount() {
-    // this.props.kycAuth();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // console.log("compoeenenewilll", nextProps, this.props);
-    // if (nextProps.id !== this.props.id) {
-    //   this.props.kycSdkToken(nextProps.id);
-    // }
-  }
-
   componentWillUnmount() {
-    // onfido.tearDown();
+    if (onfido) onfido.tearDown();
   }
 
   triggerIR = () => {
@@ -42,7 +32,7 @@ class Profile extends PureComponent {
     investReady = window.IR.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
   };
 
-  triggerOnfido = () => {
+  triggerOnfido = async () => {
     const { first_name, last_name, id: user_id } = this.props || {};
     this.setState({ onfidoLoading: true });
     const config = {
@@ -53,51 +43,50 @@ class Profile extends PureComponent {
         }
       }
     };
-    axios
-      .post(`${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/applicants`, { first_name, last_name }, config)
-      .then(res => {
-        const { id } = res.data;
-        axios
-          .post(`${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/sdk_token`, { applicant_id: id, referrer: "*://*/*" }, config)
-          .then(response => {
-            const { token } = response.data || "";
-            console.log(token, "hi");
-            import("onfido-sdk-ui").then(Onfido => {
-              onfido = Onfido.init({
-                useModal: true,
-                isModalOpen: true,
-                onModalRequestClose() {
-                  // Update options with the state of the modal
-                  onfido.setOptions({ isModalOpen: false });
-                },
-                token,
-                onComplete(data) {
-                  axios
-                    .patch(`${configuration.api}/api/users/status?id=${user_id}`, { status: constants.APPROVED, field: "kycStatus" })
-                    .then(kycResponse => {
-                      console.log("registered successfully");
-                    })
-                    .catch(err => console.log(err));
-                },
-                steps: [
-                  {
-                    type: "welcome",
-                    options: {
-                      title: "Open your new bank account"
-                    }
-                  },
-                  "document",
-                  "face",
-                  "complete"
-                ]
-              });
-            });
-          })
-          .catch(err => console.log("error in kycSdkToken", err));
-      })
-      .catch(err => console.log(err));
-
-    this.setState({ onfidoLoading: false });
+    try {
+      const res = await axios.post(
+        `${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/applicants`,
+        { first_name, last_name },
+        config
+      );
+      const { id } = res.data || {};
+      const response = await axios.post(
+        `${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/sdk_token`,
+        { applicant_id: id, referrer: "*://*/*" },
+        config
+      );
+      const { token } = response.data || "";
+      import("onfido-sdk-ui")
+        .then(Onfido => {
+          onfido = Onfido.init({
+            useModal: true,
+            isModalOpen: true,
+            onModalRequestClose() {
+              // Update options with the state of the modal
+              onfido.setOptions({ isModalOpen: false });
+            },
+            token,
+            onComplete(data) {
+              axios
+                .patch(`${configuration.api}/api/users/status?id=${user_id}`, { status: constants.APPROVED, field: "kycStatus" })
+                .then(kycResponse => {
+                  const stringified = JSON.stringify(kycResponse.data);
+                  localStorage.setItem("user_data", stringified);
+                  store.dispatch({
+                    type: actionTypes.SET_USER_DATA,
+                    payload: stringified
+                  });
+                })
+                .catch(err => console.log(err));
+            }
+          });
+        })
+        .catch(err => console.log("error importing onfido api"));
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      this.setState({ onfidoLoading: false });
+    }
   };
 
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
@@ -185,7 +174,7 @@ class Profile extends PureComponent {
                       <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
                       {/* If check complete, show completed; else, show button which opens modal */}
                       <TableCell className="txt-s fnt-ps table-text-pad">{kycStatus}</TableCell>
-                      {kycStatus !== constants.APPROVED && (
+                      {kycStatus !== constants.APPROVED ? (
                         <TableCell className="txt-s fnt-ps table-text-pad">
                           <LoadingButton
                             style={{ marginTop: "20px" }}
@@ -193,39 +182,45 @@ class Profile extends PureComponent {
                             loading={onfidoLoading}
                             onClick={this.triggerOnfido}
                           >
-                            Proceed for KYC
+                            Proceed
                           </LoadingButton>
                         </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
                       )}
                     </TableRow>
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
                       <TableCell className="txt-s fnt-ps table-text-pad">{amlStatus}</TableCell>
-                      {amlStatus !== constants.APPROVED && (
+                      {amlStatus !== constants.APPROVED ? (
                         <TableCell className="txt-s fnt-ps table-text-pad">
                           <LoadingButton
                             style={{ marginTop: "20px" }}
                             className="btn bg--primary txt-p-vault txt-dddbld text--white"
                             onClick={() => this.setState({ modalOpen: true })}
                           >
-                            Proceed for AML
+                            Proceed
                           </LoadingButton>
                         </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
                       )}
                     </TableRow>
                     <TableRow>
-                      <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">ACRED</TableCell>
                       <TableCell className="txt-s fnt-ps table-text-pad">{accreditationStatus}</TableCell>
-                      {accreditationStatus !== constants.APPROVED && (
+                      {accreditationStatus !== constants.APPROVED ? (
                         <TableCell className="txt-s fnt-ps table-text-pad">
                           <LoadingButton
                             style={{ marginTop: "20px" }}
                             className="btn bg--primary txt-p-vault txt-dddbld text--white"
                             onClick={() => this.triggerIR()}
                           >
-                            Proceed for Accredition
+                            Proceed
                           </LoadingButton>
                         </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
                       )}
                     </TableRow>
                   </TableBody>
