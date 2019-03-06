@@ -14,7 +14,6 @@ import store from "../../store";
 
 let onfido;
 let investReady = {};
-
 class Profile extends PureComponent {
   state = {
     modalOpen: false,
@@ -182,7 +181,7 @@ class Profile extends PureComponent {
                 <div>Hello, {first_name}!</div>
                 <div className="push--top">
                   {/* Check for final kyc/aml/accreditation status and enable or disable below content */}
-                  {status === constants.APPROVED ? "All checks are done" : "You still need to do some checks"}
+                  You still need to do some checks
                 </div>
               </Paper>
               <Paper className="card-brdr push--ends">
@@ -258,7 +257,6 @@ class Profile extends PureComponent {
         <div id="onfido-mount" />
         <div className="push-top--50">
           <iframe
-            title="investReadyFrame"
             style={{ border: "0px #ffffff none" }}
             id="InvestReadyiFrame"
             name="InvestReady"
