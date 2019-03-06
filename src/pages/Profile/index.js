@@ -1,39 +1,36 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import Onfido from "onfido-sdk-ui";
 import { AccountCircle, Lock } from "@material-ui/icons";
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Button } from "@material-ui/core";
+import axios from "axios";
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import LoadingButton from "../../components/common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { kycAuth, kycSdkToken } from "../../actions/kycAuth";
 import { amlComplyCheck } from "../../actions/amlActions";
+import { setUserData } from "../../actions/authActions";
 import Navbar from "../../containers/Navbar";
 import constants from "../../helpers/constants";
 import AmlModal from "../../components/AmlModal";
+import configuration from "../../config";
+import store from "../../store";
 
-let onfido = {};
+let onfido;
 let investReady = {};
 class Profile extends PureComponent {
   state = {
     modalOpen: false,
-    irFrame: false
+    irFrame: false,
+    onfidoLoading: false
   };
 
   componentDidMount() {
-    // window.onload = function(e) {
-    // window.IR.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
-    // };
-    // this.props.kycAuth();
+    const { isAuthenticated, history } = this.props || {};
+    if (!isAuthenticated) {
+      history.push("/");
+    }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log("compoeenenewilll", nextProps, this.props);
-  //   if (nextProps.id !== this.props.id) {
-  //     this.props.kycSdkToken(nextProps.id);
-  //   }
-  // }
-
   componentWillUnmount() {
-    onfido.tearDown();
+    if (onfido) onfido.tearDown();
   }
 
   triggerIR = () => {
@@ -41,27 +38,65 @@ class Profile extends PureComponent {
     investReady = window.IR.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
   };
 
-  triggerOnfido = sdkToken => {
-    onfido = Onfido.init({
-      useModal: true,
-      isModalOpen: true,
-      onModalRequestClose() {
-        // Update options with the state of the modal
-        onfido.setOptions({ isModalOpen: false });
-      },
-      token: sdkToken,
-      onComplete(data) {
-        // callback for when everything is complete
-        console.log("everything is complete", data);
+  triggerOnfido = async () => {
+    const { first_name, last_name, id: user_id } = this.props || {};
+    this.setState({ onfidoLoading: true });
+    const config = {
+      headers: {
+        common: {
+          Authorization: "Token token=test_ZaRgJLgxxomSw7FPT8x7DcrAABb14dKl",
+          "Access-Control-Allow-Origin": "*"
+        }
       }
-    });
+    };
+    try {
+      const res = await axios.post(
+        `${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/applicants`,
+        { first_name, last_name },
+        config
+      );
+      const { id } = res.data || {};
+      const response = await axios.post(
+        `${"https://cors-anywhere.herokuapp.com/"}https://api.onfido.com/v2/sdk_token`,
+        { applicant_id: id, referrer: "*://*/*" },
+        config
+      );
+      const { token } = response.data || "";
+      import("onfido-sdk-ui")
+        .then(Onfido => {
+          onfido = Onfido.init({
+            useModal: true,
+            isModalOpen: true,
+            onModalRequestClose() {
+              // Update options with the state of the modal
+              onfido.setOptions({ isModalOpen: false });
+            },
+            token,
+            onComplete(data) {
+              axios
+                .patch(`${configuration.api}/api/users/status?id=${user_id}`, { status: constants.APPROVED, field: "kycStatus" })
+                .then(kycResponse => {
+                  const stringified = JSON.stringify(kycResponse.data);
+                  localStorage.setItem("user_data", stringified);
+                  store.dispatch(setUserData(stringified));
+                })
+                .catch(err => console.log(err));
+            }
+          });
+        })
+        .catch(err => console.log("error importing onfido api"));
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      this.setState({ onfidoLoading: false });
+    }
   };
 
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
 
   render() {
-    const { first_name, email, phone, id, role, date, status, last_name, sdkToken, matchStatus } = this.props || {};
-    const { modalOpen, irFrame } = this.state || {};
+    const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus, matchStatus } = this.props || {};
+    const { modalOpen, irFrame, onfidoLoading } = this.state;
 
     return (
       <div>
@@ -93,7 +128,7 @@ class Profile extends PureComponent {
                         <div className="txt-l txt-dbld">Account</div>
                         <div>{status}</div>
                         <div className="push--top txt-l txt-dbld">Active Since</div>
-                        <div>{date.slice(0, 10)}</div>
+                        <div>{date && date.slice(0, 10)}</div>
                       </div>
                     </Col>
                     <Col lg={3} sm={12} className="soft">
@@ -141,42 +176,55 @@ class Profile extends PureComponent {
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
                       {/* If check complete, show completed; else, show button which opens modal */}
-                      <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">
-                        <Button
-                          style={{ marginTop: "20px" }}
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                          onClick={() => this.triggerOnfido(sdkToken)}
-                        >
-                          Proceed for KYC
-                        </Button>
-                      </TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{kycStatus}</TableCell>
+                      {kycStatus !== constants.APPROVED ? (
+                        <TableCell className="txt-s fnt-ps table-text-pad">
+                          <LoadingButton
+                            style={{ marginTop: "20px" }}
+                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                            loading={onfidoLoading}
+                            onClick={this.triggerOnfido}
+                          >
+                            Proceed
+                          </LoadingButton>
+                        </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
+                      )}
                     </TableRow>
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">
-                        <Button
-                          style={{ marginTop: "20px" }}
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                          onClick={() => this.setState({ modalOpen: true })}
-                        >
-                          Proceed for AML
-                        </Button>
-                      </TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{amlStatus}</TableCell>
+                      {amlStatus !== constants.APPROVED ? (
+                        <TableCell className="txt-s fnt-ps table-text-pad">
+                          <LoadingButton
+                            style={{ marginTop: "20px" }}
+                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                            onClick={() => this.setState({ modalOpen: true })}
+                          >
+                            Proceed
+                          </LoadingButton>
+                        </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
+                      )}
                     </TableRow>
                     <TableRow>
-                      <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">
-                        <Button
-                          style={{ marginTop: "20px" }}
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white"
-                          onClick={() => this.triggerIR()}
-                        >
-                          Proceed for Accredition
-                        </Button>
-                      </TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">ACRED</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{accreditationStatus}</TableCell>
+                      {accreditationStatus !== constants.APPROVED ? (
+                        <TableCell className="txt-s fnt-ps table-text-pad">
+                          <LoadingButton
+                            style={{ marginTop: "20px" }}
+                            className="btn bg--primary txt-p-vault txt-dddbld text--white"
+                            onClick={() => this.triggerIR()}
+                          >
+                            Proceed
+                          </LoadingButton>
+                        </TableCell>
+                      ) : (
+                        <TableCell className="txt-s fnt-ps table-text-pad">{constants.COMPLETED}</TableCell>
+                      )}
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -207,7 +255,8 @@ class Profile extends PureComponent {
 
 const mapStatesToProps = state => {
   const {
-    userData: { first_name, email, phone, id, role, date, status, last_name }
+    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus },
+    isAuthenticated
   } = state.auth || {};
   return {
     first_name,
@@ -217,7 +266,11 @@ const mapStatesToProps = state => {
     id,
     role,
     date,
-    status
+    status,
+    kycStatus,
+    amlStatus,
+    accreditationStatus,
+    isAuthenticated
   };
 };
 
