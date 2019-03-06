@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { AccountCircle, Lock } from "@material-ui/icons";
-import { Paper } from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../../containers/Navbar";
 
@@ -65,6 +65,38 @@ class Profile extends PureComponent {
                 </Col>
               </Row>
             </Grid>
+          </Paper>
+          <Paper className="card-brdr push--ends">
+            <div>Hello, {first_name}!</div>
+            <div>
+              {/* Check for final kyc/aml/accreditation status and enable or disable below content */}
+              You still need to do some checks
+            </div>
+          </Paper>
+          <Paper className="card-brdr push--ends">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Check Type</TableCell>
+                  <TableCell className="txt-s fnt-ps txt-dddbld table-head-clr">Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
+                  {/* If check complete, show completed; else, show button which opens modal */}
+                  <TableCell className="txt-s fnt-ps table-text-pad">KYC</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">AML</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
+                  <TableCell className="txt-s fnt-ps table-text-pad">Accreditation</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </Paper>
         </div>
       </Grid>
