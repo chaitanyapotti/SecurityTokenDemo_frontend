@@ -18,25 +18,39 @@ const validate = values => {
   return errors;
 };
 
-const renderTextField = ({ label, input, meta: { touched, invalid, error }, ...custom }) => (
-  <TextField label={label} placeholder={label} fullWidth error={touched && invalid} helperText={touched && error} {...input} {...custom} />
-);
+const renderTextField = props => {
+  const {
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  } = props || {};
+  return <TextField label={label} placeholder={label} fullWidth error={touched && invalid} helperText={touched && error} {...input} {...custom} />;
+};
 
-const renderPicker = ({ label, input, meta: { touched, invalid, error }, ...custom }) => (
-  <TextField
-    type="date"
-    label={label}
-    placeholder={label}
-    fullWidth
-    error={touched && invalid}
-    helperText={touched && error}
-    InputLabelProps={{
-      shrink: true
-    }}
-    {...input}
-    {...custom}
-  />
-);
+const renderPicker = props => {
+  const {
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  } = props || {};
+  return (
+    <TextField
+      type="date"
+      label={label}
+      placeholder={label}
+      fullWidth
+      error={touched && invalid}
+      helperText={touched && error}
+      InputLabelProps={{
+        shrink: true
+      }}
+      {...input}
+      {...custom}
+    />
+  );
+};
 
 const AmlForm = props => {
   const { handleSubmit, pristine, reset, submitting, handleClose } = props || {};

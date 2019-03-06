@@ -11,7 +11,6 @@ import Navbar from "../../containers/Navbar";
 import constants from "../../helpers/constants";
 import AmlModal from "../../components/AmlModal";
 import configuration from "../../config";
-import actionTypes from "../../actionTypes";
 import store from "../../store";
 
 let onfido;
