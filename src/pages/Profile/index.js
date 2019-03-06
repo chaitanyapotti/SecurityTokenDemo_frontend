@@ -1,4 +1,4 @@
-import React, { PureComponent, lazy } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { AccountCircle, Lock } from "@material-ui/icons";
 import axios from "axios";
