@@ -6,7 +6,7 @@ export const kycAuth = () => dispatch => {
     headers: {
       common: {
         Authorization: "Token token=test_ZaRgJLgxxomSw7FPT8x7DcrAABb14dKl",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true"
       }
     }
@@ -32,7 +32,7 @@ export const kycSdkToken = id => dispatch => {
     headers: {
       common: {
         Authorization: "Token token=test_ZaRgJLgxxomSw7FPT8x7DcrAABb14dKl",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true"
       }
     }
