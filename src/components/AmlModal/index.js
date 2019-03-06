@@ -21,7 +21,7 @@ const DialogTitle = withStyles(theme => ({
   const { children, classes, onClose } = props;
   return (
     <CUIModalTitle className={classes.root}>
-      <h3>{children}</h3>
+      <div>{children}</div>
       {onClose ? (
         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
@@ -39,7 +39,7 @@ const AmlModal = props => {
         AML Compliance
       </DialogTitle>
       <CUIModalContent>
-        <AmlForm handleClose={handleClose} />
+        <AmlForm />
       </CUIModalContent>
     </CUIModal>
   );

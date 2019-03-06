@@ -5,7 +5,6 @@ import axios from "axios";
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import LoadingButton from "../../components/common/LoadingButton";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import { amlComplyCheck } from "../../actions/amlActions";
 import { setUserData } from "../../actions/authActions";
 import Navbar from "../../containers/Navbar";
 import constants from "../../helpers/constants";
@@ -27,6 +26,24 @@ class Profile extends PureComponent {
     const { isAuthenticated, history } = this.props || {};
     if (!isAuthenticated) {
       history.push("/");
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { matchStatus } = prevProps || {};
+    const { matchStatus: newMatch, id } = this.props || {};
+    if (matchStatus !== newMatch) {
+      this.handleModalClose();
+    }
+    if (matchStatus !== newMatch && newMatch === constants.NO_MATCH) {
+      axios
+        .patch(`${configuration.api}/api/users/status?id=${id}`, { status: constants.APPROVED, field: "amlStatus" })
+        .then(amlResponse => {
+          const stringified = JSON.stringify(amlResponse.data);
+          localStorage.setItem("user_data", stringified);
+          store.dispatch(setUserData(stringified));
+        })
+        .catch(err => console.log(err));
     }
   }
 
@@ -93,10 +110,14 @@ class Profile extends PureComponent {
     }
   };
 
+  handleModalClose = () => {
+    this.setState({ modalOpen: false });
+  };
+
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
 
   render() {
-    const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus, matchStatus } = this.props || {};
+    const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus } = this.props || {};
     const { modalOpen, irFrame, onfidoLoading } = this.state;
 
     return (
@@ -233,7 +254,7 @@ class Profile extends PureComponent {
             </div>
           )}
         </Grid>
-        <AmlModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
+        <AmlModal modalOpen={modalOpen} handleClose={this.handleModalClose} />
         <div id="onfido-mount" />
         <div className="push-top--50">
           <iframe
@@ -258,8 +279,10 @@ class Profile extends PureComponent {
 const mapStatesToProps = state => {
   const {
     userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus },
+    userData,
     isAuthenticated
   } = state.auth || {};
+  const { matchStatus } = state.amlCheck || {};
   return {
     first_name,
     last_name,
@@ -272,7 +295,9 @@ const mapStatesToProps = state => {
     kycStatus,
     amlStatus,
     accreditationStatus,
-    isAuthenticated
+    isAuthenticated,
+    userData,
+    matchStatus
   };
 };
 

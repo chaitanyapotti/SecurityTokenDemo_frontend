@@ -1,7 +1,7 @@
 import actionTypes from "../actionTypes";
 
 const INITIAL_STATE = {
-  matchStatus: ""
+  matchStatus: undefined
 };
 
 export default function(state = INITIAL_STATE, action) {

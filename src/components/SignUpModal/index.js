@@ -21,8 +21,8 @@ const DialogTitle = withStyles(theme => ({
 }))(props => {
   const { children, classes, onClose } = props;
   return (
-    <CUIModalTitle disableTypography className={classes.root}>
-      <h6>{children}</h6>
+    <CUIModalTitle className={classes.root}>
+      <div>{children}</div>
       {onClose ? (
         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />

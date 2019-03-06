@@ -53,7 +53,7 @@ const renderPicker = props => {
 };
 
 const AmlForm = props => {
-  const { handleSubmit, pristine, reset, submitting, handleClose } = props || {};
+  const { handleSubmit, pristine, reset, submitting } = props || {};
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -66,7 +66,7 @@ const AmlForm = props => {
         <Field name="dob" component={renderPicker} label="Date of Birth" />
       </div>
       <div style={{ marginTop: "20px" }}>
-        <Button className="btn bg--primary txt-p-vault txt-dddbld text--white" type="submit" disabled={pristine || submitting} onClick={handleClose}>
+        <Button className="btn bg--primary txt-p-vault txt-dddbld text--white" type="submit" disabled={pristine || submitting}>
           Submit
         </Button>
         <Button

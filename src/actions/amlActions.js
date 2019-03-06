@@ -1,24 +1,5 @@
 import axios from "axios";
 import actionTypes from "../actionTypes";
-import config from "../config";
-
-export const amlData = investorData => dispatch => {
-  axios
-    .post(`${config.api}/api/add/addinvestor`, investorData)
-    .then(res => {
-      const { token } = res.data;
-      dispatch({
-        type: actionTypes.ADD_INVESTOR_SUCCESS,
-        payload: {}
-      });
-    })
-    .catch(err =>
-      dispatch({
-        type: actionTypes.ADD_INVESTOR_ERROR,
-        payload: err.response.data
-      })
-    );
-};
 
 export const amlComplyCheck = amlData => dispatch => {
   const { firstName, lastName, dob } = amlData || {};
@@ -45,5 +26,11 @@ export const amlComplyCheck = amlData => dispatch => {
         payload: data
       });
     })
-    .catch(err => console.log("error in aml ComplyCheck", err));
+    .catch(err => {
+      console.log("error in aml ComplyCheck", err);
+      dispatch({
+        type: actionTypes.AML_CHECK_SUCCESS,
+        payload: {}
+      });
+    });
 };
