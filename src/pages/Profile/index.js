@@ -19,40 +19,44 @@ class Profile extends PureComponent {
           <Paper className="card-brdr push--ends">
             <Grid>
               <Row>
-                <Col lg={3} sm={12}>
-                  <div>
-                    <AccountCircle style={{ fontSize: 100 }} />
-                    <div>
-                      {first_name} {last_name}
+                <Col lg={3} sm={12} className="soft">
+                  <div className="hl">
+                    <div className="hli">
+                      <AccountCircle style={{ fontSize: 60 }} />
                     </div>
-                    <div>{email}</div>
-                    <div>{phone}</div>
+                    <div className="hli push--left">
+                      <div className="txt-l txt-dbld">
+                        {first_name} {last_name}
+                      </div>
+                      <div className="push-half--top">{email}</div>
+                      <div>{phone}</div>
+                    </div>
                   </div>
                 </Col>
-                <Col lg={3} sm={12}>
+                <Col lg={3} sm={12} className="soft">
                   <div>
-                    <div>Account</div>
+                    <div className="txt-l txt-dbld">Account</div>
                     <div>{status}</div>
-                    <div>Active Since</div>
+                    <div className="push--top txt-l txt-dbld">Active Since</div>
                     <div>{date.slice(0, 10)}</div>
                   </div>
                 </Col>
-                <Col lg={3} sm={12}>
+                <Col lg={3} sm={12} className="soft">
                   <div>
-                    <div>Pro Status</div>
+                    <div className="txt-l txt-dbld">Pro Status</div>
                     <div>{this.getProStatus(role)}</div>
-                    <div>CRD Number</div>
+                    <div className="push--top txt-l txt-dbld">CRD Number</div>
                     <div>{id}</div>
                   </div>
                 </Col>
-                <Col lg={3} sm={12}>
+                <Col lg={3} sm={12} className="soft">
                   <div>
-                    <div>
+                    <div className="push-half--top">
                       <a>
                         Connect with issuers <Lock />
                       </a>
                     </div>
-                    <div>
+                    <div className="push--top">
                       <a>
                         Connect with brokers <Lock />
                       </a>
