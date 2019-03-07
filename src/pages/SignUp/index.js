@@ -19,7 +19,7 @@ const SignUp = props => {
       <Navbar />
       <Grid>
         <Row>
-          <Col>
+          <Col style={{ margin: "0 auto" }}>
             <Card className={classes.card}>
               <SignUpForm />
             </Card>
