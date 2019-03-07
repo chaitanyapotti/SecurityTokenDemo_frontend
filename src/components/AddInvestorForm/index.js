@@ -47,8 +47,13 @@ const AddInvestorForm = props => {
   );
 };
 
+const onSubmit = (values, dispatch) => {
+  dispatch(); // action with values here
+};
+
 export default reduxForm({
   // a unique name for the form
   form: "addInvestor",
-  validate
+  validate,
+  onSubmit
 })(AddInvestorForm);
