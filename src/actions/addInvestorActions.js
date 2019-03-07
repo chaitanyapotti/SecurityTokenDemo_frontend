@@ -6,16 +6,21 @@ export const addInvestor = investorData => dispatch => {
   axios
     .post(`${config.api}/api/add/addinvestor`, investorData)
     .then(res => {
-      const { token } = res.data;
-      dispatch({
-        type: actionTypes.ADD_INVESTOR_SUCCESS,
-        payload: {}
-      });
+      if (res.status === 200)
+        dispatch({
+          type: actionTypes.ADD_INVESTOR_SUCCESS,
+          payload: true
+        });
+      else
+        dispatch({
+          type: actionTypes.ADD_INVESTOR_SUCCESS,
+          payload: false
+        });
     })
     .catch(err =>
       dispatch({
-        type: actionTypes.ADD_INVESTOR_ERROR,
-        payload: err.response.data
+        type: actionTypes.ADD_INVESTOR_SUCCESS,
+        payload: false
       })
     );
 };

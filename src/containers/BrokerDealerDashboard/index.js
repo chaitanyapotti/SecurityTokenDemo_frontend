@@ -34,6 +34,15 @@ class BrokerDealerDashboard extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { addInvestorSuccess } = this.props || {};
+    const { addInvestorSuccess: old } = prevProps || {};
+
+    if (addInvestorSuccess !== old && addInvestorSuccess) {
+      this.closeModal();
+    }
+  }
+
   setModalOpen = () => this.setState({ modalOpen: true });
 
   closeModal = () => this.setState({ modalOpen: false });
@@ -106,13 +115,14 @@ BrokerDealerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { marketMakerData, userData, tradeData, priceHistoryData, auth } = state;
+  const { marketMakerData, userData, tradeData, priceHistoryData, auth, investorData } = state;
   const { userData: newData } = auth || {};
   const { userBalance, tokenBalance, transactionHistory } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
   const { buyTradeData, sellTradeData } = tradeData || {};
   const { priceHistory } = priceHistoryData || {};
   const { publicAddress, investors } = newData;
+  const { addInvestorSuccess } = investorData;
   const tokenOptions =
     investors.map(x => ({
       value: x.address,
@@ -130,7 +140,8 @@ const mapStateToProps = state => {
     sellTradeData,
     priceHistory,
     transactionHistory,
-    tokenOptions
+    tokenOptions,
+    addInvestorSuccess
   };
 };
 

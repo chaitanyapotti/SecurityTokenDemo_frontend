@@ -2,6 +2,7 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { Button } from "@material-ui/core";
 import { TextField } from "../common/FormComponents";
+import { addInvestor } from "../../actions/addInvestorActions";
 
 const validate = values => {
   const errors = {};
@@ -48,7 +49,7 @@ const AddInvestorForm = props => {
 };
 
 const onSubmit = (values, dispatch) => {
-  dispatch(); // action with values here
+  dispatch(addInvestor(values)); // action with values here
 };
 
 export default reduxForm({
