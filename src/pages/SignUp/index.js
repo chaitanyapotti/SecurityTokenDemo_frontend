@@ -19,9 +19,11 @@ const SignUp = props => {
       <Navbar />
       <Grid>
         <Row>
-          <Card className={classes.card}>
-            <SignUpForm />
-          </Card>
+          <Col>
+            <Card className={classes.card}>
+              <SignUpForm />
+            </Card>
+          </Col>
         </Row>
       </Grid>
     </div>

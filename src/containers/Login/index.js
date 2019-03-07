@@ -127,9 +127,9 @@ class Login extends Component {
               >
                 Sign in
               </Button>
-              <div className="text-center push--top">
+              {/* <div className="text-center push--top">
                 Don't have an acccount? <a onClick={() => this.setState({ modalOpen: true })}>Sign Up</a>
-              </div>
+              </div> */}
             </form>
           </Paper>
         </main>
