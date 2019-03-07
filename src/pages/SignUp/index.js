@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import { withStyles, CssBaseline, Paper, Typography, Avatar, Card } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import SignUpForm from "../../components/SignUpForm";
-// import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { getURLParameter } from "../../helpers/numberHelpers";
 
 export const styles = theme => ({
@@ -38,7 +37,6 @@ class SignUp extends PureComponent {
 
   render() {
     const { classes, history, location, match } = this.props || {};
-    console.log("props in signiup", this.props);
     return (
       <div className="landing">
         <main className={classes.main}>

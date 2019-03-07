@@ -1,24 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import Button from "@material-ui/core/Button";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ErrorIcon from "@material-ui/icons/Error";
-import InfoIcon from "@material-ui/icons/Info";
-import CloseIcon from "@material-ui/icons/Close";
-import green from "@material-ui/core/colors/green";
-import amber from "@material-ui/core/colors/amber";
-import IconButton from "@material-ui/core/IconButton";
-import Snackbar from "@material-ui/core/Snackbar";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import WarningIcon from "@material-ui/icons/Warning";
-import { withStyles } from "@material-ui/core/styles";
+import { CheckCircle, Error, Close, Info, Warning } from "@material-ui/icons";
+import { green, amber } from "@material-ui/core/colors";
+import { withStyles, IconButton, Snackbar, SnackbarContent } from "@material-ui/core";
 
 const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon
+  success: CheckCircle,
+  warning: Warning,
+  error: Error,
+  info: Info
 };
 
 const styles1 = theme => ({
@@ -48,7 +39,7 @@ const styles1 = theme => ({
 });
 
 function MySnackbarContent(props) {
-  const { classes, className, message, onClose, variant, ...other } = props;
+  const { classes, className, message, onClose, variant, ...other } = props || {};
   const Icon = variantIcon[variant];
 
   return (
@@ -63,7 +54,7 @@ function MySnackbarContent(props) {
       }
       action={[
         <IconButton key="close" aria-label="Close" color="inherit" className={classes.close} onClick={onClose}>
-          <CloseIcon className={classes.icon} />
+          <Close className={classes.icon} />
         </IconButton>
       ]}
       {...other}
@@ -72,10 +63,6 @@ function MySnackbarContent(props) {
 }
 
 MySnackbarContent.propTypes = {
-  classes: PropTypes.object.isRequired,
-  className: PropTypes.string,
-  message: PropTypes.node,
-  onClose: PropTypes.func,
   variant: PropTypes.oneOf(["success", "warning", "error", "info"]).isRequired
 };
 
@@ -83,7 +70,7 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class CustomizedSnackbars extends React.Component {
   render() {
-    const { open, error, closeSnackBar } = this.props;
+    const { open, error, closeSnackBar } = this.props || {};
 
     return (
       <div>
