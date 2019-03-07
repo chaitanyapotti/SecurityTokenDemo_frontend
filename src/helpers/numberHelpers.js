@@ -194,6 +194,12 @@ const calculateInversePercentChange = (percent, price) => {
   return ((1 / newPrice - 1 / parseFloat(price)) / (1 / parseFloat(price))) * 100;
 };
 
+const getURLParameter = name => {
+  return (
+    decodeURIComponent((new RegExp(`[?|&]${name}=([^&;]+?)(&|#|;|$)`).exec(window.location.search) || [null, ""])[1].replace(/\+/g, "%20")) || null
+  );
+};
+
 export {
   formatFromWei,
   formatMoney,
@@ -209,5 +215,6 @@ export {
   getEtherScanAddressLink,
   formatRateToPrice,
   bytesToHex,
-  calculateInversePercentChange
+  calculateInversePercentChange,
+  getURLParameter
 };

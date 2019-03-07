@@ -2,6 +2,8 @@ import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { Button } from "@material-ui/core";
 import { TextField } from "../common/FormComponents";
+import { signUp } from "../../actions/signUpActions";
+import { getURLParameter } from "../../helpers/numberHelpers";
 
 const validate = values => {
   const errors = {};
@@ -34,7 +36,7 @@ const SignUpForm = props => {
         <Field name="email" component={TextField} label="Email" />
       </div>
       <div className="push--top">
-        <Field name="password" component={TextField} label="Password" />
+        <Field name="password" type="password" component={TextField} label="Password" />
       </div>
       <div className="push--top">
         <Field name="pubadd" component={TextField} label="Public Address" />
@@ -59,8 +61,14 @@ const SignUpForm = props => {
   );
 };
 
+const onSubmit = (values, dispatch, props) => {
+  const token = getURLParameter("token") || {};
+  dispatch(signUp(values, token));
+};
+
 export default reduxForm({
   // a unique name for the form
   form: "signUp",
-  validate
+  validate,
+  onSubmit
 })(SignUpForm);

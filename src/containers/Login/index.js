@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Button, Avatar, CssBaseline, FormControl, Input, InputLabel, Paper, Typography, withStyles } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
-import SignUpModal from "../../components/SignUpModal";
 import constants from "../../helpers/constants";
 
 const styles = theme => ({
@@ -42,10 +41,6 @@ const styles = theme => ({
 });
 
 class Login extends Component {
-  state = {
-    modalOpen: false
-  };
-
   onUsernameOrEmailChange = e => {
     const { setUsernameOrEmailAction: setUsernameOrEmail } = this.props;
     setUsernameOrEmail(e.target.value);
@@ -77,7 +72,6 @@ class Login extends Component {
 
   render() {
     const { errors, usernameOrEmail, password, classes } = this.props || {};
-    const { modalOpen } = this.state;
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -127,13 +121,9 @@ class Login extends Component {
               >
                 Sign in
               </Button>
-              {/* <div className="text-center push--top">
-                Don't have an acccount? <a onClick={() => this.setState({ modalOpen: true })}>Sign Up</a>
-              </div> */}
             </form>
           </Paper>
         </main>
-        <SignUpModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
       </div>
     );
   }
