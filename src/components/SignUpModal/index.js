@@ -8,7 +8,6 @@ import SignUpForm from "../SignUpForm";
 
 const DialogTitle = withStyles(theme => ({
   root: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
     margin: 0,
     padding: theme.spacing.unit * 2
   },

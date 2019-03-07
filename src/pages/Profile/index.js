@@ -198,7 +198,7 @@ class Profile extends PureComponent {
                           </a>
                         </div>
                         <div className="push--top">
-                          <a href="https://www4.idealsvdr.com/v3/two12" target="_blank" rel="noreferrer noopener">
+                          <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
                             Connect with brokers <Lock />
                           </a>
                         </div>

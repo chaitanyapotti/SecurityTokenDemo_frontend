@@ -15,8 +15,13 @@ import PortfolioTable from "../../components/common/PortfolioTable";
 import TransactionHistory from "../../components/common/TransactionHistory";
 import DropdownComponent from "../../components/common/DropdownComponent";
 import AddInvestorModal from "../../components/AddInvestorModal";
+import LoadingButton from "../../components/common/LoadingButton";
 
 class BrokerDealerDashboard extends Component {
+  state = {
+    modalOpen: false
+  };
+
   componentDidMount() {
     const { publicAddress, investors } = this.props || {};
     const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
@@ -29,6 +34,10 @@ class BrokerDealerDashboard extends Component {
     }
   }
 
+  setModalOpen = () => this.setState({ modalOpen: true });
+
+  closeModal = () => this.setState({ modalOpen: false });
+
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange } = this.props;
     dropDownChange(e.target.value);
@@ -37,8 +46,7 @@ class BrokerDealerDashboard extends Component {
   render() {
     const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory, publicAddress, tokenOptions } =
       this.props || {};
-    const { modalOpen } = this.state || {};
-    // modalOpen = true;
+    const { modalOpen } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
     return (
@@ -48,7 +56,7 @@ class BrokerDealerDashboard extends Component {
         <PortfolioTable currentHoldings={currentHoldings} />
         <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
           <Row>
-            <Col lg={6}>
+            <Col lg={6} sm={12}>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
                 <DropdownComponent onChange={this.onDropdownChange} value={dropDownSelect} label="Select Investor" data={tokenOptions} />
@@ -63,6 +71,11 @@ class BrokerDealerDashboard extends Component {
                   </div>
                 </div>
               ) : null}
+            </Col>
+            <Col lg={6} sm={12}>
+              <div className="txt-m text--primary push--bottom text--right">
+                <LoadingButton onClick={this.setModalOpen}>Add Investor</LoadingButton>
+              </div>
             </Col>
           </Row>
         </CUICard>
@@ -79,7 +92,7 @@ class BrokerDealerDashboard extends Component {
             </CUICard>
           </div>
         ) : null}
-        <AddInvestorModal modalOpen={modalOpen} handleClose={() => this.setState({ modalOpen: false })} />
+        <AddInvestorModal modalOpen={modalOpen} handleClose={this.closeModal} />
       </Grid>
     );
   }

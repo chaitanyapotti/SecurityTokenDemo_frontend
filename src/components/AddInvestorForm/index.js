@@ -1,15 +1,11 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Button from "@material-ui/core/Button";
+import { Button } from "@material-ui/core";
+import { TextField } from "../common/FormComponents";
 
 const validate = values => {
   const errors = {};
-  const requiredFields = ["firstName", "lastName", "email", "favoriteColor", "notes"];
+  const requiredFields = ["firstName", "lastName", "email"];
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = "Required";
@@ -21,58 +17,25 @@ const validate = values => {
   return errors;
 };
 
-const renderTextField = ({ label, input, meta: { touched, invalid, error }, ...custom }) => (
-  <TextField label={label} placeholder={label} fullWidth error={touched && invalid} helperText={touched && error} {...input} {...custom} />
-);
-
-const renderFromHelper = ({ touched, error }) => {
-  if (!(touched && error)) {
-  } else {
-    return <FormHelperText>{touched && error}</FormHelperText>;
-  }
-};
-
-const renderSelectField = ({ input, label, meta: { touched, error }, children, ...custom }) => (
-  <FormControl fullWidth error={touched && error}>
-    <InputLabel htmlFor="role">Role</InputLabel>
-    <Select
-      native
-      {...input}
-      {...custom}
-      inputProps={{
-        name: "Role",
-        id: "role"
-      }}
-    >
-      {children}
-    </Select>
-    {renderFromHelper({ touched, error })}
-  </FormControl>
-);
-
 const AddInvestorForm = props => {
-  const { handleSubmit, pristine, reset, submitting, classes } = props;
+  const { handleSubmit, pristine, reset, submitting } = props || {};
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <Field name="firstName" component={renderTextField} label="First Name" />
+        <Field name="firstName" component={TextField} label="First Name" />
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <Field name="lastName" component={renderTextField} label="Last Name" />
+      <div className="push--top">
+        <Field name="lastName" component={TextField} label="Last Name" />
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <Field name="email" component={renderTextField} label="Email" />
+      <div className="push--top">
+        <Field name="email" component={TextField} label="Email" />
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <Field name="contact" component={renderTextField} label="Contact Number" />
-      </div>
-      <div style={{ marginTop: "20px" }}>
+      <div className="push--top">
         <Button className="btn bg--primary txt-p-vault txt-dddbld text--white" type="submit" disabled={pristine || submitting}>
           Submit
         </Button>
         <Button
-          style={{ marginLeft: "20px" }}
-          className="btn bg--primary txt-p-vault txt-dddbld text--white"
+          className="btn bg--primary txt-p-vault txt-dddbld text--white push--left"
           type="button"
           disabled={pristine || submitting}
           onClick={reset}
