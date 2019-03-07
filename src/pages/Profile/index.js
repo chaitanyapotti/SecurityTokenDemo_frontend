@@ -29,13 +29,13 @@ class Profile extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { matchStatus } = prevProps || {};
-    const { matchStatus: newMatch, id } = this.props || {};
+    const { matchStatus: newMatch } = this.props || {};
     if (matchStatus !== newMatch) {
       this.handleModalClose();
     }
     if (matchStatus !== newMatch && newMatch === constants.NO_MATCH) {
       axios
-        .patch(`${configuration.api}/api/users/status?id=${id}`, { status: constants.APPROVED, field: "amlStatus" })
+        .patch(`${configuration.api}/api/users/status`, { status: constants.APPROVED, field: "amlStatus" })
         .then(amlResponse => {
           const stringified = JSON.stringify(amlResponse.data);
           localStorage.setItem("user_data", stringified);
@@ -50,14 +50,13 @@ class Profile extends PureComponent {
   }
 
   triggerIR = () => {
-    const { id } = this.props || {};
     this.setState({ irFrame: true });
     import("../../helpers/IRiFrame")
       .then(IR => {
         IR.default.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
         IR.default.complete = function IRComplete(data) {
           axios
-            .patch(`${configuration.api}/api/users/status?id=${id}`, { status: constants.APPROVED, field: "accreditationStatus" })
+            .patch(`${configuration.api}/api/users/status`, { status: constants.APPROVED, field: "accreditationStatus" })
             .then(amlResponse => {
               const stringified = JSON.stringify(amlResponse.data);
               localStorage.setItem("user_data", stringified);
@@ -72,7 +71,7 @@ class Profile extends PureComponent {
   };
 
   triggerOnfido = async () => {
-    const { first_name, last_name, id: user_id } = this.props || {};
+    const { first_name, last_name } = this.props || {};
     this.setState({ onfidoLoading: true });
     const config = {
       headers: {
@@ -107,7 +106,7 @@ class Profile extends PureComponent {
             token,
             onComplete(data) {
               axios
-                .patch(`${configuration.api}/api/users/status?id=${user_id}`, { status: constants.APPROVED, field: "kycStatus" })
+                .patch(`${configuration.api}/api/users/status`, { status: constants.APPROVED, field: "kycStatus" })
                 .then(kycResponse => {
                   const stringified = JSON.stringify(kycResponse.data);
                   localStorage.setItem("user_data", stringified);
