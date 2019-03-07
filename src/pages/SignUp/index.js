@@ -7,12 +7,11 @@ import { getURLParameter } from "../../helpers/numberHelpers";
 
 export const styles = theme => ({
   main: {
-    width: "auto",
+    width: "600px",
     display: "block", // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
+    margin: "0 50%",
     position: "relative",
-    top: "20%"
+    top: "4%"
   },
   paper: {
     display: "flex",
@@ -23,6 +22,10 @@ export const styles = theme => ({
   avatar: {
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.secondary.main
+  },
+  card: {
+    width: "500px",
+    padding: "50px"
   }
 });
 
@@ -34,7 +37,8 @@ class SignUp extends PureComponent {
   }
 
   render() {
-    const { classes } = this.props || {};
+    const { classes, history, location, match } = this.props || {};
+    console.log("props in signiup", this.props);
     return (
       <div className="landing">
         <main className={classes.main}>
@@ -47,7 +51,7 @@ class SignUp extends PureComponent {
               Sign in
             </Typography>
             <Card className={classes.card}>
-              <SignUpForm />
+              <SignUpForm history={history} location={location} match={match} />
             </Card>
           </Paper>
         </main>
