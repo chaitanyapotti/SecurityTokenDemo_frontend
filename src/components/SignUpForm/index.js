@@ -20,7 +20,7 @@ const validate = values => {
     errors.password = "Invalid password. Must be between 5 and 15 characters";
   if (values.username && (values.username.length > 10 || values.username.length < 3))
     errors.username = "Invalid username. Must be between 3 and 10 characters";
-  if (values.pubadd && web3.utils.isAddress(values.pubadd)) errors.pubadd = "Invalid Public Address";
+  if (values.pubadd && !web3.utils.isAddress(values.pubadd)) errors.pubadd = "Invalid Public Address";
   if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     errors.email = "Invalid email address";
   }

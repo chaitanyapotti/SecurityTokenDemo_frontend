@@ -191,16 +191,27 @@ class Profile extends PureComponent {
                     </Col>
                     <Col lg={3} sm={12} className="soft">
                       <div>
-                        <div className="push-half--top">
-                          <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
-                            Connect with issuers <Lock />
-                          </a>
-                        </div>
-                        <div className="push--top">
-                          <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
-                            Connect with brokers <Lock />
-                          </a>
-                        </div>
+                        {role === constants.BROKER_DEALER && (
+                          <div className="push-half--top">
+                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                              Connect with issuers <Lock />
+                            </a>
+                          </div>
+                        )}
+                        {role === constants.INVESTOR || role === constants.BROKER_DEALER ? (
+                          <div className="push-half--top">
+                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                              Connect with brokers <Lock />
+                            </a>
+                          </div>
+                        ) : null}
+                        {role === constants.BROKER_DEALER ? (
+                          <div className="push-half--top">
+                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                              Connect with investors <Lock />
+                            </a>
+                          </div>
+                        ) : null}
                       </div>
                     </Col>
                   </Row>
