@@ -159,7 +159,7 @@ class BuyHoldingsTable extends Component {
                     <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(balance, 0)}</TableCell>
                     <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(dollarValue, 0)}</TableCell>
                     <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                    <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(currentPortfolioValue[key] / balance)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(currentPortfolioValue[key] / balance || 0)}</TableCell>
                     <TableCell className="txt-s fnt-ps table-text-pad">
                       {`+${formatMoney(currentPortfolioValue[key] - dollarValue, 0)}(+${Math.round(
                         ((currentPortfolioValue[key] - dollarValue) * 100) / dollarValue,

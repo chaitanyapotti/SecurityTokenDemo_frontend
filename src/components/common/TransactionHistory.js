@@ -28,7 +28,7 @@ class TransactionHistory extends PureComponent {
                   <TableRow key={transaction_hash}>
                     <TableCell className="txt-s fnt-ps table-text-pad">{token_name}</TableCell>
                     <TableCell className="txt-s fnt-ps table-text-pad">{transaction_type}</TableCell>
-                    <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(token_count)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(token_count || 0)}</TableCell>
                     <TableCell className="txt-s fnt-ps table-text-pad">
                       <span>
                         <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
