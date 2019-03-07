@@ -56,7 +56,7 @@ class Profile extends PureComponent {
         IR.default.init("1X4Qzd156ctlAs51JU88gk3c0CZTl3On1TdB7fGe");
         IR.default.complete = function IRComplete(data) {
           axios
-            .patch(`${configuration.api}/api/users/status`, { status: constants.APPROVED, field: "accreditationStatus" })
+            .patch(`${configuration.api}/api/users/status`, { status: constants.PENDINGAPPROVAL, field: "accreditationStatus" })
             .then(amlResponse => {
               const stringified = JSON.stringify(amlResponse.data);
               localStorage.setItem("user_data", stringified);
@@ -272,8 +272,10 @@ class Profile extends PureComponent {
                     </TableRow>
                     <TableRow>
                       <TableCell className="txt-s fnt-ps table-text-pad">ACRED</TableCell>
-                      <TableCell className="txt-s fnt-ps table-text-pad">{accreditationStatus}</TableCell>
-                      {accreditationStatus !== constants.APPROVED ? (
+                      <TableCell className="txt-s fnt-ps table-text-pad">
+                        {accreditationStatus === constants.PENDINGAPPROVAL ? "PENDING APPROVAL" : accreditationStatus}
+                      </TableCell>
+                      {accreditationStatus !== constants.APPROVED || accreditationStatus !== constants.PENDINGAPPROVAL ? (
                         <TableCell className="txt-s fnt-ps table-text-pad">
                           <LoadingButton
                             style={{ marginTop: "20px" }}
