@@ -16,7 +16,7 @@ const validate = values => {
       errors[field] = "Required";
     }
   });
-  if (values.password && (values.password.length > 15 || values.username.length < 5))
+  if (values.password && (values.password.length > 15 || values.password.length < 5))
     errors.password = "Invalid password. Must be between 5 and 15 characters";
   if (values.username && (values.username.length > 10 || values.username.length < 3))
     errors.username = "Invalid username. Must be between 3 and 10 characters";
