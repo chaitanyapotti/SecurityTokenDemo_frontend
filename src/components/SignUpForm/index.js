@@ -5,7 +5,7 @@ import { TextField } from "../common/FormComponents";
 
 const validate = values => {
   const errors = {};
-  const requiredFields = ["firstName", "lastName", "email", "userName","phone", "password"];
+  const requiredFields = ["firstName", "lastName", "email", "userName", "password", "contact", "pubadd"];
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = "Required";
@@ -34,10 +34,13 @@ const SignUpForm = props => {
         <Field name="email" component={TextField} label="Email" />
       </div>
       <div className="push--top">
-        <Field name="phone" component={TextField} label="Phone Number" />
+        <Field name="password" component={TextField} label="Password" />
       </div>
       <div className="push--top">
-        <Field name="password" component={TextField} label="Password" />
+        <Field name="pubadd" component={TextField} label="Public Address" />
+      </div>
+      <div className="push--top">
+        <Field name="contact" component={TextField} label="Contact Number" />
       </div>
       <div className="push--top">
         <Button className="btn bg--primary txt-p-vault txt-dddbld text--white" type="submit" disabled={pristine || submitting}>
