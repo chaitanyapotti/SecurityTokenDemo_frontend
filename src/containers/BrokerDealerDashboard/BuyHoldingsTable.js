@@ -17,7 +17,7 @@ import {
   transferTokensFromUser,
   approveTokenTransfer
 } from "../../actions/tradeActions";
-import { CustomToolTip } from "../../components/common/FormComponents";
+// import { CustomToolTip } from "../../components/common/FormComponents";
 import Transaction from "../../components/common/FormComponents/Transaction";
 
 class BuyHoldingsTable extends Component {
@@ -102,8 +102,8 @@ class BuyHoldingsTable extends Component {
       sellTradeData,
       buyButtonSpinning,
       transferButtonSpinning,
-      userLocalPublicAddress,
-      publicAddress,
+      // userLocalPublicAddress,
+      // publicAddress,
       buyButtonTransactionHash,
       transferButtonTransactionHash,
       buySuccess,
@@ -133,7 +133,7 @@ class BuyHoldingsTable extends Component {
     } else {
       sellPrice = `${formatMoney(sellPrice)}`;
     }
-    const isOperator = userLocalPublicAddress === publicAddress;
+    // const isOperator = userLocalPublicAddress === publicAddress;
     return (
       <div>
         <Paper className="card-brdr push--ends">
