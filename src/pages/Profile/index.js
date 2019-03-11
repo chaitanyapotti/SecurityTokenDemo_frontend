@@ -129,6 +129,7 @@ class Profile extends PureComponent {
   };
 
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
+  getAccountStatus = role => (role === constants.BROKER_DEALER ? "CRD Number" : "Account Number");
 
   render() {
     const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus } = this.props || {};
@@ -185,7 +186,7 @@ class Profile extends PureComponent {
                       <div>
                         <div className="txt-l txt-dbld">Pro Status</div>
                         <div>{this.getProStatus(role)}</div>
-                        <div className="push--top txt-l txt-dbld">CRD Number</div>
+                        <div className="push--top txt-l txt-dbld">{this.getAccountStatus(role)}</div>
                         <div>{id}</div>
                       </div>
                     </Col>
@@ -260,7 +261,7 @@ class Profile extends PureComponent {
                       )}
                     </TableRow>
                     <TableRow>
-                      <TableCell className="txt-s fnt-ps table-text-pad">ACRED</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">ACCREDITATION</TableCell>
                       <TableCell className="txt-s fnt-ps table-text-pad">{accreditationStatus}</TableCell>
                       {accreditationStatus !== constants.APPROVED ? (
                         <TableCell className="txt-s fnt-ps table-text-pad">
