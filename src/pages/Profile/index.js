@@ -129,6 +129,7 @@ class Profile extends PureComponent {
   };
 
   getProStatus = role => (role === constants.MARKET_MAKER ? "Market Maker" : role === constants.BROKER_DEALER ? "Broker Dealer" : "Pro-Investor");
+
   getAccountStatus = role => (role === constants.BROKER_DEALER ? "CRD Number" : "Account Number");
 
   render() {
@@ -211,7 +212,7 @@ class Profile extends PureComponent {
                 <div>Hello, {first_name}!</div>
                 <div className="push--top">
                   {/* Check for final kyc/aml/accreditation status and enable or disable below content */}
-                  {status === constants.APPROVED ? "All checks are done" : "You still need to do some checks"}
+                  {status === constants.APPROVED ? "Account is up to date" : "Please complete your verifications below"}
                 </div>
               </Paper>
               <Paper className="card-brdr push--ends">
