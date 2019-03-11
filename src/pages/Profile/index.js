@@ -193,8 +193,12 @@ class Profile extends PureComponent {
                     </Col>
                     <Col lg={3} sm={12} className="soft">
                       <div>
-                        {role === constants.INVESTOR && <div className="txt-l txt-dbld">Broker Dealer</div>}
-                        <div>{`${brokerDealer.first_name} ${brokerDealer.last_name}`}</div>
+                        {role === constants.INVESTOR && (
+                          <div>
+                            <div className="txt-l txt-dbld">Broker Dealer</div>
+                            <div>{`${brokerDealer.first_name} ${brokerDealer.last_name}`}</div>
+                          </div>
+                        )}
                         <div className="push--top txt-l txt-dbld">
                           {role === constants.BROKER_DEALER && (
                             <div className="push-half--top">
