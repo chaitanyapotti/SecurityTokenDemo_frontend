@@ -20,9 +20,26 @@ class InvestorDashboard extends Component {
   }
 
   render() {
-    const { userBalance, tokenBalance, currentPortfolioValue } = this.props || {};
+    const {
+      userBalance,
+      tokenBalance,
+      currentPortfolioValue,
+      userLocalPublicAddress,
+      buyTradeData,
+      sellTradeData,
+      buyButtonSpinning,
+      buyButtonTransactionHash,
+      buySuccess,
+      sellButtonSpinning,
+      sellButtonTransactionHash,
+      sellSuccess,
+      approveButtonSpinning,
+      approveButtonTransactionHash,
+      approveSuccess
+    } = this.props || {};
     const { publicAddress } = this.props || {};
     if (tokenBalance[publicAddress] && currentPortfolioValue[publicAddress]) {
+      const isOperator = userLocalPublicAddress === publicAddress;
       return (
         <Grid container="true">
           <Navbar />
@@ -38,7 +55,22 @@ class InvestorDashboard extends Component {
               </Col>
             </Row>
           </CUICard>
-          <HoldingsTable tokenBalance={tokenBalance[publicAddress]} currentPortfolioValue={currentPortfolioValue[publicAddress]} />
+          <HoldingsTable
+            isOperator={isOperator}
+            tokenBalance={tokenBalance[publicAddress]}
+            currentPortfolioValue={currentPortfolioValue[publicAddress]}
+            buyTradeData={buyTradeData}
+            sellTradeData={sellTradeData}
+            buyButtonSpinning={buyButtonSpinning}
+            buyButtonTransactionHash={buyButtonTransactionHash}
+            buySuccess={buySuccess}
+            sellButtonSpinning={sellButtonSpinning}
+            sellButtonTransactionHash={sellButtonTransactionHash}
+            sellSuccess={sellSuccess}
+            approveSuccess={approveSuccess}
+            approveButtonTransactionHash={approveButtonTransactionHash}
+            approveButtonSpinning={approveButtonSpinning}
+          />
           <CUICard>
             <Row center="lg">
               <Col>
@@ -63,15 +95,41 @@ InvestorDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { userData, auth } = state;
+  const { userData, auth, signinManagerData, tradeData } = state;
   const { userBalance, tokenBalance } = userData || {};
   const {
     userData: { publicAddress }
   } = auth || {};
+  const { userLocalPublicAddress } = signinManagerData || {};
+  const {
+    buyTradeData,
+    sellTradeData,
+    buyButtonSpinning,
+    buyButtonTransactionHash,
+    sellButtonSpinning,
+    sellButtonTransactionHash,
+    buySuccess,
+    sellSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning
+  } = tradeData || {};
   return {
     publicAddress,
     userBalance,
     tokenBalance,
+    userLocalPublicAddress,
+    buyTradeData,
+    sellTradeData,
+    buyButtonSpinning,
+    sellButtonSpinning,
+    buyButtonTransactionHash,
+    sellButtonTransactionHash,
+    buySuccess,
+    sellSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning,
     currentPortfolioValue: getPortfolioSelector(state)
   };
 };
