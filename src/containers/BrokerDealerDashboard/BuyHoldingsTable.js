@@ -146,8 +146,8 @@ class BuyHoldingsTable extends Component {
                 <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Current Value($)</TableCell>
                 <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Price($)</TableCell>
                 <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Change</TableCell>
-                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Buy</TableCell>
-                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Sell</TableCell>
+                {/* <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Buy</TableCell>
+                <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Sell</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -166,7 +166,7 @@ class BuyHoldingsTable extends Component {
                         2
                       )}%)`}
                     </TableCell>
-                    <TableCell className="txt-s fnt-ps table-text-pad">
+                    {/* <TableCell className="txt-s fnt-ps table-text-pad">
                       <CustomToolTip disabled={!isOperator} title="You are not the operator">
                         <span>
                           <LoadingButton
@@ -191,7 +191,7 @@ class BuyHoldingsTable extends Component {
                           </LoadingButton>
                         </span>
                       </CustomToolTip>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}
