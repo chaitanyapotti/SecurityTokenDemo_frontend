@@ -3,20 +3,22 @@ import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { CircularProgress } from "@material-ui/core";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
+import { getUserBalanceAction, getTokenBalance, getTransactionHistory } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
-import HoldingsTable from "../../components/common/HoldingsTable";
+import HoldingsTable from "./HoldingsTable";
 import Navbar from "../Navbar";
 import { getPortfolioSelector } from "../../selectors";
+import TransactionHistory from "../../components/common/TransactionHistory";
 
 class InvestorDashboard extends Component {
   componentDidMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
     const { publicAddress } = this.props || {};
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
+    fetchTransactionHistory(publicAddress, publicAddress);
   }
 
   render() {
@@ -35,7 +37,8 @@ class InvestorDashboard extends Component {
       sellSuccess,
       approveButtonSpinning,
       approveButtonTransactionHash,
-      approveSuccess
+      approveSuccess,
+      transactionHistory
     } = this.props || {};
     const { publicAddress } = this.props || {};
     if (tokenBalance[publicAddress] && currentPortfolioValue[publicAddress]) {
@@ -70,7 +73,12 @@ class InvestorDashboard extends Component {
             approveSuccess={approveSuccess}
             approveButtonTransactionHash={approveButtonTransactionHash}
             approveButtonSpinning={approveButtonSpinning}
+            userLocalPublicAddress={userLocalPublicAddress}
+            publicAddress={publicAddress}
           />
+          <div>
+            <TransactionHistory transactionHistory={transactionHistory} dropDownSelect={publicAddress} />
+          </div>
           <CUICard>
             <Row center="lg">
               <Col>
@@ -91,12 +99,13 @@ class InvestorDashboard extends Component {
 
 InvestorDashboard.propTypes = {
   getUserBalanceAction: Proptypes.func.isRequired,
-  getTokenBalance: Proptypes.func.isRequired
+  getTokenBalance: Proptypes.func.isRequired,
+  getTransactionHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   const { userData, auth, signinManagerData, tradeData } = state;
-  const { userBalance, tokenBalance } = userData || {};
+  const { userBalance, tokenBalance, transactionHistory } = userData || {};
   const {
     userData: { publicAddress }
   } = auth || {};
@@ -130,11 +139,12 @@ const mapStateToProps = state => {
     approveSuccess,
     approveButtonTransactionHash,
     approveButtonSpinning,
-    currentPortfolioValue: getPortfolioSelector(state)
+    currentPortfolioValue: getPortfolioSelector(state),
+    transactionHistory
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getUserBalanceAction, getTokenBalance }
+  { getUserBalanceAction, getTokenBalance, getTransactionHistory }
 )(InvestorDashboard);

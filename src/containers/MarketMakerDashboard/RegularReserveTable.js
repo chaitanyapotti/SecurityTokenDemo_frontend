@@ -3,11 +3,10 @@ import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Divider, TextF
 
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
-import { CustomToolTip } from "../../components/common/FormComponents";
+import { CustomToolTip, Transaction } from "../../components/common/FormComponents";
 import { getEtherScanAddressLink, significantDigits, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
 import AlertModal from "../../components/common/AlertModal";
-import Transaction from "../../components/common/FormComponents/Transaction";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { depositToken, withdrawAction, setQtyStepFunction, setCompactData, setImbalanceStepFunction } from "../../actions/marketMakerActions";
 import LoadingButton from "../../components/common/LoadingButton";

@@ -16,7 +16,7 @@ const INITIAL_STATE = {
   transferFromButtonTransactionHash: "",
   sellSuccess: true,
   transferFromSuccess: false,
-  approveSuccess: true,
+  approveSuccess: false,
   approveButtonTransactionHash: "",
   approveButtonSpinning: false
 };

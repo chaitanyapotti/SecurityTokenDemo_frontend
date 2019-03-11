@@ -15,8 +15,7 @@ import CUICard from "../../components/CustomMUI/CUICard";
 import { formatMoney, getEtherScanAddressLink } from "../../helpers/numberHelpers";
 import Navbar from "../Navbar";
 import AlertModal from "../../components/common/AlertModal";
-import Transaction from "../../components/common/FormComponents/Transaction";
-import { CustomToolTip } from "../../components/common/FormComponents";
+import { CustomToolTip, Transaction } from "../../components/common/FormComponents";
 import { getPortfolioSelector } from "../../selectors";
 
 class MarketMakerDashboard extends Component {

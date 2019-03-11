@@ -98,6 +98,7 @@ export const buyTokenAction = (token, etherAmount, userLocalPublicAddress, buyRa
                 () => {
                   dispatch(buySuccess(true));
                   dispatch(transferSuccess(false));
+                  dispatch(getTokenBalance(investorAddress));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.BUY_BUTTON_TRANSACTION_HASH_RECEIVED
@@ -182,6 +183,7 @@ export const sellTokenAction = (token, tokenAmount, userLocalPublicAddress, sell
                 transactionHash,
                 () => {
                   dispatch(sellSuccess(true));
+                  dispatch(getTokenBalance(investorAddress));
                   dispatch({
                     payload: { transactionHash: "" },
                     type: actionTypes.SELL_BUTTON_TRANSACTION_HASH_RECEIVED

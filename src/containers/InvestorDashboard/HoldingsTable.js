@@ -1,17 +1,16 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { formatCurrencyNumber, formatMoney, getEtherScanAddressLink, formatFromWei } from "../../helpers/numberHelpers";
 import config from "../../config";
-import { CustomToolTip } from "./FormComponents";
-import LoadingButton from "./LoadingButton";
-import AlertModal from "./AlertModal";
+import { CustomToolTip, Transaction } from "../../components/common/FormComponents";
+import LoadingButton from "../../components/common/LoadingButton";
+import AlertModal from "../../components/common/AlertModal";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
-import Transaction from "./FormComponents/Transaction";
 import { getBuyRate, getSellRate, buyTokenAction, sellTokenAction, approveTokenTransfer } from "../../actions/tradeActions";
 
-class HoldingsTable extends PureComponent {
+class HoldingsTable extends Component {
   state = {
     buyModalOpen: false,
     sellModalOpen: false,
@@ -41,9 +40,9 @@ class HoldingsTable extends PureComponent {
 
   onBuyTokenClick = () => {
     const { buyTokenAction: doBuyToken } = this.props;
-    const { buyTradeData, userLocalPublicAddress, dropDownSelect } = this.props || {};
+    const { buyTradeData, userLocalPublicAddress, publicAddress } = this.props || {};
     const { buyToken, buyInput } = this.state;
-    doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate, dropDownSelect);
+    doBuyToken(buyToken, buyInput, userLocalPublicAddress, buyTradeData[buyToken].rate, publicAddress);
   };
 
   getSellPriceClick = () => {
@@ -54,9 +53,9 @@ class HoldingsTable extends PureComponent {
 
   onSellTokenClick = () => {
     const { sellTokenAction: doSellToken } = this.props;
-    const { sellTradeData, userLocalPublicAddress, dropDownSelect } = this.props || {};
+    const { sellTradeData, userLocalPublicAddress, publicAddress } = this.props || {};
     const { sellToken, sellInput } = this.state;
-    doSellToken(sellToken, sellInput, userLocalPublicAddress, sellTradeData[sellToken].rate, dropDownSelect);
+    doSellToken(sellToken, sellInput, userLocalPublicAddress, sellTradeData[sellToken].rate, publicAddress);
   };
 
   onApproveClick = () => {

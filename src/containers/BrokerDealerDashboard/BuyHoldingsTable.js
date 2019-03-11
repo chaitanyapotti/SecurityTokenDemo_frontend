@@ -18,7 +18,7 @@ import {
   approveTokenTransfer
 } from "../../actions/tradeActions";
 // import { CustomToolTip } from "../../components/common/FormComponents";
-import Transaction from "../../components/common/FormComponents/Transaction";
+import { Transaction } from "../../components/common/FormComponents";
 
 class BuyHoldingsTable extends Component {
   state = {
