@@ -133,7 +133,7 @@ class Profile extends PureComponent {
   getAccountStatus = role => (role === constants.BROKER_DEALER ? "CRD Number" : "Account Number");
 
   render() {
-    const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus } = this.props || {};
+    const { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus, brokerDealer } = this.props || {};
     const { modalOpen, irFrame, onfidoLoading } = this.state;
 
     return (
@@ -193,27 +193,31 @@ class Profile extends PureComponent {
                     </Col>
                     <Col lg={3} sm={12} className="soft">
                       <div>
-                        {role === constants.BROKER_DEALER && (
-                          <div className="push-half--top">
-                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
-                              Connect with issuers <Lock />
-                            </a>
-                          </div>
-                        )}
-                        {role === constants.INVESTOR || role === constants.BROKER_DEALER ? (
-                          <div className="push-half--top">
-                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
-                              Connect with brokers <Lock />
-                            </a>
-                          </div>
-                        ) : null}
-                        {role === constants.BROKER_DEALER ? (
-                          <div className="push-half--top">
-                            <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
-                              Connect with investors <Lock />
-                            </a>
-                          </div>
-                        ) : null}
+                        {role === constants.INVESTOR && <div className="txt-l txt-dbld">Broker Dealer</div>}
+                        <div>{`${brokerDealer.first_name} ${brokerDealer.last_name}`}</div>
+                        <div className="push--top txt-l txt-dbld">
+                          {role === constants.BROKER_DEALER && (
+                            <div className="push-half--top">
+                              <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                                Connect with issuers <Lock />
+                              </a>
+                            </div>
+                          )}
+                          {role === constants.INVESTOR || role === constants.BROKER_DEALER ? (
+                            <div className="push-half--top">
+                              <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                                Connect with brokers <Lock />
+                              </a>
+                            </div>
+                          ) : null}
+                          {role === constants.BROKER_DEALER ? (
+                            <div className="push-half--top">
+                              <a href="https://www4.idealsvdr.com/v3/two12/" target="_blank" rel="noreferrer noopener">
+                                Connect with investors <Lock />
+                              </a>
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </Col>
                   </Row>
@@ -306,7 +310,7 @@ class Profile extends PureComponent {
 
 const mapStatesToProps = state => {
   const {
-    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus },
+    userData: { first_name, email, phone, id, role, date, status, last_name, kycStatus, amlStatus, accreditationStatus, brokerDealer },
     userData,
     isAuthenticated
   } = state.auth || {};
@@ -325,7 +329,8 @@ const mapStatesToProps = state => {
     accreditationStatus,
     isAuthenticated,
     userData,
-    matchStatus
+    matchStatus,
+    brokerDealer
   };
 };
 
