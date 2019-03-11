@@ -37,6 +37,7 @@
     "q": "eslint --quiet --fix src/index.js $(git diff --cached --name-only --diff-filter=d HEAD | grep .js$)",
     "size:why": "node tools/stats.js",
     "size": "size-limit",
+    "postbuild": "react-snap",
     "heroku-postbuild": "echo Skip build on Heroku"
   },
   "devDependencies": {
@@ -54,6 +55,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "react-snap": "^1.23.0",
     "prettier": "^1.16.4",
     "webpack-bundle-analyzer": "^3.0.4"
   },
