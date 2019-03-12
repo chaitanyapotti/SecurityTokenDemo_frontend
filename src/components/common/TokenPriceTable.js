@@ -20,22 +20,23 @@ class TokenPriceTable extends PureComponent {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(tokenBalance).map(key => {
-              const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
-              const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
-              return (
-                <TableRow key={key}>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
-                  </TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
-                </TableRow>
-              );
-            })}
+            {tokenBalance &&
+              Object.keys(tokenBalance).map(key => {
+                const buyDollarPrice = buyPriceData[key] && buyPriceData[key].price ? buyPriceData[key].price * config.etherPrice : 0;
+                const sellDollarPrice = sellPriceData[key] && sellPriceData[key].price ? config.etherPrice / sellPriceData[key].price : 0;
+                return (
+                  <TableRow key={key}>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
+                      {parseFloat(currentPortfolioValue[key] / tokenBalance[key].balance).toFixed(3)}
+                    </TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{sellDollarPrice.toFixed(3)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{buyDollarPrice.toFixed(3)}</TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </Paper>

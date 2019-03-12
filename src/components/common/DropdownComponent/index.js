@@ -39,11 +39,12 @@ class DropdownComponent extends PureComponent {
             }}
             className={fontClass}
           >
-            {data.map((item, index) => (
-              <MenuItem className={fontClass} key={item.value} value={item.value}>
-                {item.text}
-              </MenuItem>
-            ))}
+            {data &&
+              data.map((item, index) => (
+                <MenuItem className={fontClass} key={item.value} value={item.value}>
+                  {item.text}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       </form>

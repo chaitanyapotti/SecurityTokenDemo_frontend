@@ -113,56 +113,57 @@ class HoldingsTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.keys(tokenBalance).map(key => (
-                <TableRow key={key}>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(tokenBalance[key].dollarValue, 0)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    {`+${formatMoney(currentPortfolioValue[key] - tokenBalance[key].dollarValue, 0)}(+${Math.round(
-                      ((currentPortfolioValue[key] - tokenBalance[key].dollarValue) * 100) / tokenBalance[key].dollarValue,
-                      2
-                    )}%)`}
-                  </TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    {formatMoney(currentPortfolioValue[key] / tokenBalance[key].balance || 0, 2)}
-                  </TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    <span>
-                      <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
-                        View on Blockchain
-                      </a>
-                    </span>
-                  </TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
+              {tokenBalance &&
+                Object.keys(tokenBalance).map(key => (
+                  <TableRow key={key}>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{config.tokens[key].name}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{formatCurrencyNumber(tokenBalance[key].balance, 0)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(tokenBalance[key].dollarValue, 0)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">{formatMoney(currentPortfolioValue[key], 0)}</TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
+                      {`+${formatMoney(currentPortfolioValue[key] - tokenBalance[key].dollarValue, 0)}(+${Math.round(
+                        ((currentPortfolioValue[key] - tokenBalance[key].dollarValue) * 100) / tokenBalance[key].dollarValue,
+                        2
+                      )}%)`}
+                    </TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
+                      {formatMoney(currentPortfolioValue[key] / tokenBalance[key].balance || 0, 2)}
+                    </TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
                       <span>
-                        <LoadingButton
-                          className="btn bg--primary txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onBuyClick(key)}
-                        >
-                          Buy
-                        </LoadingButton>
+                        <a href={getEtherScanAddressLink(config.tokens[key].address, "rinkeby")} target="_blank" rel="noopener noreferrer">
+                          View on Blockchain
+                        </a>
                       </span>
-                    </CustomToolTip>
-                  </TableCell>
-                  <TableCell className="txt-s fnt-ps table-text-pad">
-                    <CustomToolTip disabled={!isOperator} title="You are not the operator">
-                      <span>
-                        <LoadingButton
-                          className="btn bg--danger txt-p-vault txt-dddbld text--white test"
-                          disabled={!isOperator}
-                          onClick={() => this.onSellClick(key)}
-                        >
-                          Sell
-                        </LoadingButton>
-                      </span>
-                    </CustomToolTip>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
+                      <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                        <span>
+                          <LoadingButton
+                            className="btn bg--primary txt-p-vault txt-dddbld text--white test"
+                            disabled={!isOperator}
+                            onClick={() => this.onBuyClick(key)}
+                          >
+                            Buy
+                          </LoadingButton>
+                        </span>
+                      </CustomToolTip>
+                    </TableCell>
+                    <TableCell className="txt-s fnt-ps table-text-pad">
+                      <CustomToolTip disabled={!isOperator} title="You are not the operator">
+                        <span>
+                          <LoadingButton
+                            className="btn bg--danger txt-p-vault txt-dddbld text--white test"
+                            disabled={!isOperator}
+                            onClick={() => this.onSellClick(key)}
+                          >
+                            Sell
+                          </LoadingButton>
+                        </span>
+                      </CustomToolTip>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </Paper>
