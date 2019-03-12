@@ -69,6 +69,12 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 TODO:
 
-1. center circular progress wherever present
-2. Align contents of button inside Navbar class (with michelle text - don't capitalize text of michelle)
-3. Remove unused css - to be done at the end
+1. Remove unused css - to be done at the end
+
+Note:
+
+- For post-build to work on ubuntu, use the following command
+
+  ```
+  sudo apt-get install -y libx11-xcb1 libxrandr2 libasound2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libnss3 libxss1
+  ```
