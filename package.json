@@ -62,6 +62,14 @@
   "engines": {
     "node": "10.x"
   },
+  "reactSnap": {
+    "include": [
+      "/",
+      "/dashboard/",
+      "/signup/",
+      "/profile/"
+    ]
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
