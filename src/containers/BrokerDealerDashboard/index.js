@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Dropdown } from "semantic-ui-react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import CUICard from "../../components/CustomMUI/CUICard";
@@ -11,54 +10,65 @@ import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import Navbar from "../Navbar";
-import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector, getTokenPortfolioSelector } from "../../selectors";
 import PortfolioTable from "../../components/common/PortfolioTable";
 import TransactionHistory from "../../components/common/TransactionHistory";
+import DropdownComponent from "../../components/common/DropdownComponent";
+import AddInvestorModal from "../../components/AddInvestorModal";
+import LoadingButton from "../../components/common/LoadingButton";
 
 class BrokerDealerDashboard extends Component {
-  componentWillMount() {
-    const { first_name, email, phone, id, role, date, status, publicAddress, investors } = JSON.parse(localStorage.getItem("user_data")) || {};
+  state = {
+    modalOpen: false
+  };
+
+  componentDidMount() {
+    const { publicAddress, investors } = this.props || {};
     const { getTokenBalance: fetchTokenBalance, getUserBalanceAction: fetchUserBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
 
-    const tokenOptions =
-      investors.map(x => ({
-        key: x.name,
-        value: x.address,
-        text: x.name
-      })) || [];
-    this.setState({ first_name, email, phone, id, role, date, status, publicAddress, tokenOptions });
+    const tokenOptions = investors.map(x => x.address) || [];
     for (const iterator of tokenOptions) {
-      fetchTokenBalance(iterator.value);
-      fetchUserBalance(iterator.value);
-      fetchTransactionHistory(publicAddress, iterator.value);
+      fetchTokenBalance(iterator);
+      fetchUserBalance(iterator);
+      fetchTransactionHistory(publicAddress, iterator);
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { addInvestorSuccess } = this.props || {};
+    const { addInvestorSuccess: old } = prevProps || {};
+
+    if (addInvestorSuccess !== old && addInvestorSuccess) {
+      this.closeModal();
+    }
+  }
+
+  setModalOpen = () => this.setState({ modalOpen: true });
+
+  closeModal = () => this.setState({ modalOpen: false });
+
   onDropdownChange = (e, d) => {
     const { onDropdownChange: dropDownChange } = this.props;
-    dropDownChange(d.value);
+    dropDownChange(e.target.value);
   };
 
   render() {
-    const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress, tokenOptions } = this.state;
+    const { dropDownSelect, tokenBalance, userBalance, currentPortfolioValue, currentHoldings, transactionHistory, publicAddress, tokenOptions } =
+      this.props || {};
+    const { modalOpen } = this.state;
     const dropDownSelectedPortfolio = currentPortfolioValue[dropDownSelect] || {};
     const { total } = dropDownSelectedPortfolio || {};
     return (
       <Grid container="true">
         <Navbar />
-        <div style={{ marginTop: "100px" }}>
-          <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-        </div>
-        <div className="txt-m text--black text-align push--bottom push-top--35 ">Portfolio Under Management</div>
+        <div className="txt-m text--black text-align push--bottom push-top--100 ">Portfolio Under Management</div>
         <PortfolioTable currentHoldings={currentHoldings} />
         <CUICard style={{ marginTop: "10px", padding: "50px 50px" }}>
           <Row>
-            <Col lg={8}>
+            <Col lg={6} sm={12}>
               <div className="txt-m text--primary push--bottom push-top--35">
                 Select Investor :{" "}
-                <Dropdown className="txt-s" onChange={this.onDropdownChange} selection placeholder="Select Investor" options={tokenOptions} />
+                <DropdownComponent onChange={this.onDropdownChange} value={dropDownSelect} label="Select Investor" data={tokenOptions} />
               </div>
               {dropDownSelect ? (
                 <div>
@@ -70,6 +80,11 @@ class BrokerDealerDashboard extends Component {
                   </div>
                 </div>
               ) : null}
+            </Col>
+            <Col lg={6} sm={12}>
+              <div className="txt-m text--primary push--bottom text--right">
+                <LoadingButton onClick={this.setModalOpen}>Add Investor</LoadingButton>
+              </div>
             </Col>
           </Row>
         </CUICard>
@@ -86,6 +101,7 @@ class BrokerDealerDashboard extends Component {
             </CUICard>
           </div>
         ) : null}
+        <AddInvestorModal modalOpen={modalOpen} handleClose={this.closeModal} />
       </Grid>
     );
   }
@@ -99,12 +115,22 @@ BrokerDealerDashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { marketMakerData, userData, tradeData, priceHistoryData } = state;
+  const { marketMakerData, userData, tradeData, priceHistoryData, auth, investorData } = state;
+  const { userData: newData } = auth || {};
   const { userBalance, tokenBalance, transactionHistory } = userData || {};
   const { dropDownSelect } = marketMakerData || {};
   const { buyTradeData, sellTradeData } = tradeData || {};
   const { priceHistory } = priceHistoryData || {};
+  const { publicAddress, investors } = newData;
+  const { addInvestorSuccess } = investorData;
+  const tokenOptions =
+    investors.map(x => ({
+      value: x.address,
+      text: x.name
+    })) || [];
   return {
+    publicAddress,
+    investors,
     dropDownSelect,
     tokenBalance,
     currentPortfolioValue: getPortfolioSelector(state),
@@ -113,7 +139,9 @@ const mapStateToProps = state => {
     buyTradeData,
     sellTradeData,
     priceHistory,
-    transactionHistory
+    transactionHistory,
+    tokenOptions,
+    addInvestorSuccess
   };
 };
 

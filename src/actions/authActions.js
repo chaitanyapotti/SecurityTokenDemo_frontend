@@ -3,22 +3,23 @@ import jwt_decode from "jwt-decode";
 import actionTypes from "../actionTypes";
 import setAuthToken from "../utils/setAuthToken";
 import config from "../config";
+import constants from "../helpers/constants";
 
 export const loginUserAction = (userData, history) => dispatch => {
   axios
     .post(`${config.api}/api/users/login`, userData)
     .then(res => {
-      const { token } = res.data;
-      localStorage.setItem("user_data", JSON.stringify(res.data));
+      const { token, status } = res.data;
+      const stringified = JSON.stringify(res.data);
+      localStorage.setItem("user_data", stringified);
       localStorage.setItem("jwtToken", token);
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
-      history.push("/dashboard");
-      dispatch({
-        type: actionTypes.GET_ERRORS,
-        payload: {}
-      });
+      dispatch(setUserData(stringified));
+      if (status !== constants.APPROVED) {
+        history.push("/profile");
+      } else history.push("/dashboard");
     })
     .catch(err =>
       dispatch({
@@ -33,12 +34,17 @@ export const setCurrentUser = decoded => ({
   payload: decoded
 });
 
+export const setUserData = userData => ({
+  type: actionTypes.SET_USER_DATA,
+  payload: userData
+});
+
 export const logoutUserAction = history => dispatch => {
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("user_data");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
-  history.push("/");
+  dispatch(setUserData(""));
   dispatch({
     type: actionTypes.SET_USERNAME_OR_EMAIL,
     payload: ""
@@ -51,6 +57,7 @@ export const logoutUserAction = history => dispatch => {
     type: actionTypes.CLEAR_STORE,
     payload: ""
   });
+  history.push("/");
 };
 
 export const setUsernameOrEmailAction = input => dispatch => {

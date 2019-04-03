@@ -1,4 +1,4 @@
-import merge from "lodash/merge";
+import merge from "lodash.merge";
 import { CS_COLORS, CUIColor } from "./variables";
 import { isMobile } from "../../helpers/common/deviceDetect";
 
@@ -69,11 +69,11 @@ const customTheme = {
       },
       colorSecondary: CS_COLORS.SECONDARY
     },
-    MuiSelect: {
-      "&$disabled": {
-        cursor: "not-allowed !important"
-      }
-    },
+    // MuiSelect: {
+    //   "&$disabled": {
+    //     cursor: "not-allowed !important"
+    //   }
+    // },
     MuiTabs: {
       indicator: {
         backgroundColor: "#4CA9FC"
@@ -125,9 +125,6 @@ const customTheme = {
       },
       input: {
         background: "transparent !important"
-      },
-      "&$disabled": {
-        cursor: "not-allowed !important"
       },
       inputType: {
         color: CS_COLORS.G_PRIMARY

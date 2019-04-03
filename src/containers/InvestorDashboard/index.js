@@ -1,43 +1,52 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
+import { CircularProgress } from "@material-ui/core";
 import CUICard from "../../components/CustomMUI/CUICard";
-import { logoutUserAction } from "../../actions/authActions";
-import { getUserBalanceAction, getTokenBalance } from "../../actions/userActions";
+import { getUserBalanceAction, getTokenBalance, getTransactionHistory } from "../../actions/userActions";
 import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
 import { formatMoney } from "../../helpers/numberHelpers";
 import TokenChart from "../../components/common/TokenChart";
-import HoldingsTable from "../../components/common/HoldingsTable";
+import HoldingsTable from "./HoldingsTable";
 import Navbar from "../Navbar";
-import BioTable from "../../components/common/BioTable";
 import { getPortfolioSelector } from "../../selectors";
+import TransactionHistory from "../../components/common/TransactionHistory";
 
 class InvestorDashboard extends Component {
-  onLogoutClick = e => {
-    const { logoutUserAction: logoutUser } = this.props;
-    const { history } = this.props || {};
-    logoutUser(history);
-  };
-
-  componentWillMount() {
-    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance } = this.props;
-    const { publicAddress, first_name, email, phone, id, role, date, status } = JSON.parse(localStorage.getItem("user_data")) || {};
-    this.setState({ first_name, email, phone, id, role, date, status, publicAddress });
+  componentDidMount() {
+    const { getUserBalanceAction: fetchUserBalance, getTokenBalance: fetchTokenBalance, getTransactionHistory: fetchTransactionHistory } = this.props;
+    const { publicAddress } = this.props || {};
     fetchUserBalance(publicAddress);
     fetchTokenBalance(publicAddress);
+    fetchTransactionHistory(publicAddress, publicAddress);
   }
 
   render() {
-    const { userBalance, tokenBalance, currentPortfolioValue } = this.props || {};
-    const { first_name, email, phone, id, role, date, status, publicAddress } = this.state;
+    const {
+      userBalance,
+      tokenBalance,
+      currentPortfolioValue,
+      userLocalPublicAddress,
+      buyTradeData,
+      sellTradeData,
+      buyButtonSpinning,
+      buyButtonTransactionHash,
+      buySuccess,
+      sellButtonSpinning,
+      sellButtonTransactionHash,
+      sellSuccess,
+      approveButtonSpinning,
+      approveButtonTransactionHash,
+      approveSuccess,
+      transactionHistory
+    } = this.props || {};
+    const { publicAddress } = this.props || {};
     if (tokenBalance[publicAddress] && currentPortfolioValue[publicAddress]) {
+      const isOperator = userLocalPublicAddress === publicAddress;
       return (
         <Grid container="true">
           <Navbar />
-          <div style={{ marginTop: "100px" }}>
-            <BioTable first_name={first_name} email={email} phone={phone} id={id} role={role} date={date} status={status} />
-          </div>
-          <CUICard style={{ marginTop: "10px" }}>
+          <CUICard style={{ marginTop: "100px" }}>
             <Row>
               <Col lg={8}>
                 <div className="txt-m text--primary push-half--bottom push-top--35">
@@ -47,14 +56,29 @@ class InvestorDashboard extends Component {
                   Portfolio Value : <span className="txt-m text--secondary">{formatMoney(currentPortfolioValue[publicAddress].total, 0)}</span>
                 </div>
               </Col>
-              {/* <Col lg={2} xsOffset={2}>
-              <Button className="btn bg--danger txt-p-vault txt-dddbld text--white" onClick={this.onLogoutClick}>
-                Logout
-              </Button>
-            </Col> */}
             </Row>
           </CUICard>
-          <HoldingsTable tokenBalance={tokenBalance[publicAddress]} currentPortfolioValue={currentPortfolioValue[publicAddress]} />
+          <HoldingsTable
+            isOperator={isOperator}
+            tokenBalance={tokenBalance[publicAddress]}
+            currentPortfolioValue={currentPortfolioValue[publicAddress]}
+            buyTradeData={buyTradeData}
+            sellTradeData={sellTradeData}
+            buyButtonSpinning={buyButtonSpinning}
+            buyButtonTransactionHash={buyButtonTransactionHash}
+            buySuccess={buySuccess}
+            sellButtonSpinning={sellButtonSpinning}
+            sellButtonTransactionHash={sellButtonTransactionHash}
+            sellSuccess={sellSuccess}
+            approveSuccess={approveSuccess}
+            approveButtonTransactionHash={approveButtonTransactionHash}
+            approveButtonSpinning={approveButtonSpinning}
+            userLocalPublicAddress={userLocalPublicAddress}
+            publicAddress={publicAddress}
+          />
+          <div>
+            <TransactionHistory transactionHistory={transactionHistory} dropDownSelect={publicAddress} />
+          </div>
           <CUICard>
             <Row center="lg">
               <Col>
@@ -65,27 +89,62 @@ class InvestorDashboard extends Component {
         </Grid>
       );
     }
-    return <div />;
+    return (
+      <div className="vertical-center">
+        <CircularProgress />
+      </div>
+    );
   }
 }
 
 InvestorDashboard.propTypes = {
-  logoutUserAction: Proptypes.func.isRequired,
   getUserBalanceAction: Proptypes.func.isRequired,
-  getTokenBalance: Proptypes.func.isRequired
+  getTokenBalance: Proptypes.func.isRequired,
+  getTransactionHistory: Proptypes.func.isRequired
 };
 
 const mapStateToProps = state => {
-  const { userData } = state;
-  const { userBalance, tokenBalance } = userData || {};
+  const { userData, auth, signinManagerData, tradeData } = state;
+  const { userBalance, tokenBalance, transactionHistory } = userData || {};
+  const {
+    userData: { publicAddress }
+  } = auth || {};
+  const { userLocalPublicAddress } = signinManagerData || {};
+  const {
+    buyTradeData,
+    sellTradeData,
+    buyButtonSpinning,
+    buyButtonTransactionHash,
+    sellButtonSpinning,
+    sellButtonTransactionHash,
+    buySuccess,
+    sellSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning
+  } = tradeData || {};
   return {
+    publicAddress,
     userBalance,
     tokenBalance,
-    currentPortfolioValue: getPortfolioSelector(state)
+    userLocalPublicAddress,
+    buyTradeData,
+    sellTradeData,
+    buyButtonSpinning,
+    sellButtonSpinning,
+    buyButtonTransactionHash,
+    sellButtonTransactionHash,
+    buySuccess,
+    sellSuccess,
+    approveSuccess,
+    approveButtonTransactionHash,
+    approveButtonSpinning,
+    currentPortfolioValue: getPortfolioSelector(state),
+    transactionHistory
   };
 };
 
 export default connect(
   mapStateToProps,
-  { logoutUserAction, getUserBalanceAction, getTokenBalance }
+  { getUserBalanceAction, getTokenBalance, getTransactionHistory }
 )(InvestorDashboard);

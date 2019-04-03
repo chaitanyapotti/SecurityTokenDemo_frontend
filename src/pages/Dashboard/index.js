@@ -1,10 +1,11 @@
 import React, { Component, lazy } from "react";
-import { Button } from "semantic-ui-react";
+import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import Proptypes from "prop-types";
 import { logoutUserAction } from "../../actions/authActions";
 import { getPriceHistory } from "../../actions/priceHistoryActions";
 import ErrorBoundary from "../ErrorBoundary";
+import constants from "../../helpers/constants";
 
 const InvestorDashboard = lazy(() => import("../../containers/InvestorDashboard"));
 const MarketMakerDashboard = lazy(() => import("../../containers/MarketMakerDashboard"));
@@ -27,23 +28,22 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { history } = this.props || {};
-    const { role } = JSON.parse(localStorage.getItem("user_data")) || {};
-    if (role === "INVESTOR") {
+    const { history, role } = this.props || {};
+    if (role === constants.INVESTOR) {
       return (
         <ErrorBoundary>
           <InvestorDashboard history={history} />
         </ErrorBoundary>
       );
     }
-    if (role === "MARKET_MAKER") {
+    if (role === constants.MARKET_MAKER) {
       return (
         <ErrorBoundary>
           <MarketMakerDashboard history={history} />
         </ErrorBoundary>
       );
     }
-    if (role === "BROKER_DEALER") {
+    if (role === constants.BROKER_DEALER) {
       return (
         <ErrorBoundary>
           <BrokerDealerDashboard history={history} />
@@ -64,9 +64,13 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { isAuthenticated } = state.auth || {};
+  const {
+    isAuthenticated,
+    userData: { role }
+  } = state.auth || {};
   return {
-    isAuthenticated
+    isAuthenticated,
+    role
   };
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -23,7 +22,7 @@ const CustomToolTip = props => {
     <div>
       {disabled === true ? (
         <div>
-          <Tooltip title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
+          <Tooltip className="fnt-ps" title={title} classes={{ tooltip: classes.fonts }} id={id} placement={placement}>
             {children}
           </Tooltip>
         </div>
@@ -32,10 +31,6 @@ const CustomToolTip = props => {
       )}
     </div>
   );
-};
-
-CustomToolTip.propTypes = {
-  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(CustomToolTip);

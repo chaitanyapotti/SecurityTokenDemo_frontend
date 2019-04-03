@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Table } from "semantic-ui-react";
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@material-ui/core";
 import config from "../../config";
 import { getEtherScanHashLink, significantDigits } from "../../helpers/numberHelpers";
 
@@ -7,37 +7,44 @@ class TransactionHistory extends PureComponent {
   render() {
     const { transactionHistory, dropDownSelect } = this.props || {};
     return (
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Token Name</Table.HeaderCell>
-            <Table.HeaderCell>Transaction Type</Table.HeaderCell>
-            <Table.HeaderCell>Token Count</Table.HeaderCell>
-            <Table.HeaderCell>EtherScan</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {transactionHistory[dropDownSelect].map(item => {
-            const token_name = config.tokens[Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address)].name;
-            const { token_count, transaction_hash, transaction_type } = item || {};
-            const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
-            return (
-              <Table.Row key={transaction_hash}>
-                <Table.Cell>{token_name}</Table.Cell>
-                <Table.Cell>{transaction_type}</Table.Cell>
-                <Table.Cell>{significantDigits(token_count)}</Table.Cell>
-                <Table.Cell>
-                  <span>
-                    <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
-                      View on Blockchain
-                    </a>
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
-        </Table.Body>
-      </Table>
+      <Paper className="card-brdr push--ends">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Name</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Transaction Type</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">Token Count</TableCell>
+              <TableCell className="txt-s fnt-ps txt-dddbld table-text-pad  table-head-clr">EtherScan</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {transactionHistory &&
+              transactionHistory[dropDownSelect].map(item => {
+                const token = Object.keys(config.tokens).find(keyy => config.tokens[keyy].address === item.token_address);
+                if (token) {
+                  const token_name = token ? config.tokens[token].name : "";
+                  const { token_count, transaction_hash, transaction_type } = item || {};
+                  const etherScanLink = getEtherScanHashLink(transaction_hash, "rinkeby");
+                  return (
+                    <TableRow key={transaction_hash}>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{token_name}</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{transaction_type}</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">{significantDigits(token_count || 0)}</TableCell>
+                      <TableCell className="txt-s fnt-ps table-text-pad">
+                        <span>
+                          <a href={etherScanLink} target="_blank" rel="noopener noreferrer">
+                            View on Blockchain
+                          </a>
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+                return null;
+              })}
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }

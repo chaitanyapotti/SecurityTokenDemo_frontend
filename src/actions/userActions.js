@@ -17,25 +17,28 @@ export const getUserBalanceAction = publicAddress => async dispatch => {
     .catch(err => console.log(err));
 };
 
-export const getTokenBalance = publicAddress => dispatch => {
+export const getTokenBalance = (publicAddress, reserveType) => dispatch => {
   for (const token in config.tokens) {
     if (Object.prototype.hasOwnProperty.call(config.tokens, token)) {
-      axios
-        .get(
-          `${config.api}/web3/erc20token/tokenbalance?address=${config.tokens[token].address}&network=${config.network}&useraddress=${publicAddress}`
-        )
-        .then(res => {
-          if (res.status === 200) {
-            const { data } = res.data;
-            dispatch({
-              type: actionTypes.GET_TOKEN_BALANCE,
-              payload: { token, data, user: publicAddress }
-            });
-          }
-        })
-        .catch(err => console.log(err));
+      if (reserveType && config.tokens[token].reserveType === reserveType) getItemBalance(publicAddress, dispatch, token);
+      else if (!reserveType) getItemBalance(publicAddress, dispatch, token);
     }
   }
+};
+
+const getItemBalance = (publicAddress, dispatch, token) => {
+  axios
+    .get(`${config.api}/web3/erc20token/tokenbalance?address=${config.tokens[token].address}&network=${config.network}&useraddress=${publicAddress}`)
+    .then(res => {
+      if (res.status === 200) {
+        const { data } = res.data;
+        dispatch({
+          type: actionTypes.GET_TOKEN_BALANCE,
+          payload: { token, data, user: publicAddress }
+        });
+      }
+    })
+    .catch(err => console.log(err));
 };
 
 export const getTransactionHistory = (bdAddress, publicAddress) => dispatch => {

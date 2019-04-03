@@ -1,9 +1,44 @@
 import React, { Component } from "react";
-import { Button, Form, Segment } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Grid, Row, Col } from "../../helpers/react-flexbox-grid";
+import { Button, Avatar, CssBaseline, FormControl, Input, InputLabel, Paper, Typography, withStyles } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { loginUserAction, setUsernameOrEmailAction, setPasswordAction } from "../../actions/authActions";
+import constants from "../../helpers/constants";
+
+const styles = theme => ({
+  main: {
+    width: "auto",
+    display: "block", // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    position: "relative",
+    top: "20%",
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: "auto",
+      marginRight: "15%"
+    }
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing.unit
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+    background: "#fa9220"
+  }
+});
 
 class Login extends Component {
   onUsernameOrEmailChange = e => {
@@ -23,87 +58,89 @@ class Login extends Component {
       usernameOrEmail,
       password
     };
-
     loginUser(userData, history);
   };
 
   componentDidMount() {
-    const { isAuthenticated, history } = this.props || {};
-
-    if (isAuthenticated) {
+    const { isAuthenticated, history, status } = this.props || {};
+    if (isAuthenticated && status !== constants.APPROVED) {
+      history.push("/profile");
+    } else if (isAuthenticated) {
       history.push("/dashboard");
     }
   }
 
   render() {
-    const { errors, usernameOrEmail, password } = this.props || {};
+    const { errors, usernameOrEmail, password, classes } = this.props || {};
     return (
-      <div className="login-form">
-        <style>
-          {`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}
-        </style>
-        <div className="landing">
-          <Grid>
-            {/* <Row>
-              <Col>
-                <div className="logo" />
-              </Col>
-            </Row> */}
-            <Row end="lg" middle="lg" start="lg">
-              {/* <Col lg={6}>
-                <div className="text-white txt-m bold txt-xxxxl">
-                  FINANCING <br /> THE FUTURE
-                </div>
-              </Col> */}
-              <Col lgOffset={6} lg={6}>
-                <Form size="large" style={{ marginTop: "50%", marginLeft: "20%" }}>
-                  <Segment stacked>
-                    <Form.Input
-                      error={!!errors.usernameOrEmail}
-                      value={usernameOrEmail}
-                      onChange={this.onUsernameOrEmailChange}
-                      fluid
-                      icon="user"
-                      iconPosition="left"
-                      placeholder="Username or E-mail address"
-                    />
-                    {errors.usernameOrEmail && <Form.Field>{errors.usernameOrEmail}</Form.Field>}
-                    <Form.Input
-                      error={!!errors.password}
-                      value={password}
-                      onChange={this.onPasswordChange}
-                      fluid
-                      icon="lock"
-                      iconPosition="left"
-                      placeholder="Password"
-                      type="password"
-                    />
-                    {errors.password && <Form.Field>{errors.password}</Form.Field>}
-                    <Button onClick={this.onSubmitClick} className="btn bg-test txt-p-vault txt-dddbld text--white" fluid size="large">
-                      Login
-                    </Button>
-                  </Segment>
-                </Form>
-              </Col>
-            </Row>
-          </Grid>
-        </div>
+      <div className="landing">
+        <main className={classes.main}>
+          <CssBaseline />
+          <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <form className={classes.form}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="email">Email Address</InputLabel>
+                <Input
+                  id="email"
+                  error={!!errors.usernameOrEmail}
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={this.onUsernameOrEmailChange}
+                  value={usernameOrEmail}
+                />
+                {errors.usernameOrEmail && <div>{errors.usernameOrEmail}</div>}
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input
+                  error={!!errors.password}
+                  value={password}
+                  onChange={this.onPasswordChange}
+                  name="password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+                {errors.password && <div>{errors.password}</div>}
+              </FormControl>
+              {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
+              <Button
+                style={{ backgroundColor: "#ED8C0E" }}
+                onClick={this.onSubmitClick}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign in
+              </Button>
+            </form>
+          </Paper>
+        </main>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { isAuthenticated, user, usernameOrEmail, password } = state.auth || {};
+  const {
+    isAuthenticated,
+    user,
+    usernameOrEmail,
+    password,
+    userData: { status }
+  } = state.auth || {};
   const { errors } = state || {};
 
   return {
+    status,
     isAuthenticated,
     user,
     usernameOrEmail,
@@ -121,4 +158,4 @@ Login.propTypes = {
 export default connect(
   mapStateToProps,
   { loginUserAction, setPasswordAction, setUsernameOrEmailAction }
-)(Login);
+)(withStyles(styles)(Login));
